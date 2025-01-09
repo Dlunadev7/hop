@@ -1,19 +1,31 @@
 import { StyleSheet, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Hop } from "@/assets/svg";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Text } from "@/components/ui/text";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { VStack } from "@/components/ui/vstack";
-import { router } from "expo-router";
-import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 import { Formik } from "formik";
 import { KeyboardContainer } from "@/components/keyboard/keyboard.component";
 import validationSchema from "@/schemas/send-code";
 import { Input, LinearGradient } from "@/components";
+import { recoveryPassword } from "@/services/auth.service";
+import { Colors } from "@/constants/Colors";
 
 export default function RecoveryPassword() {
-  const insets = useSafeAreaInsets();
+  const [loading, setLoading] = useState(false);
+
+  const handleSendEmail = async ({ email }: { email: string }) => {
+    setLoading(true);
+    try {
+      await recoveryPassword(email);
+      // router.navigate(AuthRoutesLink.NEW_PASSWORD);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <LinearGradient>
       <KeyboardContainer>
@@ -32,8 +44,7 @@ export default function RecoveryPassword() {
             initialValues={{ email: "" }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-              console.log("values", values);
-              router.navigate(AuthRoutesLink.NEW_PASSWORD);
+              handleSendEmail(values);
             }}
           >
             {({
@@ -55,6 +66,7 @@ export default function RecoveryPassword() {
                     touched={touched.email}
                     error={touched.email && errors.email}
                     keyboardType="email-address"
+                    autoCapitalize="none"
                   />
                 </VStack>
                 <VStack space="lg" className="mt-28">
@@ -65,16 +77,20 @@ export default function RecoveryPassword() {
                       handleSubmit();
                     }}
                   >
-                    <ButtonText className="font-semibold text-lg">
-                      Enviar código
-                    </ButtonText>
+                    {loading ? (
+                      <ButtonSpinner color={Colors.WHITE} />
+                    ) : (
+                      <ButtonText className="font-semibold text-lg">
+                        Enviar código
+                      </ButtonText>
+                    )}
                   </Button>
                   <Text className="text-center text-[#10524B]">
                     ¿No recibiste el código?{" "}
                     <Text
                       className="font-semibold"
                       onPress={() => {
-                        router.navigate(AuthRoutesLink.SIGN_UP);
+                        handleSendEmail(values);
                       }}
                     >
                       Reenviar código

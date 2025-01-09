@@ -1,18 +1,18 @@
 export const accountTypes = [
   {
     label: "Cuenta Corriente",
-    value: "ux",
+    value: "current_account",
   },
   {
     label: "Cuenta Vista (RUT)",
-    value: "web",
+    value: "view_account_rut",
   },
   {
     label: "Cuenta de Ahorro",
-    value: "Cross Platform Development Process",
+    value: "savings_account",
   },
   {
     label: "Prepago",
-    value: "prepago",
+    value: "prepaid",
   },
-]
+];

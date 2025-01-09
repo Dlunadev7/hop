@@ -8,13 +8,19 @@
     "scheme": "hop",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "permissions": [
+      "CAMERA",
+      "AUDIO_RECORDING"
+    ],
     "ios": {
       "icon": "./assets/images/logo.png",
       "supportsTablet": true,
       "infoPlist": {
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
-        }
+        },
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       },
       "splash": {
         "image": "./assets/images/logo.png",
@@ -24,7 +30,9 @@
     },
     "android": {
       "permissions": [
-        "ACCESS_NETWORK_STATE"
+        "ACCESS_NETWORK_STATE",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
       ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
@@ -35,7 +43,8 @@
         "resizeMode": "contain",
         "backgroundColor": "#2EC4B6",
         "width": 250
-      }
+      },
+      "package": "com.dlunadev7.hop"
     },
     "web": {
       "bundler": "metro",
@@ -43,7 +52,8 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "react-native-expo-metamap-sdk"
     ],
     "experiments": {
       "typedRoutes": true

@@ -1,6 +1,5 @@
 import { AssetsImages } from "@/assets/images";
-// import { Image } from "@/components/ui/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { Colors } from "@/constants/Colors";
 import { Image, StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
@@ -9,8 +8,17 @@ import { VStack } from "@/components/ui/vstack";
 import { router } from "expo-router";
 import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 import { LinearGradient } from "@/components";
+import { useAuth } from "@/context/auth.context";
 
 export default function Entry() {
+  const { token } = useAuth();
+
+  useEffect(() => {
+    if (token) {
+      router.replace("/(tabs)");
+    }
+  }, [token]);
+
   return (
     <>
       <StatusBar translucent style="light" />

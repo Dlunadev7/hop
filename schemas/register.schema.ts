@@ -11,6 +11,10 @@ export const validationSchema = Yup.object().shape({
     .max(20, "Last name cannot exceed 20 characters.")
     .required("Last name is required."),
 
+  password: Yup.string()
+    .min(6, 'La contraseña debe tener al menos 6 caracteres.')
+    .required('La contraseña es obligatoria.'),
+
   email: Yup.string()
     .email("Invalid email format.")
     .required("Email is required."),
@@ -30,31 +34,31 @@ export const validationSchema = Yup.object().shape({
 });
 
 export const validationSchemaS1 = Yup.object().shape({
-  accountHolder: Yup.string()
+  bank_account_holder: Yup.string()
     .required('El titular de la cuenta es obligatorio')
     .min(3, 'El titular de la cuenta debe tener al menos 3 caracteres'),
 
-  bankName: Yup.string()
+  bank_name: Yup.string()
     .required('El nombre del banco es obligatorio')
     .min(3, 'El nombre del banco debe tener al menos 3 caracteres'),
 
-  accountNumber: Yup.string()
+  bank_account: Yup.string()
     .required('El número de la cuenta es obligatorio')
     .min(10, 'El número de cuenta debe tener al menos 10 caracteres'),
 
-  accountType: Yup.string()
+  bank_account_type: Yup.string()
     .required('El tipo de cuenta es obligatorio'),
-  rut: Yup.string()
+  bank_account_rut: Yup.string()
     .required('El RUT del titular es obligatorio')
 
 })
 
 export const validationSchemaS3 = Yup.object().shape({
-  bankName: Yup.string()
+  bank_name: Yup.string()
     .min(2, "Hotel name must be at least 2 characters.")
     .max(20, "Hotel name cannot exceed 20 characters.")
     .required("Hotel name is required."),
 
-  address: Yup.string()
+  home_address: Yup.string()
     .required("Address is required."),
 })

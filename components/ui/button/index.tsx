@@ -248,7 +248,7 @@ const buttonIconStyle = tva({
       variant: "solid",
       action: "negative",
       class:
-        "text-typography-0 data-[hover=true]:text-typography-0 data-[active=true]:text-typography-0",
+        "min-w-44 text-typography-0 data-[hover=true]:text-typography-0 data-[active=true]:text-typography-0",
     },
   ],
 });

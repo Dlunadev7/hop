@@ -50,6 +50,7 @@ export default function Step1(props: formProps) {
           firstName: "",
           lastName: "",
           email: "",
+          password: "",
           rut: "",
           address: "",
           birthDate: "",
@@ -69,9 +70,6 @@ export default function Step1(props: formProps) {
           errors,
           touched,
         }) => {
-          console.log(values.birthDate);
-          console.log(dayjs("25/12/2025", "DD/MM/YYYY"));
-
           return (
             <VStack space="md">
               <HStack space="md">
@@ -106,6 +104,19 @@ export default function Step1(props: formProps) {
                 error={touched.email && errors.email}
                 touched={touched.email}
                 keyboardType="email-address"
+                autoCapitalize="none"
+              />
+
+              <Input
+                label="Password"
+                placeholder=""
+                secureTextEntry
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+                touched={touched.password}
+                error={touched.password && errors.password}
+                rightIcon
               />
 
               {/* RUT */}
@@ -190,5 +201,6 @@ export default function Step1(props: formProps) {
 const styles = StyleSheet.create({
   formulary: {
     gap: 16,
+    flex: 1,
   },
 });
