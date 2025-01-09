@@ -1,0 +1,5 @@
+export enum userRoles {
+  USER_SUPER_ADMIN = 'USER_SUPER_ADMIN',
+  USER_HOPPER = 'USER_HOPPER',
+  USER_HOPPY = 'USER_HOPPY',
+} 

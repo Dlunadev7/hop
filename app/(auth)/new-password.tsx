@@ -31,7 +31,6 @@ export default function NewPassword() {
             initialValues={{ password: "", confirmPassword: "" }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-              console.log("values", values);
               router.replace(AuthRoutesLink.FINISH_RECOVER_PASSWORD);
             }}
           >

@@ -5,10 +5,26 @@ import { VStack } from "@/components/ui/vstack";
 import { KeyboardContainer } from "@/components/keyboard/keyboard.component";
 import { Step1, Step2, Step3, Step4 } from "@/components/forms/register";
 import { LinearGradient } from "@/components";
+import { userInfo } from "os";
 
 export default function SignUp() {
   const [step, setStep] = useState(1);
-  const [payload, setPayload] = useState({});
+  const [payload, setPayload] = useState({
+    email: "",
+    password: "Csaomsiala7#",
+    role: "USER_HOPPER",
+    firstName: "",
+    lastName: "",
+    rut: "",
+    phone: "",
+    home_address: "",
+    bank_name: "",
+    bank_account: "",
+    bank_account_type: "",
+    bank_account_rut: "",
+    bank_account_number: "",
+    bank_account_holder: "",
+  });
 
   const accumulatePayload = (newData: {}) => {
     setPayload((prevPayload) => ({
@@ -21,7 +37,30 @@ export default function SignUp() {
 
   const renderStep = () => {
     const StepComponent = steps[step - 1] || Step1;
-    return <StepComponent setStep={setStep} payload={accumulatePayload} />;
+    const payloadCompleted = {
+      email: payload.email,
+      password: payload.password,
+      role: "USER_HOPPER",
+      userInfo: {
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        rut: payload.rut,
+        phone: payload.phone,
+        home_address: payload.home_address,
+        bank_name: payload.bank_name,
+        bank_account_holder: payload.bank_account_holder,
+        bank_account_type: payload.bank_account_type,
+        bank_account_rut: payload.bank_account_rut,
+        bank_account: payload.bank_account,
+      },
+    };
+    return (
+      <StepComponent
+        setStep={setStep}
+        payload={accumulatePayload}
+        payloadValues={payloadCompleted}
+      />
+    );
   };
 
   return (
@@ -56,6 +95,7 @@ const styles = StyleSheet.create({
     gap: 16,
     paddingHorizontal: 16,
     margin: "auto",
+    position: "relative",
   },
   header: {
     marginBottom: 24,

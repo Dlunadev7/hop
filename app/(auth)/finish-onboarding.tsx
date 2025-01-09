@@ -30,7 +30,7 @@ export default function FinishOnboarding() {
           <Button
             variant="solid"
             className="rounded-xl bg-[#2EC4B6] self-center"
-            onPress={() => router.replace(AuthRoutesLink.WAITING_VALIDATION)}
+            onPress={() => router.replace("/(tabs)")}
           >
             <ButtonText className="font-semibold text-lg">Finalizar</ButtonText>
           </Button>

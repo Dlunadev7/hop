@@ -71,6 +71,7 @@ export const Input = (
         editable={editable}
         className={`${error ? "placeholder:text-[#9A0000]" : ""}`}
         secureTextEntry={secureTextEntry}
+        autoCapitalize={props.autoCapitalize}
       />
       {rightIcon && (
         <InputSlot

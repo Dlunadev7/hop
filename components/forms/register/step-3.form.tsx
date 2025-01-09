@@ -22,8 +22,8 @@ export default function Step3(props: formProps) {
       <Text className="text-lg mb-4">Información del Hotel</Text>
       <Formik
         initialValues={{
-          bankName: "",
-          address: "",
+          bank_name: "",
+          home_address: "",
         }}
         validationSchema={validationSchemaS3}
         onSubmit={(values) => {
@@ -39,26 +39,28 @@ export default function Step3(props: formProps) {
           errors,
           touched,
         }) => (
-          <VStack space="lg">
-            <Input
-              label="Nombre del Hotel"
-              onBlur={handleBlur("bankName")}
-              onChangeText={handleChange("bankName")}
-              placeholder=""
-              value={values.bankName}
-              error={touched.bankName && errors.bankName}
-              touched={touched.bankName}
-            />
+          <>
+            <VStack space="md">
+              <Input
+                label="Nombre del Hotel"
+                onBlur={handleBlur("bank_name")}
+                onChangeText={handleChange("bank_name")}
+                placeholder=""
+                value={values.bank_name}
+                error={touched.bank_name && errors.bank_name}
+                touched={touched.bank_name}
+              />
 
-            <Input
-              label="Dirección"
-              onBlur={handleBlur("address")}
-              onChangeText={handleChange("address")}
-              placeholder=""
-              value={values.address}
-              error={touched.address && errors.address}
-              touched={touched.address}
-            />
+              <Input
+                label="Dirección"
+                onBlur={handleBlur("home_address")}
+                onChangeText={handleChange("home_address")}
+                placeholder=""
+                value={values.home_address}
+                error={touched.home_address && errors.home_address}
+                touched={touched.home_address}
+              />
+            </VStack>
 
             <StepControl
               handleBack={() => setStep(2)}
@@ -66,7 +68,7 @@ export default function Step3(props: formProps) {
               textBack="Atrás"
               textNext="Siguiente"
             />
-          </VStack>
+          </>
         )}
       </Formik>
     </View>
@@ -76,5 +78,7 @@ export default function Step3(props: formProps) {
 const styles = StyleSheet.create({
   formulary: {
     gap: 16,
+    flex: 1,
+    marginBottom: 120,
   },
 });
