@@ -17,8 +17,11 @@ import { useAuth } from "@/context/auth.context";
 import { Colors } from "@/constants/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ErrorWithStatus } from "@/utils/interfaces/error.interface";
+import { useTranslation } from "react-i18next";
 
 export default function SignIn() {
+  const { t } = useTranslation();
+  const schema = validationSchema(t);
   const [loading, setLoading] = useState(false);
   const { setToken } = useAuth();
   const [showError, setShowError] = useState(false);
@@ -56,7 +59,7 @@ export default function SignIn() {
             },
           });
         } else if (errorWithStatus.status === 401) {
-          setShowError(true);
+          console.log(err);
         }
       } else {
         console.error("Error inesperado:", err);
@@ -71,16 +74,16 @@ export default function SignIn() {
       <KeyboardContainer>
         <View style={styles.container}>
           <VStack space="lg" className="items-center mb-9">
-            <Hop />
-            <Text className="text-2xl font-semibold mt-12">Bienvenido</Text>
-            <Text>Inicia sesión en tu cuenta</Text>
+            <Hop color={Colors.SECONDARY} />
+            <Text className="text-2xl font-semibold mt-12">
+              {t("signin.welcome", { ns: "auth" })}
+            </Text>
+            <Text>{t("signin.sign_in_to_your_account", { ns: "auth" })}</Text>
           </VStack>
           <Formik
             initialValues={{ email: "", password: "" }}
-            validationSchema={validationSchema}
-            onSubmit={(values) => {
-              handleLogin(values);
-            }}
+            validationSchema={schema}
+            onSubmit={handleLogin}
           >
             {({
               handleChange,
@@ -93,7 +96,7 @@ export default function SignIn() {
               <>
                 <VStack space="lg">
                   <Input
-                    label="Email"
+                    label={t("signin.email_label", { ns: "auth" })}
                     placeholder=""
                     onChangeText={handleChange("email")}
                     onBlur={handleBlur("email")}
@@ -106,54 +109,52 @@ export default function SignIn() {
 
                   <Box>
                     <Input
-                      label="Password"
+                      label={t("signin.password_label", { ns: "auth" })}
                       placeholder=""
                       secureTextEntry
                       onChangeText={handleChange("password")}
                       onBlur={handleBlur("password")}
                       value={values.password}
                       touched={touched.password}
-                      error={!showError && touched.password && errors.password}
+                      error={touched.password && errors.password}
                       rightIcon
                     />
-                    {/* {showError && (
-                      <Text className="text-xs font-light color-[#9A0000] mt-2">
-                        {showError && error}
-                      </Text>
-                    )} */}
                     <Text
                       className="text-[#2EC4B6] underline mt-2"
                       onPress={() =>
                         router.push(AuthRoutesLink.RECOVERY_PASSWORD)
                       }
                     >
-                      Olvide mi contraseña
+                      {t("signin.forgot_password", { ns: "auth" })}
                     </Text>
                   </Box>
                 </VStack>
                 <VStack space="lg" className="mt-28">
                   <Button
                     variant="solid"
-                    className="rounded-xl bg-[#2EC4B6] self-center min-w-44"
+                    className="rounded-xl bg-[#2EC4B6] self-center"
                     onPress={() => handleSubmit()}
                   >
-                    {loading ? (
-                      <ButtonSpinner color={Colors.WHITE} />
-                    ) : (
+                    {!loading ? (
                       <ButtonText className="font-semibold text-lg">
-                        Iniciar Sesión
+                        {t("signin.sign_in_button", { ns: "auth" })}
                       </ButtonText>
+                    ) : (
+                      <ButtonSpinner
+                        className={loading ? "min-w-44 " : ""}
+                        color={Colors.WHITE}
+                      />
                     )}
                   </Button>
                   <Text className="text-center text-[#10524B]">
-                    ¿Aún no tienes una cuenta?{" "}
+                    {t("signin.no_account", { ns: "auth" })}{" "}
                     <Text
                       className="font-semibold"
                       onPress={() => {
                         router.navigate(AuthRoutesLink.SIGN_UP);
                       }}
                     >
-                      Crea una
+                      {t("signin.create_account", { ns: "auth" })}
                     </Text>
                   </Text>
                 </VStack>

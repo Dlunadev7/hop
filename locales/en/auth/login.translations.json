@@ -1,0 +1,10 @@
+{
+  "welcome": "Welcome",
+  "sign_in_to_your_account": "Sign in to your account",
+  "email_label": "Email",
+  "password_label": "Password",
+  "forgot_password": "Forgot my password",
+  "sign_in_button": "Sign In",
+  "no_account": "Don’t have an account yet?",
+  "create_account": "Create one"
+}

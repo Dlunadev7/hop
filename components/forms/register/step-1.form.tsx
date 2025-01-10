@@ -14,6 +14,7 @@ import { dateToString, stringToDate } from "@/helpers/date";
 import dayjs from "dayjs";
 import { router } from "expo-router";
 import { AuthRoutesLink } from "@/utils/enum/auth.routes";
+import { useTranslation } from "react-i18next";
 
 type formProps = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
@@ -23,6 +24,9 @@ type formProps = {
 export default function Step1(props: formProps) {
   const { payload, setStep } = props;
   const [openCalendar, setOpenCalendar] = useState(false);
+  const { t } = useTranslation();
+
+  const schema = validationSchema(t);
 
   const handleDateChange = (
     selectedDate: Date,
@@ -44,7 +48,9 @@ export default function Step1(props: formProps) {
 
   return (
     <View style={styles.formulary}>
-      <Text className="text-lg">Informacion personal</Text>
+      <Text className="text-lg">
+        {t("signup.step_1.title", { ns: "auth" })}
+      </Text>
       <Formik
         initialValues={{
           firstName: "",
@@ -55,7 +61,7 @@ export default function Step1(props: formProps) {
           address: "",
           birthDate: "",
         }}
-        validationSchema={validationSchema}
+        validationSchema={schema}
         onSubmit={(values) => {
           setStep(2);
           payload(values);
@@ -74,7 +80,7 @@ export default function Step1(props: formProps) {
             <VStack space="md">
               <HStack space="md">
                 <Input
-                  label="Nombre"
+                  label={t("signup.step_1.name.label", { ns: "auth" })}
                   onBlur={handleBlur("firstName")}
                   onChangeText={handleChange("firstName")}
                   placeholder=""
@@ -84,7 +90,7 @@ export default function Step1(props: formProps) {
                   stretch
                 />
                 <Input
-                  label="Apellido"
+                  label={t("signup.step_1.last_name.label", { ns: "auth" })}
                   onBlur={handleBlur("lastName")}
                   onChangeText={handleChange("lastName")}
                   placeholder=""
@@ -96,7 +102,7 @@ export default function Step1(props: formProps) {
               </HStack>
 
               <Input
-                label="Correo electrónico"
+                label={t("signup.step_1.email.label", { ns: "auth" })}
                 onBlur={handleBlur("email")}
                 onChangeText={handleChange("email")}
                 placeholder=""
@@ -121,7 +127,7 @@ export default function Step1(props: formProps) {
 
               {/* RUT */}
               <Input
-                label="RUT"
+                label={t("signup.step_1.rut.label", { ns: "auth" })}
                 onBlur={handleBlur("rut")}
                 onChangeText={handleChange("rut")}
                 placeholder=""
@@ -134,7 +140,7 @@ export default function Step1(props: formProps) {
 
               {/* Address */}
               <Input
-                label="Direccion"
+                label={t("signup.step_1.address.label", { ns: "auth" })}
                 onBlur={handleBlur("address")}
                 onChangeText={handleChange("address")}
                 placeholder=""
@@ -147,7 +153,7 @@ export default function Step1(props: formProps) {
               {/* Birth Date */}
 
               <Input
-                label="Fecha de Nacimiento"
+                label={t("signup.step_1.birth_date.label", { ns: "auth" })}
                 onBlur={handleBlur("birthDate")}
                 onChangeText={handleChange("birthDate")}
                 placeholder="DD/MM/YYYY"
@@ -177,16 +183,16 @@ export default function Step1(props: formProps) {
                   onPress={() => handleSubmit()}
                 >
                   <ButtonText className="font-semibold text-lg">
-                    Siguiente
+                    {t("signup.step_1.next", { ns: "auth" })}
                   </ButtonText>
                 </Button>
                 <Text className="text-center text-[#10524B]">
-                  ¿Ya tienes una cuenta?{" "}
+                  {t("signup.step_1.already_have_account", { ns: "auth" })}{" "}
                   <Text
                     className="font-semibold"
                     onPress={() => router.push(AuthRoutesLink.SIGN_IN)}
                   >
-                    Iniciar Sesión
+                    {t("signup.step_1.sign_in", { ns: "auth" })}
                   </Text>
                 </Text>
               </Box>

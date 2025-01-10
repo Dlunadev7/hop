@@ -1,0 +1,79 @@
+{
+  "title": "Registro de Hoppy",
+  "subtitle": "(recepcionista)",
+  "step_message": "Para solicitar el registro debes completar los campos siguientes",
+  "step_message_final": "Sigue el link para confirmar tu identidad y finalizar la solicitud de registro",
+  "step_label": "Paso {{step}} de 4",
+  "step_1": {
+    "title": "Informacion Personal",
+    "name": {
+      "label": "Nombre"
+    },
+    "last_name": {
+      "label": "Apellido"
+    },
+    "email": {
+      "label": "Correo Electrónico"
+    },
+    "rut": {
+      "label": "RUT"
+    },
+    "address": {
+      "label": "Dirección"
+    },
+    "birth_date": {
+      "label": "Fecha de Nacimiento"
+    },
+    "next": "Siguiente",
+    "already_have_account": "¿Ya tienes cuenta?",
+    "sign_in": "Iniciar Sesión"
+  },
+  "step_2": {
+    "title": "Cuenta Bancaria",
+    "fields": {
+      "accountHolder": {
+        "label": "Titular de la cuenta",
+        "placeholder": ""
+      },
+      "bankName": {
+        "label": "Nombre del Banco",
+        "placeholder": ""
+      },
+      "accountNumber": {
+        "label": "Número de la cuenta",
+        "placeholder": ""
+      },
+      "accountType": {
+        "label": "Tipo de cuenta",
+        "placeholder": "Seleccione una opción"
+      },
+      "rut": {
+        "label": "RUT del titular",
+        "placeholder": ""
+      }
+    },
+    "accountTypes": {
+      "checking": "Cuenta Corriente",
+      "savings_rut": "Cuenta Vista (RUT)",
+      "savings": "Cuenta de Ahorro",
+      "prepaid": "Prepago"
+    },
+    "buttons": {
+      "back": "Atrás",
+      "next": "Siguiente"
+    }
+  },
+  "step_3": {
+    "title": "Información del Hotel",
+    "hotel_name": {
+      "label": "Nombre del Hotel"
+    },
+    "address": {
+      "label": "Dirección"
+    }
+  },
+  "step_4": {
+    "title": "Verifica tu Identidad",
+    "go_site": "Ir al sitio"
+  }
+}

@@ -13,6 +13,7 @@ import { ArrowLeftIcon } from "@/components/ui/icon";
 import { Colors } from "@/constants/Colors";
 import { ArrowLeft } from "@/assets/svg";
 import { StepControl } from "@/components/step-controls/step-control.component";
+import { useTranslation } from "react-i18next";
 
 type formProps = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
@@ -21,10 +22,16 @@ type formProps = {
 
 export default function Step2(props: formProps) {
   const { payload, setStep } = props;
-
+  const { t } = useTranslation();
+  const schema = validationSchemaS1(t);
+  console.log(
+    t("validations.step_2.bank_account_type.current_account", { ns: "auth" })
+  );
   return (
     <View style={styles.formulary}>
-      <Text className="text-lg mb-4">Cuenta Bancaria</Text>
+      <Text className="text-lg mb-4">
+        {t("signup.step_2.title", { ns: "auth" })}
+      </Text>
       <Formik
         initialValues={{
           bank_account_holder: "",
@@ -33,7 +40,7 @@ export default function Step2(props: formProps) {
           bank_account_type: "",
           bank_account: "",
         }}
-        validationSchema={validationSchemaS1}
+        validationSchema={schema}
         onSubmit={(values) => {
           setStep(3);
           payload(values);
@@ -47,10 +54,13 @@ export default function Step2(props: formProps) {
           errors,
           touched,
         }) => {
+          console.log(errors);
           return (
-            <VStack space="md" className="pb-4">
+            <VStack space="md">
               <Input
-                label="Titular de la cuenta"
+                label={t("signup.step_2.fields.accountHolder.label", {
+                  ns: "auth",
+                })}
                 onBlur={handleBlur("bank_account_holder")}
                 onChangeText={handleChange("bank_account_holder")}
                 placeholder=""
@@ -61,7 +71,9 @@ export default function Step2(props: formProps) {
                 touched={touched.bank_account_holder}
               />
               <Input
-                label="Nombre del Banco"
+                label={t("signup.step_2.fields.bankName.label", {
+                  ns: "auth",
+                })}
                 onBlur={handleBlur("bank_name")}
                 onChangeText={handleChange("bank_name")}
                 placeholder=""
@@ -71,7 +83,9 @@ export default function Step2(props: formProps) {
               />
 
               <Input
-                label="Número de la cuenta"
+                label={t("signup.step_2.fields.accountNumber.label", {
+                  ns: "auth",
+                })}
                 onBlur={handleBlur("bank_account")}
                 onChangeText={handleChange("bank_account")}
                 placeholder=""
@@ -82,15 +96,27 @@ export default function Step2(props: formProps) {
               />
 
               <Select
-                label="Tipo de cuenta"
+                label={t("signup.step_2.fields.accountType.label", {
+                  ns: "auth",
+                })}
+                placeholder={t("signup.step_2.fields.accountType.placeholder", {
+                  ns: "auth",
+                })}
                 onSelect={handleChange("bank_account_type")}
-                options={accountTypes}
+                options={accountTypes.map((type) => ({
+                  label: t(
+                    `validations.step_2.bank_account_type.${type.value}`
+                  ),
+                  value: type.value,
+                }))}
                 touched={touched.bank_account_type}
                 error={touched.bank_account_type && errors.bank_account_type}
               />
 
               <Input
-                label="RUT del titular  "
+                label={t("signup.step_2.fields.rut.label", {
+                  ns: "auth",
+                })}
                 onBlur={handleBlur("bank_account_rut")}
                 onChangeText={handleChange("bank_account_rut")}
                 placeholder=""
@@ -99,14 +125,16 @@ export default function Step2(props: formProps) {
                 touched={touched.bank_account_rut}
                 keyboardType="number-pad"
               />
-              <View className="mt-[32px]">
-                <StepControl
-                  handleBack={() => setStep(1)}
-                  handleNext={handleSubmit}
-                  textBack="Atrás"
-                  textNext="Siguiente"
-                />
-              </View>
+              <StepControl
+                handleBack={() => setStep(1)}
+                handleNext={handleSubmit}
+                textBack={t("signup.step_2.buttons.back", {
+                  ns: "auth",
+                })}
+                textNext={t("signup.step_2.buttons.next", {
+                  ns: "auth",
+                })}
+              />
             </VStack>
           );
         }}
