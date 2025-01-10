@@ -4,11 +4,9 @@ import { Hop } from "@/assets/svg";
 import { AssetsImages } from "@/assets/images";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
-import { Colors } from "@/constants/Colors";
 import { VStack } from "@/components/ui/vstack";
 import { Image } from "react-native";
 import { router } from "expo-router";
-import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 import { LinearGradient } from "@/components";
 
 export default function FinishOnboarding() {
@@ -48,7 +46,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     flexGrow: 1,
-    // justifyContent: "space-between",
     alignItems: "center",
   },
 });

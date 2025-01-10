@@ -10,15 +10,16 @@ import validationSchema from "@/schemas/send-code";
 import { Input, LinearGradient } from "@/components";
 import { recoveryPassword } from "@/services/auth.service";
 import { Colors } from "@/constants/Colors";
+import { useTranslation } from "react-i18next";
 
 export default function RecoveryPassword() {
   const [loading, setLoading] = useState(false);
-
+  const { t } = useTranslation();
+  const schema = validationSchema(t);
   const handleSendEmail = async ({ email }: { email: string }) => {
     setLoading(true);
     try {
       await recoveryPassword(email);
-      // router.navigate(AuthRoutesLink.NEW_PASSWORD);
     } catch (error) {
       console.error(error);
     } finally {
@@ -31,18 +32,17 @@ export default function RecoveryPassword() {
       <KeyboardContainer>
         <View style={styles.container}>
           <VStack space="lg" className="items-center mb-9">
-            <Hop />
+            <Hop color={Colors.PRIMARY} />
             <Text className="text-2xl font-semibold mt-12">
-              Reestablece tu contraseña
+              {t("forgot_password.title")}
             </Text>
             <Text className="text-center">
-              Ingresa el email asociado a tu cuenta para recibir el link de
-              recuperación de contraseña
+              {t("forgot_password.description")}
             </Text>
           </VStack>
           <Formik
             initialValues={{ email: "" }}
-            validationSchema={validationSchema}
+            validationSchema={schema}
             onSubmit={(values) => {
               handleSendEmail(values);
             }}
@@ -58,7 +58,7 @@ export default function RecoveryPassword() {
               <>
                 <VStack space="lg">
                   <Input
-                    label="Email"
+                    label={t("forgot_password.emailLabel")}
                     placeholder=""
                     onChangeText={handleChange("email")}
                     onBlur={handleBlur("email")}
@@ -81,19 +81,19 @@ export default function RecoveryPassword() {
                       <ButtonSpinner color={Colors.WHITE} />
                     ) : (
                       <ButtonText className="font-semibold text-lg">
-                        Enviar código
+                        {t("forgot_password.sendCodeButton")}
                       </ButtonText>
                     )}
                   </Button>
                   <Text className="text-center text-[#10524B]">
-                    ¿No recibiste el código?{" "}
+                    {t("forgot_password.resendCodePrompt")}{" "}
                     <Text
                       className="font-semibold"
                       onPress={() => {
                         handleSendEmail(values);
                       }}
                     >
-                      Reenviar código
+                      {t("forgot_password.resendCodeAction")}
                     </Text>
                   </Text>
                 </VStack>

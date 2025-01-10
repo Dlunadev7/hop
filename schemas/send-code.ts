@@ -1,9 +1,10 @@
+import { i18NextType } from '@/utils/types/i18n.type';
 import * as Yup from 'yup';
 
-const validationSchema = Yup.object({
+const validationSchema = (t: i18NextType) => Yup.object({
   email: Yup.string()
-    .email('Por favor, ingresa un email válido.')
-    .required('El email es obligatorio.'),
+    .email(t('validations.signin.email.invalid', { ns: 'auth' }))
+    .required(t('validations.signin.email.required', { ns: 'auth' })),
 });
 
 export default validationSchema;

@@ -53,7 +53,8 @@
     },
     "plugins": [
       "expo-router",
-      "react-native-expo-metamap-sdk"
+      "react-native-expo-metamap-sdk",
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true

@@ -25,6 +25,7 @@ import { METAMAP_API_KEY, METAMAP_API_URL, METAMAP_FLOW_ID } from "@/config";
 import useSWR from "swr";
 import { createUser, login } from "@/services/auth.service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTranslation } from "react-i18next";
 // @ts-ignore
 
 type formProps = {
@@ -37,12 +38,18 @@ export default function Step4(props: formProps) {
   const { data, error, mutate } = useSWR("signup", async () => null, {
     revalidateOnFocus: false,
   });
-  const [loading, setLoading] = useState(false);
   const { setStep, payloadValues } = props;
+  const { t } = useTranslation();
+
   const { isDone, handleWebViewMessage } = useWebViewMessageHandler();
   const injectJavaScript = useInjectJavaScript();
-  const webViewRef = useRef(null);
+
+  console.log(isDone);
+
+  const [loading, setLoading] = useState(false);
   const [openAccordion, setOpenAccordion] = useState(false);
+
+  const webViewRef = useRef(null);
 
   const handleSignUp = async (values: any) => {
     setLoading(true);
@@ -73,7 +80,7 @@ export default function Step4(props: formProps) {
 
   return (
     <View style={styles.formulary}>
-      <Text className="text-lg mb-4">Verifica tu Identidad</Text>
+      <Text className="text-lg mb-4">{t("signup.step_4.title")}</Text>
       <Formik
         initialValues={{}}
         onSubmit={() => {
@@ -82,7 +89,7 @@ export default function Step4(props: formProps) {
         }}
       >
         {({ handleSubmit }) => (
-          <>
+          <VStack space="lg" className="justify-between h-[80%]">
             <Pressable
               style={{ backgroundColor: Colors.PRIMARY }}
               className={`p-2 h-11 w-72 rounded-2xl px-3 flex-row items-center gap-2 self-center justify-center hover:none`}
@@ -91,7 +98,7 @@ export default function Step4(props: formProps) {
               <Text
                 className={`text-lg font-semibold text-[${Colors.DARK_GREEN}] hover:none`}
               >
-                Ir al sitio
+                {t("signup.step_4.go_site")}{" "}
               </Text>
               <CircleArrowRight color={Colors.DARK_GREEN} />
             </Pressable>
@@ -150,14 +157,17 @@ export default function Step4(props: formProps) {
             )}
             {isDone && (
               <StepControl
-                handleBack={() => setStep(3)}
+                handleBack={() => setStep(1)}
                 handleNext={handleSubmit}
-                textBack="Atrás"
-                textNext="Enviar formulario"
-                loading={loading}
+                textBack={t("signup.step_2.buttons.back", {
+                  ns: "auth",
+                })}
+                textNext={t("signup.step_2.buttons.next", {
+                  ns: "auth",
+                })}
               />
             )}
-          </>
+          </VStack>
         )}
       </Formik>
     </View>
@@ -165,7 +175,7 @@ export default function Step4(props: formProps) {
 }
 const styles = StyleSheet.create({
   formulary: {
-    flex: 1,
     gap: 16,
+    paddingBottom: 120,
   },
 });

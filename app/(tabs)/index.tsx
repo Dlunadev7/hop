@@ -14,7 +14,6 @@ export default function HomeScreen() {
     revalidateOnFocus: false,
   });
 
-  console.log(data);
   return (
     <SafeAreaView className="flex-1 mb-28">
       <Text className="text-[35px] mt-5">

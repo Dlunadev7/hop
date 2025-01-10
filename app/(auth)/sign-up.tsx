@@ -5,9 +5,10 @@ import { VStack } from "@/components/ui/vstack";
 import { KeyboardContainer } from "@/components/keyboard/keyboard.component";
 import { Step1, Step2, Step3, Step4 } from "@/components/forms/register";
 import { LinearGradient } from "@/components";
-import { userInfo } from "os";
+import { useTranslation } from "react-i18next";
 
 export default function SignUp() {
+  const { t } = useTranslation();
   const [step, setStep] = useState(1);
   const [payload, setPayload] = useState({
     email: "",
@@ -70,18 +71,20 @@ export default function SignUp() {
           <View style={styles.header}>
             <VStack space="xs">
               <Text className="text-2xl text-center font-semibold">
-                Registro de Hoppy
+                {t("signup.title", { ns: "auth" })}
               </Text>
-              <Text className="text-center">(recepcionista)</Text>
+              <Text className="text-center">{t("signup.subtitle")}</Text>
             </VStack>
             <Text className="text-center mt-[16px]">
               {step === 4
-                ? "Sigue el link para confirmar tu identidad y finalizarla solicitud de registro"
-                : "Para solicitar el registro debes completar los campos siguientes"}
+                ? t("signup.step_message_final")
+                : t("signup.step_message")}
             </Text>
           </View>
           <View style={styles.formulary_container}>
-            <Text className="font-bold text-sm">Paso {step} de 4</Text>
+            <Text className="font-bold text-sm">
+              {t("signup.step_label", { step })}
+            </Text>
             {renderStep()}
           </View>
         </View>
@@ -93,8 +96,7 @@ export default function SignUp() {
 const styles = StyleSheet.create({
   container: {
     gap: 16,
-    paddingHorizontal: 16,
-    margin: "auto",
+    marginVertical: "auto",
     position: "relative",
   },
   header: {

@@ -5,9 +5,9 @@ import { Text } from "@/components/ui/text";
 import { validationSchemaS3 } from "@/schemas/register.schema";
 import { VStack } from "@/components/ui/vstack";
 import Input from "@/components/input/input.component";
-import { Box } from "@/components/ui/box";
-import { Button, ButtonText } from "@/components/ui/button";
 import { StepControl } from "@/components/step-controls/step-control.component";
+import { useTranslation } from "react-i18next";
+import { Box } from "@/components/ui/box";
 
 type formProps = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
@@ -16,10 +16,10 @@ type formProps = {
 
 export default function Step3(props: formProps) {
   const { payload, setStep } = props;
-
+  const { t } = useTranslation();
   return (
     <View style={styles.formulary}>
-      <Text className="text-lg mb-4">Información del Hotel</Text>
+      <Text className="text-lg mb-4">{t("signup.step_3.title")}</Text>
       <Formik
         initialValues={{
           bank_name: "",
@@ -39,10 +39,10 @@ export default function Step3(props: formProps) {
           errors,
           touched,
         }) => (
-          <>
-            <VStack space="md">
+          <VStack space="lg" className="justify-between h-[80%]">
+            <Box className="gap-4">
               <Input
-                label="Nombre del Hotel"
+                label={t("signup.step_3.hotel_name.label")}
                 onBlur={handleBlur("bank_name")}
                 onChangeText={handleChange("bank_name")}
                 placeholder=""
@@ -52,7 +52,7 @@ export default function Step3(props: formProps) {
               />
 
               <Input
-                label="Dirección"
+                label={t("signup.step_3.address.label")}
                 onBlur={handleBlur("home_address")}
                 onChangeText={handleChange("home_address")}
                 placeholder=""
@@ -60,15 +60,19 @@ export default function Step3(props: formProps) {
                 error={touched.home_address && errors.home_address}
                 touched={touched.home_address}
               />
-            </VStack>
+            </Box>
 
             <StepControl
-              handleBack={() => setStep(2)}
+              handleBack={() => setStep(1)}
               handleNext={handleSubmit}
-              textBack="Atrás"
-              textNext="Siguiente"
+              textBack={t("signup.step_2.buttons.back", {
+                ns: "auth",
+              })}
+              textNext={t("signup.step_2.buttons.next", {
+                ns: "auth",
+              })}
             />
-          </>
+          </VStack>
         )}
       </Formik>
     </View>
@@ -78,7 +82,6 @@ export default function Step3(props: formProps) {
 const styles = StyleSheet.create({
   formulary: {
     gap: 16,
-    flex: 1,
-    marginBottom: 120,
+    paddingBottom: 120,
   },
 });

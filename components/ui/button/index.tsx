@@ -135,7 +135,7 @@ const buttonTextStyle = tva({
       link: "",
       outline: "",
       solid:
-        "text-typography-0 data-[hover=true]:text-typography-0 data-[active=true]:text-typography-0",
+        "min-w-44 text-center text-typography-0 data-[hover=true]:text-typography-0 data-[active=true]:text-typography-0",
     },
     size: {
       xs: "text-xs",

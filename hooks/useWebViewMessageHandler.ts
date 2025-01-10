@@ -6,10 +6,9 @@ const useWebViewMessageHandler = () => {
   const handleWebViewMessage = useCallback((event: { nativeEvent: any }) => {
     try {
       const message = JSON.parse(event.nativeEvent.data);
-
       if (message.success) {
         const relevantElements = message.elements.filter(
-          (el: any) => el.text && el.text.includes("You're done!")
+          (el: any) => el.text && el.text.includes("You're done!") || el.text && el.text.includes("¡Listo!")
         );
 
         setIsDone(relevantElements.length > 0);

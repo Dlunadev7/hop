@@ -4,6 +4,7 @@ import { initReactI18next } from 'react-i18next';
 import { resources } from './resources';
 
 export const initializeI18next = async (language: string) => {
+  console.log('language', language)
   await i18next
     .use(Backend)
     .use(initReactI18next)
@@ -11,9 +12,8 @@ export const initializeI18next = async (language: string) => {
       lng: language.toLowerCase(),
       fallbackLng: 'en',
       compatibilityJSON: 'v4',
-      ns: [],
+      ns: ['auth'],
       resources,
-      defaultNS: 'auth',
       interpolation: {
         escapeValue: false,
       },

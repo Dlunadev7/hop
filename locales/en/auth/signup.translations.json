@@ -1,0 +1,79 @@
+{
+  "title": "Hoppy Registration",
+  "subtitle": "(receptionist)",
+  "step_message": "To request registration, you need to complete the following fields",
+  "step_message_final": "Follow the link to confirm your identity and complete the registration request",
+  "step_label": "Step {{step}} of 4",
+  "step_1": {
+    "title": "Personal information",
+    "name": {
+      "label": "Name"
+    },
+    "last_name": {
+      "label": "Surname"
+    },
+    "email": {
+      "label": "Email"
+    },
+    "rut": {
+      "label": "RUT"
+    },
+    "address": {
+      "label": "Address"
+    },
+    "birth_date": {
+      "label": "Birth Date"
+    },
+    "next": "Next",
+    "already_have_account": "¿Already have an account?",
+    "sign_in": "Sign in"
+  },
+  "step_2": {
+    "title": "Bank Account",
+    "fields": {
+      "accountHolder": {
+        "label": "Account Holder",
+        "placeholder": ""
+      },
+      "bankName": {
+        "label": "Bank Name",
+        "placeholder": ""
+      },
+      "accountNumber": {
+        "label": "Account Number",
+        "placeholder": ""
+      },
+      "accountType": {
+        "label": "Account Type",
+        "placeholder": "Select an option"
+      },
+      "rut": {
+        "label": "Holder's RUT",
+        "placeholder": ""
+      }
+    },
+    "accountTypes": {
+      "checking": "Checking Account",
+      "savings_rut": "Savings Account (RUT)",
+      "savings": "Savings Account",
+      "prepaid": "Prepaid"
+    },
+    "buttons": {
+      "back": "Back",
+      "next": "Next"
+    }
+  },
+  "step_3": {
+    "title": "Hotel's Information",
+    "hotel_name": {
+      "label": "Hotel's Name"
+    },
+    "address": {
+      "label": "Address"
+    }
+  },
+  "step_4": {
+    "title": "Verify your Identity",
+    "go_site": "Go to the site"
+  }
+}

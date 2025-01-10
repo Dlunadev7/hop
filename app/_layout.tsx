@@ -16,6 +16,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { AppState, AppStateStatus } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
 import { initializeI18next } from "@/i18n/i18next";
+import { getLocales } from "expo-localization";
 import { AuthProvider } from "@/context/auth.context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -35,9 +36,10 @@ export default function RootLayout() {
   }, [loaded]);
 
   useEffect(() => {
+    const language = getLocales()[0].languageCode;
+
     const setupI18n = async () => {
-      const userLanguage = "es";
-      await initializeI18next(userLanguage);
+      await initializeI18next(language ?? "es");
     };
 
     const loadToken = async () => {
