@@ -15,6 +15,9 @@
     "email": {
       "label": "Email"
     },
+    "password": {
+      "label": "Password"
+    },
     "rut": {
       "label": "RUT"
     },
@@ -70,10 +73,17 @@
     },
     "address": {
       "label": "Address"
-    }
+    },
+    "button": "Send Request"
   },
   "step_4": {
     "title": "Verify your Identity",
-    "go_site": "Go to the site"
+    "go_site": "Go to the site",
+    "go_home": "Go to the beginning"
+  },
+  "finishOnboarding": {
+    "header": "Thank you for signing up!",
+    "description": "We sent your form, our team will review your information, and you will receive an email soon.",
+    "button": "Finish"
   }
 }

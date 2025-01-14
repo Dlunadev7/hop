@@ -6,10 +6,12 @@ import DateTimePicker, {
 import { Modal, ModalBackdrop } from "../ui/modal";
 import { Colors } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
+import dayjs from "dayjs";
 
 interface CalendarProps {
   isVisible: boolean;
   date: Date;
+  maximumDate?: Date;
   onDateChange: (date: Date) => void;
   onClose: () => void;
   setOpen?: (open: boolean) => void;
@@ -18,6 +20,7 @@ interface CalendarProps {
 const CalendarPickerIOS: React.FC<CalendarProps> = ({
   isVisible,
   date,
+  maximumDate,
   onDateChange,
   onClose,
   setOpen,
@@ -40,7 +43,7 @@ const CalendarPickerIOS: React.FC<CalendarProps> = ({
         mode="date"
         display="inline"
         onChange={onChange}
-        maximumDate={new Date()}
+        maximumDate={maximumDate}
         accentColor={Colors.PRIMARY}
         style={styles.calendar}
       />
@@ -51,6 +54,7 @@ const CalendarPickerIOS: React.FC<CalendarProps> = ({
 const CalendarPickerAndroid: React.FC<CalendarProps> = ({
   isVisible,
   date,
+  maximumDate,
   onDateChange,
   onClose,
 }) => {
@@ -65,7 +69,7 @@ const CalendarPickerAndroid: React.FC<CalendarProps> = ({
         },
         mode: "date",
         display: "default",
-        minimumDate: new Date(),
+        maximumDate: maximumDate,
       });
     }
   }, [isVisible]);
@@ -75,10 +79,12 @@ const CalendarPickerAndroid: React.FC<CalendarProps> = ({
 
 export const Calendar = (props: CalendarProps) => {
   const { setOpen, ...rest } = props;
+  const maximumDate = dayjs().subtract(18, "year").toDate();
+
   return Platform.OS === "ios" ? (
-    <CalendarPickerIOS {...rest} setOpen={setOpen} />
+    <CalendarPickerIOS {...rest} setOpen={setOpen} maximumDate={maximumDate} />
   ) : (
-    <CalendarPickerAndroid {...rest} />
+    <CalendarPickerAndroid {...rest} maximumDate={maximumDate} />
   );
 };
 

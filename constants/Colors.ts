@@ -7,5 +7,6 @@ export const Colors = {
   LIGHT_GRADIENT_1: "#E1F5F3",
   LIGHT_GRADIENT_2: "#FCFDFC",
   ERROR: "#9A0000",
-  GRAY: "#8E8E8E"
+  GRAY: "#8E8E8E",
+  WHITE_SECONDARY: "#FCFCFC",
 }

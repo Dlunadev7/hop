@@ -1,28 +1,29 @@
 import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { Formik, FormikErrors } from "formik";
-import { Text } from "@/components/ui/text";
 import { validationSchema } from "@/schemas/register.schema";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import Input from "@/components/input/input.component";
 import { CalendarDaysIcon } from "@/components/ui/icon";
 import { Calendar } from "@/components/calendar/calendar.component";
-import { Box } from "@/components/ui/box";
-import { Button, ButtonText } from "@/components/ui/button";
 import { dateToString, stringToDate } from "@/helpers/date";
-import dayjs from "dayjs";
 import { router } from "expo-router";
 import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 import { useTranslation } from "react-i18next";
+import { Button } from "@/components/button/button.component";
+import { Text } from "@/components/text/text.component";
+import { Colors } from "@/constants/Colors";
+import { RegisterType } from "@/utils/types/register.type";
 
 type formProps = {
+  payloadValues: RegisterType;
   setStep: React.Dispatch<React.SetStateAction<number>>;
   payload: React.Dispatch<React.SetStateAction<{}>>;
 };
 
 export default function Step1(props: formProps) {
-  const { payload, setStep } = props;
+  const { payload, setStep, payloadValues } = props;
   const [openCalendar, setOpenCalendar] = useState(false);
   const { t } = useTranslation();
 
@@ -46,26 +47,29 @@ export default function Step1(props: formProps) {
     }
   };
 
+  console.log(payloadValues);
+
   return (
-    <View style={styles.formulary}>
-      <Text className="text-lg">
+    <View style={styles.formulary} className="pb-4">
+      <Text fontSize={16} fontWeight={400}>
         {t("signup.step_1.title", { ns: "auth" })}
       </Text>
       <Formik
         initialValues={{
-          firstName: "",
-          lastName: "",
-          email: "",
-          password: "",
-          rut: "",
-          address: "",
-          birthDate: "",
+          firstName: payloadValues.userInfo.firstName,
+          lastName: payloadValues.userInfo.lastName,
+          email: payloadValues.email,
+          password: payloadValues.password,
+          rut: payloadValues.userInfo.rut,
+          address: payloadValues.userInfo.home_address,
+          birthDate: payloadValues.userInfo.birthdate,
         }}
         validationSchema={schema}
         onSubmit={(values) => {
           setStep(2);
-          payload(values);
+          payload({ home_address: values.address, ...values });
         }}
+        enableReinitialize
       >
         {({
           handleChange,
@@ -114,7 +118,7 @@ export default function Step1(props: formProps) {
               />
 
               <Input
-                label="Password"
+                label={t("signup.step_1.password.label", { ns: "auth" })}
                 placeholder=""
                 secureTextEntry
                 onChangeText={handleChange("password")}
@@ -176,26 +180,24 @@ export default function Step1(props: formProps) {
                 onDateChange={(date) => handleDateChange(date, setFieldValue)}
               />
 
-              <Box className="mt-[24px] gap-3">
+              <VStack className="mt-[24px] gap-5 w-full items-center">
                 <Button
-                  variant="solid"
-                  className="rounded-xl bg-[#2EC4B6] self-center"
+                  style={{ alignSelf: "center" }}
                   onPress={() => handleSubmit()}
                 >
-                  <ButtonText className="font-semibold text-lg">
-                    {t("signup.step_1.next", { ns: "auth" })}
-                  </ButtonText>
+                  {t("signup.step_1.next", { ns: "auth" })}
                 </Button>
-                <Text className="text-center text-[#10524B]">
+                <Text fontSize={14} fontWeight={300} textColor={Colors.BLACK}>
                   {t("signup.step_1.already_have_account", { ns: "auth" })}{" "}
                   <Text
-                    className="font-semibold"
+                    fontSize={14}
+                    fontWeight={600}
                     onPress={() => router.push(AuthRoutesLink.SIGN_IN)}
                   >
                     {t("signup.step_1.sign_in", { ns: "auth" })}
                   </Text>
                 </Text>
-              </Box>
+              </VStack>
             </VStack>
           );
         }}

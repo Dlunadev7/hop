@@ -1,6 +1,9 @@
 import { View, Text, StyleSheet } from "react-native";
 import React, { ReactElement } from "react";
-import { LinearGradient as ELinearGradient } from "expo-linear-gradient";
+import {
+  LinearGradient as ELinearGradient,
+  LinearGradientProps,
+} from "expo-linear-gradient";
 import { Colors } from "@/constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 type LineaGradientProps = {
@@ -9,7 +12,9 @@ type LineaGradientProps = {
   style?: object;
 };
 
-export const LinearGradient = (props: LineaGradientProps) => {
+export const LinearGradient = (
+  props: LineaGradientProps & Omit<LinearGradientProps, "colors">
+) => {
   const { children, colors, style } = props;
   const insets = useSafeAreaInsets();
   const LinearGradientColors = colors
@@ -22,6 +27,7 @@ export const LinearGradient = (props: LineaGradientProps) => {
     <ELinearGradient
       colors={LinearGradientColors}
       style={[customStyle, { paddingTop: insets.top + 24 }]}
+      {...props}
     >
       {children}
     </ELinearGradient>

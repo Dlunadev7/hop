@@ -1,23 +1,22 @@
 import { Keyboard, StyleSheet, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Hop } from "@/assets/svg";
-import { Text } from "@/components/ui/text";
-import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { VStack } from "@/components/ui/vstack";
 import { router } from "expo-router";
 import { AuthRoutesLink } from "@/utils/enum/auth.routes";
-import { ErrorMessage, Formik } from "formik";
+import { Formik } from "formik";
 import { Box } from "@/components/ui/box";
 import validationSchema from "@/schemas/login.schema";
 import { KeyboardContainer } from "@/components/keyboard/keyboard.component";
 import { Input, LinearGradient } from "@/components";
-import useSWR from "swr";
-import { getUserLogged, login } from "@/services/auth.service";
+import { login } from "@/services/auth.service";
 import { useAuth } from "@/context/auth.context";
 import { Colors } from "@/constants/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ErrorWithStatus } from "@/utils/interfaces/error.interface";
 import { useTranslation } from "react-i18next";
+import { Text } from "@/components/text/text.component";
+import { Button } from "@/components/button/button.component";
 
 export default function SignIn() {
   const { t } = useTranslation();
@@ -55,6 +54,7 @@ export default function SignIn() {
               title: "Ups! Hubo un problema al intentar iniciar sesión",
               subtitle: "Por favor, intenta nuevamente más tarde.",
               buttonText: "Ir al inicio",
+              // @ts-ignore
               buttonAction: () => router.replace("/(auth)/sign-in"),
             },
           });
@@ -70,15 +70,22 @@ export default function SignIn() {
   };
 
   return (
-    <LinearGradient style={styles.wrapper}>
+    <LinearGradient locations={[0, 0.3]} style={styles.wrapper}>
       <KeyboardContainer>
         <View style={styles.container}>
-          <VStack space="lg" className="items-center mb-9">
+          <VStack space="lg" className="items-center mb-9 w-[100%]">
             <Hop color={Colors.SECONDARY} />
-            <Text className="text-2xl font-semibold mt-12">
+            <Text
+              fontSize={28}
+              fontWeight={600}
+              textColor={Colors.DARK_GREEN}
+              className="text-2xl font-semibold mt-12"
+            >
               {t("signin.welcome", { ns: "auth" })}
             </Text>
-            <Text>{t("signin.sign_in_to_your_account", { ns: "auth" })}</Text>
+            <Text fontSize={16} fontWeight={400} textAlign="center">
+              {t("signin.sign_in_to_your_account", { ns: "auth" })}
+            </Text>
           </VStack>
           <Formik
             initialValues={{ email: "", password: "" }}
@@ -105,9 +112,10 @@ export default function SignIn() {
                     error={touched.email && errors.email}
                     keyboardType="email-address"
                     autoCapitalize="none"
+                    isRequired
                   />
 
-                  <Box>
+                  <Box className="gap-[8px]">
                     <Input
                       label={t("signin.password_label", { ns: "auth" })}
                       placeholder=""
@@ -118,9 +126,12 @@ export default function SignIn() {
                       touched={touched.password}
                       error={touched.password && errors.password}
                       rightIcon
+                      isRequired
                     />
                     <Text
-                      className="text-[#2EC4B6] underline mt-2"
+                      textColor={Colors.SECONDARY}
+                      underline
+                      fontSize={14}
                       onPress={() =>
                         router.push(AuthRoutesLink.RECOVERY_PASSWORD)
                       }
@@ -129,27 +140,14 @@ export default function SignIn() {
                     </Text>
                   </Box>
                 </VStack>
-                <VStack space="lg" className="mt-28">
-                  <Button
-                    variant="solid"
-                    className="rounded-xl bg-[#2EC4B6] self-center"
-                    onPress={() => handleSubmit()}
-                  >
-                    {!loading ? (
-                      <ButtonText className="font-semibold text-lg">
-                        {t("signin.sign_in_button", { ns: "auth" })}
-                      </ButtonText>
-                    ) : (
-                      <ButtonSpinner
-                        className={loading ? "min-w-44 " : ""}
-                        color={Colors.WHITE}
-                      />
-                    )}
+                <VStack className="mt-28 gap-[20px]">
+                  <Button onPress={() => handleSubmit()} loading={loading}>
+                    {t("signin.sign_in_button", { ns: "auth" })}
                   </Button>
-                  <Text className="text-center text-[#10524B]">
+                  <Text fontSize={14} fontWeight={300} textAlign="center">
                     {t("signin.no_account", { ns: "auth" })}{" "}
                     <Text
-                      className="font-semibold"
+                      fontWeight={600}
                       onPress={() => {
                         router.navigate(AuthRoutesLink.SIGN_UP);
                       }}

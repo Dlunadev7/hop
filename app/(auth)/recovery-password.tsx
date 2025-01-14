@@ -1,25 +1,31 @@
 import { StyleSheet, View } from "react-native";
-import React, { useState } from "react";
-import { Hop } from "@/assets/svg";
-import { Text } from "@/components/ui/text";
-import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
+import React, { useEffect, useState } from "react";
 import { VStack } from "@/components/ui/vstack";
 import { Formik } from "formik";
 import { KeyboardContainer } from "@/components/keyboard/keyboard.component";
 import validationSchema from "@/schemas/send-code";
 import { Input, LinearGradient } from "@/components";
 import { recoveryPassword } from "@/services/auth.service";
-import { Colors } from "@/constants/Colors";
 import { useTranslation } from "react-i18next";
+import { Button } from "@/components/button/button.component";
+import { Text } from "@/components/text/text.component";
+import { Colors } from "@/constants/Colors";
+import useTimer from "@/hooks/useTimer.hook";
 
 export default function RecoveryPassword() {
-  const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   const schema = validationSchema(t);
+  const { formattedTime, reset, start } = useTimer();
+
+  const [loading, setLoading] = useState(false);
+  const [showTimer, setShowTimer] = useState(false);
+  const [isCodeSent, setIsCodeSent] = useState(false);
+
   const handleSendEmail = async ({ email }: { email: string }) => {
     setLoading(true);
     try {
       await recoveryPassword(email);
+      setIsCodeSent(true);
     } catch (error) {
       console.error(error);
     } finally {
@@ -27,16 +33,28 @@ export default function RecoveryPassword() {
     }
   };
 
+  useEffect(() => {
+    if (showTimer) {
+      start();
+    }
+  }, [showTimer]);
+
+  useEffect(() => {
+    if (formattedTime === "00:00") {
+      setShowTimer(false);
+      reset();
+    }
+  }, [formattedTime]);
+
   return (
-    <LinearGradient>
+    <LinearGradient locations={[0, 0.3]}>
       <KeyboardContainer>
         <View style={styles.container}>
           <VStack space="lg" className="items-center mb-9">
-            <Hop color={Colors.PRIMARY} />
-            <Text className="text-2xl font-semibold mt-12">
+            <Text fontSize={28} fontWeight={600} textColor={Colors.DARK_GREEN}>
               {t("forgot_password.title")}
             </Text>
-            <Text className="text-center">
+            <Text fontSize={14} fontWeight={400} textAlign="center">
               {t("forgot_password.description")}
             </Text>
           </VStack>
@@ -51,6 +69,8 @@ export default function RecoveryPassword() {
               handleChange,
               handleBlur,
               handleSubmit,
+              setFieldError,
+              setTouched,
               values,
               errors,
               touched,
@@ -71,31 +91,37 @@ export default function RecoveryPassword() {
                 </VStack>
                 <VStack space="lg" className="mt-28">
                   <Button
-                    variant="solid"
-                    className="rounded-xl bg-[#2EC4B6] self-center"
                     onPress={() => {
                       handleSubmit();
                     }}
+                    loading={loading}
                   >
-                    {loading ? (
-                      <ButtonSpinner color={Colors.WHITE} />
-                    ) : (
-                      <ButtonText className="font-semibold text-lg">
-                        {t("forgot_password.sendCodeButton")}
-                      </ButtonText>
-                    )}
+                    {t("forgot_password.sendCodeButton")}
                   </Button>
-                  <Text className="text-center text-[#10524B]">
-                    {t("forgot_password.resendCodePrompt")}{" "}
-                    <Text
-                      className="font-semibold"
-                      onPress={() => {
-                        handleSendEmail(values);
-                      }}
-                    >
-                      {t("forgot_password.resendCodeAction")}
+                  {isCodeSent && (
+                    <Text textAlign="center">
+                      {t("forgot_password.resendCodePrompt")}{" "}
+                      <Text
+                        fontWeight={600}
+                        onPress={() => {
+                          if (values.email.length < 1) {
+                            setFieldError("email", "El email es requerido");
+                            setTouched({ ...touched, email: true });
+                            return;
+                          }
+                          if (!showTimer) {
+                            handleSendEmail(values);
+                            setShowTimer(true);
+                            return;
+                          }
+                        }}
+                      >
+                        {showTimer
+                          ? formattedTime
+                          : t("forgot_password.resendCodeAction")}
+                      </Text>
                     </Text>
-                  </Text>
+                  )}
                 </VStack>
               </>
             )}

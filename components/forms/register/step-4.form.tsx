@@ -1,11 +1,8 @@
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, Linking, Platform } from "react-native";
 
 import React, { useEffect, useRef, useState } from "react";
 import { Formik } from "formik";
 import { Text } from "@/components/ui/text";
-import { router } from "expo-router";
-import { AuthRoutesLink } from "@/utils/enum/auth.routes";
-import { StepControl } from "@/components/step-controls/step-control.component";
 import WebView from "react-native-webview";
 import {
   Actionsheet,
@@ -15,19 +12,18 @@ import {
   ActionsheetDragIndicatorWrapper,
   ActionsheetItem,
 } from "@/components/ui/actionsheet";
-import { Button, ButtonText } from "@/components/ui/button";
 import { VStack } from "@/components/ui/vstack";
 import { Colors } from "@/constants/Colors";
 import { CircleArrowRight } from "@/assets/svg";
 import useWebViewMessageHandler from "@/hooks/useWebViewMessageHandler";
 import useInjectJavaScript from "@/hooks/useInjectJavascript";
 import { METAMAP_API_KEY, METAMAP_API_URL, METAMAP_FLOW_ID } from "@/config";
-import useSWR from "swr";
-import { createUser, login } from "@/services/auth.service";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTranslation } from "react-i18next";
 // @ts-ignore
-
+import { Camera } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+import { Button } from "@/components/button/button.component";
+import { router } from "expo-router";
 type formProps = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
   payload: React.Dispatch<React.SetStateAction<{}>>;
@@ -35,65 +31,47 @@ type formProps = {
 };
 
 export default function Step4(props: formProps) {
-  const { data, error, mutate } = useSWR("signup", async () => null, {
-    revalidateOnFocus: false,
-  });
+  const requestPermissions = async () => {
+    await Camera.requestCameraPermissionsAsync();
+    await MediaLibrary.requestPermissionsAsync();
+  };
+
+  useEffect(() => {
+    requestPermissions();
+  }, []);
+
   const { setStep, payloadValues } = props;
+
   const { t } = useTranslation();
 
   const { isDone, handleWebViewMessage } = useWebViewMessageHandler();
   const injectJavaScript = useInjectJavaScript();
 
-  console.log(isDone);
-
-  const [loading, setLoading] = useState(false);
   const [openAccordion, setOpenAccordion] = useState(false);
-
   const webViewRef = useRef(null);
 
-  const handleSignUp = async (values: any) => {
-    setLoading(true);
-    try {
-      await createUser(values);
-
-      const response = await login({
-        email: values.email,
-        password: values.password,
-      });
-
-      await AsyncStorage.setItem(
-        "auth_token",
-        JSON.stringify({
-          token: response.access_token,
-          refreshToken: response.refresh_token,
-        })
-      );
-
-      router.replace(AuthRoutesLink.FINISH_ONBOARDING);
-      mutate();
-    } catch (err) {
-      console.error("Error al iniciar sesión:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <View style={styles.formulary}>
+    <View style={styles.formulary} className="pb-4">
       <Text className="text-lg mb-4">{t("signup.step_4.title")}</Text>
       <Formik
         initialValues={{}}
         onSubmit={() => {
-          handleSignUp(payloadValues);
           console.log(payloadValues);
         }}
       >
         {({ handleSubmit }) => (
-          <VStack space="lg" className="justify-between h-[80%]">
+          <VStack
+            space="lg"
+            className={`justify-between ${
+              Platform.OS === "ios" ? "h-[80%]" : "h-[82%]"
+            }`}
+          >
             <Pressable
               style={{ backgroundColor: Colors.PRIMARY }}
               className={`p-2 h-11 w-72 rounded-2xl px-3 flex-row items-center gap-2 self-center justify-center hover:none`}
-              onPress={() => setOpenAccordion(true)}
+              onPress={() => {
+                setOpenAccordion(true);
+              }}
             >
               <Text
                 className={`text-lg font-semibold text-[${Colors.DARK_GREEN}] hover:none`}
@@ -123,9 +101,8 @@ export default function Step4(props: formProps) {
                         }}
                         javaScriptEnabled
                         domStorageEnabled
-                        allowsInlineMediaPlayback
-                        mediaPlaybackRequiresUserAction={false}
                         originWhitelist={["*"]}
+                        mixedContentMode="always"
                         className="flex-1"
                         injectedJavaScript={injectJavaScript()}
                         onMessage={handleWebViewMessage}
@@ -138,16 +115,16 @@ export default function Step4(props: formProps) {
                           }
                         }}
                         ref={webViewRef}
+                        onError={(error) =>
+                          console.error("WebView Error:", error)
+                        }
+                        onHttpError={(error) =>
+                          console.error("HTTP Error:", error)
+                        }
                       />
                       {isDone && (
-                        <Button
-                          variant="solid"
-                          className="rounded-xl bg-[#2EC4B6] self-center"
-                          onPress={() => setOpenAccordion(false)}
-                        >
-                          <ButtonText className="font-semibold text-lg">
-                            Finalizar
-                          </ButtonText>
+                        <Button onPress={() => setOpenAccordion(false)}>
+                          Finalizar
                         </Button>
                       )}
                     </VStack>
@@ -155,17 +132,14 @@ export default function Step4(props: formProps) {
                 </ActionsheetContent>
               </Actionsheet>
             )}
-            {isDone && (
-              <StepControl
-                handleBack={() => setStep(1)}
-                handleNext={handleSubmit}
-                textBack={t("signup.step_2.buttons.back", {
-                  ns: "auth",
-                })}
-                textNext={t("signup.step_2.buttons.next", {
-                  ns: "auth",
-                })}
-              />
+            {!isDone ? (
+              <Button onPress={() => router.replace("/(tabs)")}>
+                {t("signup.step_4.go_home")}{" "}
+              </Button>
+            ) : (
+              <Button onPress={() => router.replace("/(tabs)")}>
+                {t("signup.step_4.go_home")}{" "}
+              </Button>
             )}
           </VStack>
         )}
@@ -176,6 +150,6 @@ export default function Step4(props: formProps) {
 const styles = StyleSheet.create({
   formulary: {
     gap: 16,
-    paddingBottom: 120,
+    paddingBottom: Platform.OS === "ios" ? 120 : 0,
   },
 });
