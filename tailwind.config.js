@@ -167,7 +167,8 @@ module.exports = {
         heading: undefined,
         body: undefined,
         mono: undefined,
-        roboto: ['Roboto', 'sans-serif'],
+        roboto: ['Outfit-Bold'],
+        medium: ['Outfit-SemiBold']
       },
       fontWeight: {
         extrablack: '950',

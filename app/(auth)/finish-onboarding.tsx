@@ -3,34 +3,39 @@ import React from "react";
 import { Hop } from "@/assets/svg";
 import { AssetsImages } from "@/assets/images";
 import { Text } from "@/components/ui/text";
-import { Button, ButtonText } from "@/components/ui/button";
 import { VStack } from "@/components/ui/vstack";
 import { Image } from "react-native";
-import { router } from "expo-router";
 import { LinearGradient } from "@/components";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/button/button.component";
+import { router } from "expo-router";
+import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 
 export default function FinishOnboarding() {
+  const { t } = useTranslation();
   return (
     <LinearGradient>
       <View style={styles.container}>
         <VStack space="lg" className="items-center mb-9">
           <Hop />
           <Text className="text-2xl font-semibold">
-            ¡Gracias por registrarte!
+            {t("signup.finishOnboarding.header")}
           </Text>
         </VStack>
         <Image source={AssetsImages.onboardingSuccess} />
         <VStack space="lg" className="mt-28">
           <Text className="text-center text-sm">
-            Enviamos tu formulario, nuestro equipo revisará tus datos y
-            recibirás un email pronto.
+            {t("signup.finishOnboarding.description")}
           </Text>
           <Button
-            variant="solid"
-            className="rounded-xl bg-[#2EC4B6] self-center"
-            onPress={() => router.replace("/(tabs)")}
+            onPress={() =>
+              router.replace({
+                pathname: AuthRoutesLink.SIGN_UP,
+                params: { step: 4 },
+              })
+            }
           >
-            <ButtonText className="font-semibold text-lg">Finalizar</ButtonText>
+            {t("signup.finishOnboarding.button")}
           </Button>
         </VStack>
       </View>

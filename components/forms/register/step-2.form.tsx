@@ -1,44 +1,41 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
 import { Formik } from "formik";
-import { Text } from "@/components/ui/text";
 import { validationSchemaS1 } from "@/schemas/register.schema";
 import { VStack } from "@/components/ui/vstack";
 import { Input } from "@/components/input/input.component";
-import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { accountTypes } from "@/constants/account.constants";
 import { Select } from "@/components/select/select.component";
-import { HStack } from "@/components/ui/hstack";
-import { ArrowLeftIcon } from "@/components/ui/icon";
-import { Colors } from "@/constants/Colors";
-import { ArrowLeft } from "@/assets/svg";
 import { StepControl } from "@/components/step-controls/step-control.component";
 import { useTranslation } from "react-i18next";
+import { Text } from "@/components/text/text.component";
+import { RegisterType } from "@/utils/types/register.type";
 
 type formProps = {
+  payloadValues: RegisterType;
   setStep: React.Dispatch<React.SetStateAction<number>>;
   payload: React.Dispatch<React.SetStateAction<{}>>;
 };
 
 export default function Step2(props: formProps) {
-  const { payload, setStep } = props;
+  const { payload, setStep, payloadValues } = props;
   const { t } = useTranslation();
   const schema = validationSchemaS1(t);
   console.log(
     t("validations.step_2.bank_account_type.current_account", { ns: "auth" })
   );
   return (
-    <View style={styles.formulary}>
-      <Text className="text-lg mb-4">
+    <View style={styles.formulary} className="pb-4">
+      <Text fontSize={16} fontWeight={400}>
         {t("signup.step_2.title", { ns: "auth" })}
       </Text>
       <Formik
         initialValues={{
-          bank_account_holder: "",
-          bank_name: "",
-          bank_account_rut: "",
-          bank_account_type: "",
-          bank_account: "",
+          bank_account_holder: payloadValues.userInfo.bank_account_holder,
+          bank_name: payloadValues.userInfo.bank_name,
+          bank_account_rut: payloadValues.userInfo.bank_account_rut,
+          bank_account_type: payloadValues.userInfo.bank_account_type,
+          bank_account: payloadValues.userInfo.bank_account,
         }}
         validationSchema={schema}
         onSubmit={(values) => {
@@ -56,7 +53,7 @@ export default function Step2(props: formProps) {
         }) => {
           console.log(errors);
           return (
-            <VStack space="md">
+            <VStack space="md" className="mt-[32px]">
               <Input
                 label={t("signup.step_2.fields.accountHolder.label", {
                   ns: "auth",
@@ -109,6 +106,13 @@ export default function Step2(props: formProps) {
                   ),
                   value: type.value,
                 }))}
+                value={
+                  values.bank_account_type.length > 0
+                    ? t(
+                        `validations.step_2.bank_account_type.${values.bank_account_type}`
+                      )
+                    : ""
+                }
                 touched={touched.bank_account_type}
                 error={touched.bank_account_type && errors.bank_account_type}
               />
@@ -146,6 +150,7 @@ export default function Step2(props: formProps) {
 const styles = StyleSheet.create({
   formulary: {
     gap: 16,
-    flex: 1,
+    flexGrow: 1,
+    // backgroundColor: "red",
   },
 });

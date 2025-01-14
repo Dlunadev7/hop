@@ -26,7 +26,15 @@ export default function RootLayout() {
   const [token, setToken] = useState<string | null>();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    "Outfit-Black": require("../assets/fonts/Outfit-Black.ttf"),
+    "Outfit-Bold": require("../assets/fonts/Outfit-Bold.ttf"),
+    "Outfit-ExtraBold": require("../assets/fonts/Outfit-ExtraBold.ttf"),
+    "Outfit-ExtraLight": require("../assets/fonts/Outfit-ExtraLight.ttf"),
+    "Outfit-Light": require("../assets/fonts/Outfit-Light.ttf"),
+    "Outfit-Medium": require("../assets/fonts/Outfit-Medium.ttf"),
+    "Outfit-Regular": require("../assets/fonts/Outfit-Regular.ttf"),
+    "Outfit-Thin": require("../assets/fonts/Outfit-Thin.ttf"),
+    "Outfit-SemiBold": require("../assets/fonts/Outfit-SemiBold.ttf"),
   });
 
   useEffect(() => {
@@ -99,20 +107,16 @@ export default function RootLayout() {
         }}
       >
         <GluestackUIProvider mode="light">
-          <ThemeProvider
-            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-          >
-            <Stack screenOptions={{ headerShown: false }}>
-              {token ? (
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              ) : (
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              )}
-              <Stack.Screen name="+not-found" />
-              <Stack.Screen name="error" />
-            </Stack>
-            <StatusBar style="auto" />
-          </ThemeProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            {token ? (
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            ) : (
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            )}
+            <Stack.Screen name="+not-found" />
+            <Stack.Screen name="error" />
+          </Stack>
+          <StatusBar style="auto" />
         </GluestackUIProvider>
       </SWRConfig>
     </AuthProvider>

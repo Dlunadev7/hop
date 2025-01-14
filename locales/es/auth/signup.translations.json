@@ -15,6 +15,9 @@
     "email": {
       "label": "Correo Electrónico"
     },
+    "password": {
+      "label": "Contraseña"
+    },
     "rut": {
       "label": "RUT"
     },
@@ -70,10 +73,17 @@
     },
     "address": {
       "label": "Dirección"
-    }
+    },
+    "button": "Enviar Solicitud"
   },
   "step_4": {
     "title": "Verifica tu Identidad",
-    "go_site": "Ir al sitio"
+    "go_site": "Ir al sitio",
+    "go_home": "Ir al inicio"
+  },
+  "finishOnboarding": {
+    "header": "¡Gracias por registrarte!",
+    "description": "Enviamos tu formulario, nuestro equipo revisará tus datos y recibirás un email pronto.",
+    "button": "Finalizar"
   }
 }

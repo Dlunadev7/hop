@@ -12,6 +12,7 @@ import { AlertCircleIcon, EyeIcon, EyeOffIcon } from "../ui/icon";
 import { Pressable, TextInputProps } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { IInputFieldProps } from "@gluestack-ui/input/lib/types";
+import { Text } from "../text/text.component";
 
 interface CustomInputProps {
   label: string;
@@ -48,6 +49,7 @@ export const Input = (
     icon,
     editable = true,
     pressable = false,
+    isRequired,
   } = props;
 
   const [secureTextEntry, setSecureTextEntry] = useState(props.secureTextEntry);
@@ -108,8 +110,10 @@ export const Input = (
       )}
       {touched && error && (
         <FormControlError>
-          <FormControlErrorIcon as={AlertCircleIcon} />
-          <FormControlErrorText>{error}</FormControlErrorText>
+          <FormControlErrorIcon as={AlertCircleIcon} color={Colors.ERROR} />
+          <Text textColor={Colors.ERROR} fontWeight={300} className="flex-1">
+            {error}
+          </Text>
         </FormControlError>
       )}
     </FormControl>

@@ -2,18 +2,14 @@
   "expo": {
     "name": "hop",
     "icon": "./assets/images/icon.png",
-    "slug": "hop",
+    "slug": "Hop",
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "hop",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "permissions": [
-      "CAMERA",
-      "AUDIO_RECORDING"
-    ],
     "ios": {
-      "icon": "./assets/images/logo.png",
+      "icon": "./assets/images/icon-ios.png",
       "supportsTablet": true,
       "infoPlist": {
         "NSAppTransportSecurity": {
@@ -26,14 +22,14 @@
         "image": "./assets/images/logo.png",
         "resizeMode": "contain",
         "backgroundColor": "#2EC4B6"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyA-ZmtD-z4aZum_q86kpI2qJCJt-bNe5ts"
+        }
       }
     },
     "android": {
-      "permissions": [
-        "ACCESS_NETWORK_STATE",
-        "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO"
-      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
@@ -41,8 +37,19 @@
       "splash": {
         "image": "./assets/images/logo.png",
         "resizeMode": "contain",
-        "backgroundColor": "#2EC4B6",
-        "width": 250
+        "backgroundColor": "#2EC4B6"
+      },
+      "permissions": [
+        "ACCESS_NETWORK_STATE",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyA-ZmtD-z4aZum_q86kpI2qJCJt-bNe5ts"
+        }
       },
       "package": "com.dlunadev7.hop"
     },
@@ -53,11 +60,23 @@
     },
     "plugins": [
       "expo-router",
-      "react-native-expo-metamap-sdk",
-      "expo-localization"
+      "expo-localization",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "ffac8269-4d76-4934-b577-ae5361729782"
+      },
+      "EXPO_METAMAP_API_KEY": "677d56c40b01cf001d58b796",
+      "EXPO_METAMAP_FLOW_ID": "677d56c40b01cf001d58b795",
+      "EXPO_API_URL": "https://hop.api.novexisconsulting.xyz/api",
+      "EXPO_PUBLIC_API_URL_MAP": "pk.eyJ1IjoiZGx1bmFkZXYiLCJhIjoiY2x6bG9kamtlMDR0NjJxb25tcmFxYjZ5eiJ9.m31EMqqEeF7NOMTPGCbpJQ"
     }
   }
 }

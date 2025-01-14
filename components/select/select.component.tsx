@@ -48,6 +48,7 @@ interface CustomFormControlProps {
     content?: string;
     item?: string;
   };
+  value: string;
 }
 
 export const Select = (props: CustomFormControlProps) => {
@@ -61,6 +62,7 @@ export const Select = (props: CustomFormControlProps) => {
     error,
     touched,
     customClassNames = {},
+    value,
   } = props;
 
   return (
@@ -83,6 +85,7 @@ export const Select = (props: CustomFormControlProps) => {
           <SelectInput
             placeholder={placeholder}
             className={`flex-1 ${error ? "placeholder:text-[#9A0000]" : ""}`}
+            value={value}
           />
           <SelectIcon
             className={`mr-3 ${customClassNames.icon}`}
