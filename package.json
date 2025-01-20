@@ -19,6 +19,7 @@
     "@expo/vector-icons": "^14.0.2",
     "@gluestack-ui/actionsheet": "^0.2.46",
     "@gluestack-ui/button": "^1.0.8",
+    "@gluestack-ui/fab": "^0.1.22",
     "@gluestack-ui/form-control": "^0.1.19",
     "@gluestack-ui/icon": "^0.1.25",
     "@gluestack-ui/image": "^0.1.11",
@@ -48,6 +49,8 @@
     "expo-haptics": "~14.0.0",
     "expo-linear-gradient": "~14.0.1",
     "expo-linking": "~7.0.3",
+    "expo-localization": "~16.0.0",
+    "expo-location": "~18.0.4",
     "expo-media-library": "~17.0.4",
     "expo-router": "~4.0.16",
     "expo-splash-screen": "~0.29.19",
@@ -79,9 +82,7 @@
     "ssri": "^12.0.0",
     "swr": "^2.3.0",
     "tailwindcss": "^3.4.17",
-    "yup": "^1.6.1",
-    "expo-location": "~18.0.4",
-    "expo-localization": "~16.0.0"
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

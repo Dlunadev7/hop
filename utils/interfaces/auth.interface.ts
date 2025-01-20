@@ -24,37 +24,6 @@ export interface UserDocument {
   vehiclePictures: string | null;
 }
 
-export interface UserInfo {
-  bank_account: string;
-  bank_account_holder: string;
-  bank_account_rut: string;
-  bank_account_type: string;
-  bank_name: string;
-  created_at: string;
-  deleted_at: string | null;
-  firstName: string;
-  home_address: string;
-  id: string;
-  lastName: string;
-  phone: string;
-  profilePic: string | null;
-  rut: string;
-  updated_at: string;
-}
-
-export interface User {
-  created_at: string;
-  deleted_at: string | null;
-  email: string;
-  id: string;
-  isActive: boolean;
-  password: string;
-  role: string;
-  updated_at: string;
-  userDocument: UserDocument;
-  userInfo: UserInfo;
-}
-
 export interface CreateUserResponse {
   bank_account: string;
   bank_account_type: string;
@@ -64,4 +33,44 @@ export interface CreateUserResponse {
   lastName: string;
   phone: string;
   rut: string;
+}
+
+interface HomeAddress {
+  lat: number | string;
+  lng: number | string;
+  address: string;
+}
+
+interface BankName {
+  id: string;
+  name: string;
+}
+
+interface HotelLocation {
+  lat: number | string;
+  lng: number | string;
+  address: string;
+}
+
+export interface UserInfo {
+  firstName?: string;
+  lastName?: string;
+  rut?: string;
+  phone?: string;
+  home_address?: HomeAddress;
+  bank_account_holder: string;
+  bank_account_rut: string;
+  bank_name?: BankName;
+  bank_account?: string;
+  bank_account_type?: string;
+  hotel_name?: string;
+  hotel_location?: HotelLocation;
+}
+
+export interface User {
+  id: string;
+  email: string;
+  password: string;
+  role: "USER_HOPPER" | string;
+  userInfo: UserInfo;
 }

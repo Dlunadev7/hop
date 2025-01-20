@@ -53,12 +53,7 @@ export default function Step4(props: formProps) {
   return (
     <View style={styles.formulary} className="pb-4">
       <Text className="text-lg mb-4">{t("signup.step_4.title")}</Text>
-      <Formik
-        initialValues={{}}
-        onSubmit={() => {
-          console.log(payloadValues);
-        }}
-      >
+      <Formik initialValues={{}} onSubmit={() => {}}>
         {({ handleSubmit }) => (
           <VStack
             space="lg"
@@ -134,11 +129,11 @@ export default function Step4(props: formProps) {
             )}
             {!isDone ? (
               <Button onPress={() => router.replace("/(tabs)")}>
-                {t("signup.step_4.go_home")}{" "}
+                {t("signup.step_4.register")}{" "}
               </Button>
             ) : (
               <Button onPress={() => router.replace("/(tabs)")}>
-                {t("signup.step_4.go_home")}{" "}
+                {t("signup.step_4.register")}{" "}
               </Button>
             )}
           </VStack>

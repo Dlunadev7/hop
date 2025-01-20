@@ -7,5 +7,5 @@ export {
   Input,
   LinearGradient,
   Select,
-  StepControl
+  StepControl,
 }

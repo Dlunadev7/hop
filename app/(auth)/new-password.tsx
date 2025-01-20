@@ -19,7 +19,7 @@ export default function NewPassword() {
       <KeyboardContainer>
         <View style={styles.container}>
           <VStack space="lg" className="items-center mb-9">
-            <Hop />
+            <Hop color={Colors.PRIMARY} />
             <Text className="text-2xl font-semibold mt-12">
               Crea una nueva contraseña
             </Text>

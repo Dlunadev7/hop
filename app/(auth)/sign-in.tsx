@@ -1,4 +1,4 @@
-import { Keyboard, StyleSheet, View } from "react-native";
+import { Keyboard, Pressable, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { Hop } from "@/assets/svg";
 import { VStack } from "@/components/ui/vstack";
@@ -17,14 +17,14 @@ import { ErrorWithStatus } from "@/utils/interfaces/error.interface";
 import { useTranslation } from "react-i18next";
 import { Text } from "@/components/text/text.component";
 import { Button } from "@/components/button/button.component";
+import { useToast } from "@/hooks/use-toast";
 
 export default function SignIn() {
   const { t } = useTranslation();
   const schema = validationSchema(t);
   const [loading, setLoading] = useState(false);
   const { setToken } = useAuth();
-  const [showError, setShowError] = useState(false);
-
+  const { showToast, toastId } = useToast();
   const storeTokens = async (token: string, refreshToken: string) => {
     const tokenData = JSON.stringify({ token, refreshToken });
 
@@ -35,7 +35,6 @@ export default function SignIn() {
 
   const handleLogin = async (values: { email: string; password: string }) => {
     setLoading(true);
-    setShowError(false);
 
     try {
       Keyboard.dismiss();
@@ -58,8 +57,16 @@ export default function SignIn() {
               buttonAction: () => router.replace("/(auth)/sign-in"),
             },
           });
-        } else if (errorWithStatus.status === 401) {
-          console.log(err);
+        } else if (
+          errorWithStatus.status === 401 ||
+          errorWithStatus.status === 404
+        ) {
+          showToast({
+            message: t("signin.login_error", { ns: "auth" }),
+            action: "error",
+            duration: 3000,
+            placement: "bottom",
+          });
         }
       } else {
         console.error("Error inesperado:", err);
@@ -74,7 +81,7 @@ export default function SignIn() {
       <KeyboardContainer>
         <View style={styles.container}>
           <VStack space="lg" className="items-center mb-9 w-[100%]">
-            <Hop color={Colors.SECONDARY} />
+            <Hop color={Colors.PRIMARY} />
             <Text
               fontSize={28}
               fontWeight={600}

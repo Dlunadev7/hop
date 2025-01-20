@@ -21,8 +21,12 @@
       "required": "The last name is required."
     },
     "password": {
-      "min_length": "The password must be at least 6 characters long.",
-      "required": "The password is required."
+      "required": "The password is required.",
+      "min_length": "The password must be at least 8 characters long.",
+      "uppercase": "The password must contain at least one uppercase letter.",
+      "lowercase": "The password must contain at least one lowercase letter.",
+      "number": "The password must contain at least one number.",
+      "special_char": "The password must contain at least one special character."
     },
     "email": {
       "invalid": "The email format is invalid.",
@@ -54,7 +58,8 @@
     },
     "bank_account_number": {
       "required": "The account number is required",
-      "min_length": "The account number must have at least 10 characters"
+      "min_length": "The account number must have at least 10 characters",
+      "max_length": "The account number cannot exceed 20 characters"
     },
     "bank_account_type": {
       "required": "The account type is required",
@@ -67,6 +72,16 @@
       "required": "The account holder's RUT is required",
       "length": "The RUT must be exactly 12 characters long",
       "format": "The RUT must be a valid 12-digit number"
+    }
+  },
+  "step_3": {
+    "hotel_name": {
+      "min": "Hotel name must be at least 2 characters.",
+      "max": "Hotel name cannot exceed 50 characters.",
+      "required": "Hotel name is required."
+    },
+    "address": {
+      "required": "Address is required"
     }
   }
 }

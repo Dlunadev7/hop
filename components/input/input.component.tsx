@@ -9,7 +9,7 @@ import {
 } from "../ui/form-control";
 import { InputField, Input as GInput, InputSlot, InputIcon } from "../ui/input";
 import { AlertCircleIcon, EyeIcon, EyeOffIcon } from "../ui/icon";
-import { Pressable, TextInputProps } from "react-native";
+import { Pressable, StyleSheet, TextInputProps } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { IInputFieldProps } from "@gluestack-ui/input/lib/types";
 import { Text } from "../text/text.component";
@@ -17,7 +17,7 @@ import { Text } from "../text/text.component";
 interface CustomInputProps {
   label: string;
   placeholder: string;
-  value: string;
+  value?: string;
   onChangeText: (text: string) => void;
   onBlur: (e: any) => void;
   error?: string | false | undefined;
@@ -27,7 +27,7 @@ interface CustomInputProps {
   rightIcon?: boolean;
   leftIcon?: boolean;
   icon?: ElementType | undefined;
-  pressable?: boolean; // Nueva propiedad
+  pressable?: boolean;
 }
 
 export const Input = (
@@ -59,6 +59,7 @@ export const Input = (
       size={size}
       variant="rounded"
       pointerEvents={pressable ? "none" : "auto"}
+      style={styles.input}
     >
       {leftIcon && (
         <InputSlot className="pl-3">
@@ -74,6 +75,7 @@ export const Input = (
         className={`${error ? "placeholder:text-[#9A0000]" : ""}`}
         secureTextEntry={secureTextEntry}
         autoCapitalize={props.autoCapitalize}
+        placeholderClassName={props.placeholder}
       />
       {rightIcon && (
         <InputSlot
@@ -94,15 +96,17 @@ export const Input = (
       isInvalid={!!error && touched}
       className={stretch ? "flex-1" : ""}
     >
-      <FormControlLabel>
-        <FormControlLabelText
-          className={`font-semibold text-lg text-[#10524B] ${
-            error && "text-[#9A0000]"
-          }`}
-        >
-          {label}
-        </FormControlLabelText>
-      </FormControlLabel>
+      {label && (
+        <FormControlLabel>
+          <FormControlLabelText
+            className={`font-semibold text-lg text-[#10524B] ${
+              error && "text-[#9A0000]"
+            }`}
+          >
+            {label}
+          </FormControlLabelText>
+        </FormControlLabel>
+      )}
       {pressable ? (
         <Pressable onPress={props.onPress}>{InputContent}</Pressable>
       ) : (
@@ -110,14 +114,22 @@ export const Input = (
       )}
       {touched && error && (
         <FormControlError>
-          <FormControlErrorIcon as={AlertCircleIcon} color={Colors.ERROR} />
+          {!isRequired && (
+            <FormControlErrorIcon as={AlertCircleIcon} color={Colors.ERROR} />
+          )}
           <Text textColor={Colors.ERROR} fontWeight={300} className="flex-1">
-            {error}
+            {isRequired ? `*${error}` : error}
           </Text>
         </FormControlError>
       )}
     </FormControl>
   );
 };
+
+const styles = StyleSheet.create({
+  input: {
+    height: 44,
+  },
+});
 
 export default Input;

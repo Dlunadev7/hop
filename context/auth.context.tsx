@@ -8,10 +8,21 @@ import React, {
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+type addressType = {
+  address: string;
+  latitude: string;
+  longitude: string;
+};
+
 interface AuthContextType {
   token: string | null;
   setToken: (token: string) => void;
   clearToken: () => void;
+  state: {
+    user_info: addressType;
+    hotel_info: addressType;
+  };
+  updatePayload: (newData: {}) => void;
 }
 
 interface AuthProviderProps {
@@ -22,6 +33,25 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
+  const [state, setState] = useState({
+    user_info: {
+      address: "",
+      latitude: "",
+      longitude: "",
+    },
+    hotel_info: {
+      address: "",
+      latitude: "",
+      longitude: "",
+    },
+  });
+
+  const updatePayload = (newData: Partial<typeof state>) => {
+    setState((prevState) => ({
+      ...prevState,
+      ...newData,
+    }));
+  };
 
   useEffect(() => {
     (async () => {
@@ -45,7 +75,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ token, setToken: handleSetToken, clearToken: handleClearToken }}
+      value={{
+        token,
+        setToken: handleSetToken,
+        clearToken: handleClearToken,
+        state,
+        updatePayload,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/button/button.component";
 import { router } from "expo-router";
 import { AuthRoutesLink } from "@/utils/enum/auth.routes";
+import { Colors } from "@/constants/Colors";
 
 export default function FinishOnboarding() {
   const { t } = useTranslation();
@@ -17,7 +18,7 @@ export default function FinishOnboarding() {
     <LinearGradient>
       <View style={styles.container}>
         <VStack space="lg" className="items-center mb-9">
-          <Hop />
+          <Hop color={Colors.PRIMARY} />
           <Text className="text-2xl font-semibold">
             {t("signup.finishOnboarding.header")}
           </Text>

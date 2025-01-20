@@ -29,7 +29,11 @@
     },
     "next": "Next",
     "already_have_account": "¿Already have an account?",
-    "sign_in": "Sign in"
+    "sign_in": "Sign in",
+    "mark_map": "Mark on the map",
+    "select_map": "Select a point on the map",
+    "confirm_address": "Confirm Address",
+    "email_exists": "The email is already associated with an account. Please try to log in or reset your password."
   },
   "step_2": {
     "title": "Bank Account",
@@ -63,7 +67,8 @@
     },
     "buttons": {
       "back": "Back",
-      "next": "Next"
+      "next": "Next",
+      "skip": "Skip"
     }
   },
   "step_3": {
@@ -79,7 +84,8 @@
   "step_4": {
     "title": "Verify your Identity",
     "go_site": "Go to the site",
-    "go_home": "Go to the beginning"
+    "go_home": "Go to the beginning",
+    "register": "Register"
   },
   "finishOnboarding": {
     "header": "Thank you for signing up!",
