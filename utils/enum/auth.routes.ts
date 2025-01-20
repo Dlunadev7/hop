@@ -6,7 +6,8 @@ export enum AuthRoutes {
   WAITING_VALIDATION = 'waiting-validation',
   RECOVERY_PASSWORD = 'recovery-password',
   NEW_PASSWORD = 'new-password',
-  FINISH_RECOVER_PASSWORD = 'finish-recover-password'
+  FINISH_RECOVER_PASSWORD = 'finish-recover-password',
+  MAP = 'map'
 }
 
 export enum AuthRoutesLink {
@@ -17,5 +18,6 @@ export enum AuthRoutesLink {
   WAITING_VALIDATION = '/(auth)/waiting-validation',
   RECOVERY_PASSWORD = '/(auth)/recovery-password',
   NEW_PASSWORD = '/(auth)/new-password',
-  FINISH_RECOVER_PASSWORD = '/(auth)/finish-recover-password'
+  FINISH_RECOVER_PASSWORD = '/(auth)/finish-recover-password',
+  MAP = '/(auth)/map'
 }

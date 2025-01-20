@@ -37,3 +37,4 @@ config.ts
 .yarn/
 app-example
 android/*
+eas.json

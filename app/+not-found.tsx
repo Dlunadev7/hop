@@ -1,13 +1,12 @@
-import { Text } from "@/components/ui/text";
-import { Link, router, Stack } from "expo-router";
+import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonText } from "@/components/ui/button";
+import { Text } from "@/components/text/text.component";
 
 export default function NotFoundScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: "Oops!" }} />
       <View style={styles.container}>
         <Text style={styles.title}>404</Text>
         <Text style={styles.subtitle}>Page Not Found</Text>
@@ -16,7 +15,7 @@ export default function NotFoundScreen() {
           unavailable.
         </Text>
         <Button style={styles.button} onPress={() => router.replace("/")}>
-          Go Home
+          <ButtonText>Go Home</ButtonText>
         </Button>
       </View>
     </>

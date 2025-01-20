@@ -1,5 +1,11 @@
 import { StyleSheet, View } from "react-native";
-import React from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Formik } from "formik";
 import { validationSchemaS1 } from "@/schemas/register.schema";
 import { VStack } from "@/components/ui/vstack";
@@ -9,27 +15,113 @@ import { Select } from "@/components/select/select.component";
 import { StepControl } from "@/components/step-controls/step-control.component";
 import { useTranslation } from "react-i18next";
 import { Text } from "@/components/text/text.component";
+import {
+  Actionsheet,
+  ActionsheetBackdrop,
+  ActionsheetContent,
+  ActionsheetDragIndicator,
+  ActionsheetDragIndicatorWrapper,
+  ActionsheetFlatList,
+  ActionsheetItem,
+  ActionsheetItemText,
+} from "@/components/ui/actionsheet";
+import { ChevronDownIcon, SearchIcon } from "@/components/ui/icon";
+import useSWR from "swr";
+import { getBanks } from "@/services/bank.service";
+import { API_URL } from "@/config";
+import { SvgUri } from "react-native-svg";
+import { Colors } from "@/constants/Colors";
 import { RegisterType } from "@/utils/types/register.type";
+import { updateUser } from "@/services/auth.service";
+import { User, UserInfo } from "@/utils/interfaces/auth.interface";
+import { useToast } from "@/hooks/use-toast";
 
 type formProps = {
   payloadValues: RegisterType;
   setStep: React.Dispatch<React.SetStateAction<number>>;
   payload: React.Dispatch<React.SetStateAction<{}>>;
+  extraData: string;
 };
 
 export default function Step2(props: formProps) {
-  const { payload, setStep, payloadValues } = props;
+  const { setStep, payloadValues, extraData } = props;
+  const formikRef = useRef<any>(null);
   const { t } = useTranslation();
   const schema = validationSchemaS1(t);
-  console.log(
-    t("validations.step_2.bank_account_type.current_account", { ns: "auth" })
-  );
+  const [showActionsheet, setShowActionsheet] = React.useState(false);
+  const [searchText, setSearchText] = useState<string>("");
+  const [bankSelected, setBankSelected] = useState<{
+    name: string;
+    id: string;
+  }>({
+    name: "",
+    id: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const { data } = useSWR("/banks", getBanks);
+
+  const { showToast } = useToast();
+
+  const handleInputChange = (text: string) => {
+    setSearchText(text);
+  };
+
+  const filteredData = useCallback(() => {
+    return data?.filter((item) =>
+      item.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+  }, [data, searchText]);
+
+  const handleClose = ({ name, id }: { name: string; id: string }) => {
+    setShowActionsheet(false);
+    setBankSelected({ name, id });
+    if (formikRef.current) {
+      formikRef.current?.setFieldValue("bank_name", "name");
+    }
+    setSearchText("");
+  };
+
+  const Item: React.FC<{ title: string; image: string; id: string }> =
+    useCallback(({ title, image, id }) => {
+      return (
+        <ActionsheetItem
+          onPress={() => handleClose({ name: title, id: id })}
+          className="h-12 p-2 items-center gap-2"
+        >
+          <SvgUri
+            uri={`${API_URL.replace("/api", "/")}${image}`}
+            width={40}
+            height={40}
+          />
+          <ActionsheetItemText className="text-xl">{title}</ActionsheetItemText>
+        </ActionsheetItem>
+      );
+    }, []);
+
+  const handleRegisterStep2 = async (values: Partial<UserInfo>) => {
+    setLoading(true);
+    try {
+      await updateUser(extraData, values);
+      setStep(3);
+    } catch (error) {
+      showToast({
+        message: t("server_error", { ns: "utils" }),
+        action: "error",
+        duration: 3000,
+        placement: "bottom",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <View style={styles.formulary} className="pb-4">
       <Text fontSize={16} fontWeight={400}>
         {t("signup.step_2.title", { ns: "auth" })}
       </Text>
       <Formik
+        innerRef={formikRef}
         initialValues={{
           bank_account_holder: payloadValues.userInfo.bank_account_holder,
           bank_name: payloadValues.userInfo.bank_name,
@@ -39,8 +131,13 @@ export default function Step2(props: formProps) {
         }}
         validationSchema={schema}
         onSubmit={(values) => {
-          setStep(3);
-          payload(values);
+          handleRegisterStep2({
+            ...values,
+            bank_name: {
+              id: bankSelected.id,
+              name: bankSelected.name,
+            },
+          });
         }}
       >
         {({
@@ -51,7 +148,6 @@ export default function Step2(props: formProps) {
           errors,
           touched,
         }) => {
-          console.log(errors);
           return (
             <VStack space="md" className="mt-[32px]">
               <Input
@@ -67,6 +163,7 @@ export default function Step2(props: formProps) {
                 }
                 touched={touched.bank_account_holder}
               />
+
               <Input
                 label={t("signup.step_2.fields.bankName.label", {
                   ns: "auth",
@@ -74,9 +171,14 @@ export default function Step2(props: formProps) {
                 onBlur={handleBlur("bank_name")}
                 onChangeText={handleChange("bank_name")}
                 placeholder=""
-                value={values.bank_name}
+                value={bankSelected.name}
                 error={touched.bank_name && errors.bank_name}
                 touched={touched.bank_name}
+                editable={false}
+                pressable
+                onPress={() => setShowActionsheet(true)}
+                icon={ChevronDownIcon}
+                rightIcon
               />
 
               <Input
@@ -130,19 +232,53 @@ export default function Step2(props: formProps) {
                 keyboardType="number-pad"
               />
               <StepControl
-                handleBack={() => setStep(1)}
+                handleBack={() => setStep(3)}
                 handleNext={handleSubmit}
-                textBack={t("signup.step_2.buttons.back", {
+                textBack={t("signup.step_2.buttons.skip", {
                   ns: "auth",
                 })}
                 textNext={t("signup.step_2.buttons.next", {
                   ns: "auth",
                 })}
+                color={Colors.GRAY}
+                vertical
+                loading={loading}
               />
             </VStack>
           );
         }}
       </Formik>
+      <Actionsheet
+        isOpen={showActionsheet}
+        onClose={() => setShowActionsheet(false)}
+        snapPoints={[70]}
+      >
+        <ActionsheetBackdrop />
+        <ActionsheetContent className="pb-10">
+          <ActionsheetDragIndicatorWrapper>
+            <ActionsheetDragIndicator />
+          </ActionsheetDragIndicatorWrapper>
+          <View style={styles.search_bar_container}>
+            <Input
+              placeholder="Buscar banco"
+              label=""
+              onBlur={() => {}}
+              onChangeText={handleInputChange}
+              className=""
+              icon={SearchIcon}
+              rightIcon
+              size="sm"
+            />
+          </View>
+          <ActionsheetFlatList
+            data={filteredData()}
+            renderItem={({ item }: any) => (
+              <Item id={item.id} title={item.name} image={item.image} />
+            )}
+            keyExtractor={(item: any) => item.id.toString()}
+          />
+        </ActionsheetContent>
+      </Actionsheet>
     </View>
   );
 }
@@ -151,6 +287,10 @@ const styles = StyleSheet.create({
   formulary: {
     gap: 16,
     flexGrow: 1,
-    // backgroundColor: "red",
+  },
+  search_bar_container: {
+    width: "100%",
+    marginBottom: 24,
+    marginTop: 24,
   },
 });

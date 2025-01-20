@@ -8,12 +8,22 @@ import { useTranslation } from "react-i18next";
 import { Text } from "@/components/text/text.component";
 import { Colors } from "@/constants/Colors";
 import { useRoute } from "@react-navigation/native";
+import { Fab, FabIcon } from "@/components/ui/fab";
+import { ArrowLeftRounded } from "@/assets/svg";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAuth } from "@/context/auth.context";
 
 export default function SignUp() {
-  const stepLevel = useRoute().params as { step: number };
-  console.log(typeof stepLevel.step);
+  const queryParams = useRoute().params as any;
+  const insets = useSafeAreaInsets();
   const { t } = useTranslation();
-  const [step, setStep] = useState(stepLevel.step ? Number(stepLevel.step) : 1);
+  const [step, setStep] = useState(
+    queryParams.step ? Number(queryParams.step) : 1
+  );
+  const [id, setId] = useState("");
+
+  const { state } = useAuth();
+
   const [payload, setPayload] = useState({
     email: "",
     password: "",
@@ -22,13 +32,23 @@ export default function SignUp() {
     lastName: "",
     rut: "",
     phone: "",
-    home_address: "",
+    user_address: {
+      address: "",
+      latitude: "",
+      longitude: "",
+    },
     bank_name: "",
     bank_account: "",
     bank_account_type: "",
     bank_account_rut: "",
     bank_account_number: "",
     bank_account_holder: "",
+    hotel_address: {
+      hotel_name: "",
+      address: "",
+      latitude: "",
+      longitude: "",
+    },
     birthdate: "",
   });
 
@@ -52,13 +72,23 @@ export default function SignUp() {
         lastName: payload.lastName,
         rut: payload.rut,
         phone: payload.phone,
-        home_address: payload.home_address,
+        user_address: {
+          address: state.user_info.address,
+          latitude: state.user_info.latitude,
+          longitude: state.user_info.longitude,
+        },
         bank_name: payload.bank_name,
         bank_account_holder: payload.bank_account_holder,
         bank_account_type: payload.bank_account_type,
         bank_account_rut: payload.bank_account_rut,
         bank_account: payload.bank_account,
         birthdate: payload.birthdate,
+        hotel_address: {
+          name: payload.hotel_address.hotel_name,
+          address: state.hotel_info.address,
+          latitude: state.hotel_info.latitude,
+          longitude: state.hotel_info.longitude,
+        },
       },
     };
     return (
@@ -66,12 +96,28 @@ export default function SignUp() {
         setStep={setStep}
         payload={accumulatePayload}
         payloadValues={payloadCompleted}
+        extraData={id}
+        setId={setId}
       />
     );
   };
 
   return (
     <LinearGradient locations={[0, 0.3]}>
+      {/* {!(step === 1) ? (
+        <Fab
+          placement="top left"
+          onPress={() => setStep(step === 1 ? step : step - 1)}
+          className="bg-[#E1F5F3] w-[24px] h-[24px]"
+          style={{
+            marginTop: insets.top,
+          }}
+        >
+          <FabIcon as={ArrowLeftRounded} width={30} />
+        </Fab>
+      ) : (
+        <></>
+      )} */}
       <KeyboardContainer>
         <View style={styles.container}>
           <View style={styles.header}>

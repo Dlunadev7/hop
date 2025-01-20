@@ -21,12 +21,16 @@
       "required": "El apellido es obligatorio."
     },
     "email": {
-      "invalid": "El formato del correo electrónico no es válido.",
+      "invalid": "Por favor, ingrese un correo electrónico válido.",
       "required": "El correo electrónico es obligatorio."
     },
     "password": {
-      "min_length": "La contraseña debe tener al menos 6 caracteres.",
-      "required": "La contraseña es obligatoria."
+      "required": "La contraseña es obligatoria.",
+      "min_length": "La contraseña debe tener al menos 8 caracteres.",
+      "uppercase": "La contraseña debe tener al menos una letra mayúscula.",
+      "lowercase": "La contraseña debe tener al menos una letra minúscula.",
+      "number": "La contraseña debe tener al menos un número.",
+      "special_char": "La contraseña debe tener al menos un carácter especial."
     },
     "rut": {
       "length": "El RUT debe tener exactamente 12 caracteres.",
@@ -54,7 +58,8 @@
     },
     "bank_account_number": {
       "required": "El número de la cuenta es obligatorio",
-      "min_length": "El número de cuenta debe tener al menos 10 caracteres"
+      "min_length": "El número de cuenta debe tener al menos 10 caracteres",
+      "max_length": "El número de cuenta no puede exceder los 20 caracteres"
     },
     "bank_account_type": {
       "required": "El tipo de cuenta es obligatorio",
@@ -67,6 +72,16 @@
       "required": "El RUT del titular es obligatorio",
       "length": "El RUT debe tener exactamente 12 caracteres",
       "format": "El RUT debe ser un número válido de 12 dígitos"
+    }
+  },
+  "step_4": {
+    "hotel_name": {
+      "min": "El nombre del hotel debe tener al menos 2 caracteres.",
+      "max": "El nombre del hotel no puede exceder los 50 caracteres.",
+      "required": "El nombre del hotel es obligatorio."
+    },
+    "address": {
+      "required": "La direccion es requerida"
     }
   }
 }

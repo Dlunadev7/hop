@@ -29,7 +29,11 @@
     },
     "next": "Siguiente",
     "already_have_account": "¿Ya tienes cuenta?",
-    "sign_in": "Iniciar Sesión"
+    "sign_in": "Iniciar Sesión",
+    "mark_map": "Marcar en el mapa",
+    "select_map": "Seleccione un punto en el mapa",
+    "confirm_address": "Confirmar Direccion",
+    "email_exists": "El correo ya está asociado a una cuenta. Intente iniciar sesión o recuperar contraseña."
   },
   "step_2": {
     "title": "Cuenta Bancaria",
@@ -63,6 +67,7 @@
     },
     "buttons": {
       "back": "Atrás",
+      "skip": "Saltar",
       "next": "Siguiente"
     }
   },
@@ -79,7 +84,8 @@
   "step_4": {
     "title": "Verifica tu Identidad",
     "go_site": "Ir al sitio",
-    "go_home": "Ir al inicio"
+    "go_home": "Ir al inicio",
+    "register": "Registrarse"
   },
   "finishOnboarding": {
     "header": "¡Gracias por registrarte!",

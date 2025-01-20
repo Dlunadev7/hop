@@ -9,13 +9,14 @@ import { Image } from "react-native";
 import { router } from "expo-router";
 import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 import { LinearGradient } from "@/components";
+import { Colors } from "@/constants/Colors";
 
 export default function FinishRecoverPassword() {
   return (
     <LinearGradient>
       <View style={styles.container}>
         <VStack space="4xl" className="items-center mb-9">
-          <Hop />
+          <Hop color={Colors.PRIMARY} />
           <Text className="text-2xl font-semibold text-center">
             Tu contraseña se cambió correctamente{" "}
           </Text>

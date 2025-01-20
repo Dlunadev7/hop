@@ -6,5 +6,6 @@
   "forgot_password": "Olvidé mi contraseña",
   "sign_in_button": "Iniciar Sesión",
   "no_account": "¿Aún no tienes una cuenta?",
-  "create_account": "Crea una"
+  "create_account": "Crea una",
+  "login_error": "Email y/o contraseña incorrectos"
 }

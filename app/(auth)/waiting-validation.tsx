@@ -9,13 +9,14 @@ import { Image } from "react-native";
 import { router } from "expo-router";
 import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 import { LinearGradient } from "@/components";
+import { Colors } from "@/constants/Colors";
 
 export default function FinishOnboarding() {
   return (
     <LinearGradient>
       <View style={styles.container}>
         <VStack space="lg" className="items-center mb-9">
-          <Hop />
+          <Hop color={Colors.PRIMARY} />
           <Text className="text-2xl font-semibold">
             Tu cuenta se encuentra en revisión
           </Text>

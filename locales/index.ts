@@ -12,7 +12,8 @@ import AuthSignUpEs from './es/auth/signup.translations.json';
 
 import AuthForgotPasswordEn from './en/auth/forgot-password.translations.json';
 import AuthForgotPasswordEs from './es/auth/forgot-password.translations.json';
-
+import ErrorsEn from './en/utils.json';
+import ErrorsEs from './es/utils.json';
 export {
   EntryTranslationEn,
   EntryTranslationEs,
@@ -23,5 +24,7 @@ export {
   AuthSignUpEn,
   AuthSignUpEs,
   AuthForgotPasswordEn,
-  AuthForgotPasswordEs
+  AuthForgotPasswordEs,
+  ErrorsEn,
+  ErrorsEs
 }
