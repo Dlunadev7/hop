@@ -31,7 +31,7 @@ export default function FinishOnboarding() {
           <Button
             onPress={() =>
               router.replace({
-                pathname: AuthRoutesLink.SIGN_UP,
+                pathname: "/(tabs)/explore",
                 params: { step: 4 },
               })
             }

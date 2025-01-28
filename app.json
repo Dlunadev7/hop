@@ -2,7 +2,7 @@
   "expo": {
     "name": "hop",
     "icon": "./assets/images/icon.png",
-    "slug": "Hop",
+    "slug": "hop",
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "hop",
@@ -61,7 +61,8 @@
     "plugins": [
       "expo-router",
       "expo-localization",
-      "expo-font"
+      "expo-font",
+      "expo-document-picker"
     ],
     "experiments": {
       "typedRoutes": true

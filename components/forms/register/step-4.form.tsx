@@ -24,10 +24,12 @@ import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { Button } from "@/components/button/button.component";
 import { router } from "expo-router";
+import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 type formProps = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
   payload: React.Dispatch<React.SetStateAction<{}>>;
   payloadValues: {};
+  role: string;
 };
 
 export default function Step4(props: formProps) {
@@ -39,8 +41,6 @@ export default function Step4(props: formProps) {
   useEffect(() => {
     requestPermissions();
   }, []);
-
-  const { setStep, payloadValues } = props;
 
   const { t } = useTranslation();
 
@@ -92,12 +92,10 @@ export default function Step4(props: formProps) {
                     <VStack className="flex-1">
                       <WebView
                         source={{
-                          uri: `${METAMAP_API_URL}/?merchantToken=${METAMAP_API_KEY}&flowId=${METAMAP_FLOW_ID}`,
+                          uri: `${METAMAP_API_URL}?merchantToken=${METAMAP_API_KEY}&flowId=${METAMAP_FLOW_ID}`,
                         }}
                         javaScriptEnabled
                         domStorageEnabled
-                        originWhitelist={["*"]}
-                        mixedContentMode="always"
                         className="flex-1"
                         injectedJavaScript={injectJavaScript()}
                         onMessage={handleWebViewMessage}
@@ -109,13 +107,10 @@ export default function Step4(props: formProps) {
                             );
                           }
                         }}
+                        mediaPlaybackRequiresUserAction={false}
                         ref={webViewRef}
-                        onError={(error) =>
-                          console.error("WebView Error:", error)
-                        }
-                        onHttpError={(error) =>
-                          console.error("HTTP Error:", error)
-                        }
+                        allowsInlineMediaPlayback={true}
+                        allowsFullscreenVideo={true}
                       />
                       {isDone && (
                         <Button onPress={() => setOpenAccordion(false)}>
@@ -127,12 +122,16 @@ export default function Step4(props: formProps) {
                 </ActionsheetContent>
               </Actionsheet>
             )}
-            {!isDone ? (
-              <Button onPress={() => router.replace("/(tabs)")}>
+            {isDone ? (
+              <Button
+                onPress={() => router.replace(AuthRoutesLink.FINISH_ONBOARDING)}
+              >
                 {t("signup.step_4.register")}{" "}
               </Button>
             ) : (
-              <Button onPress={() => router.replace("/(tabs)")}>
+              <Button
+                onPress={() => router.replace(AuthRoutesLink.FINISH_ONBOARDING)}
+              >
                 {t("signup.step_4.register")}{" "}
               </Button>
             )}

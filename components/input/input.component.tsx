@@ -50,6 +50,7 @@ export const Input = (
     editable = true,
     pressable = false,
     isRequired,
+    style,
   } = props;
 
   const [secureTextEntry, setSecureTextEntry] = useState(props.secureTextEntry);
@@ -59,7 +60,8 @@ export const Input = (
       size={size}
       variant="rounded"
       pointerEvents={pressable ? "none" : "auto"}
-      style={styles.input}
+      // @ts-ignore
+      style={[styles.input, style]}
     >
       {leftIcon && (
         <InputSlot className="pl-3">

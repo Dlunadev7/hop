@@ -2,7 +2,9 @@
   "title": "Registro de Hoppy",
   "title_hopper": "Registro de Hopper",
   "subtitle": "(recepcionista)",
+  "subtitle_hopper": "(conductor)",
   "step_message": "Para solicitar el registro debes completar los campos siguientes",
+  "step_message_hopper": "Para solicitar el registro debes cargar los documentos señalados",
   "step_message_final": "Sigue el link para confirmar tu identidad y finalizar la solicitud de registro",
   "step_label": "Paso {{step}} de 4",
   "step_1": {
@@ -73,6 +75,16 @@
     }
   },
   "step_3": {
+    "documentation_hopper": "Documentación",
+    "fields": {
+      "driver_licence": "Fotos de la licencia de conducir",
+      "seremi": "Decreto Seremi de Transporte",
+      "curriculum_vitae": "Hoja de vida del Conductor",
+      "permission": "Permiso de Circulación vigente",
+      "secure": "Seguro de Pasajeros",
+      "vehicle_picture": "Fotos del vehículo"
+    },
+    "upload": "Subir",
     "title": "Información del Hotel",
     "hotel_name": {
       "label": "Nombre del Hotel"
@@ -87,6 +99,27 @@
     "go_site": "Ir al sitio",
     "go_home": "Ir al inicio",
     "register": "Registrarse"
+  },
+  "step_4_hopper": {
+    "title": "Detalle del vehículo",
+    "fields": {
+      "type": {
+        "label": "Tipo de vehículo",
+        "placeholder": "Seleccione un tipo de vehículo"
+      },
+      "passengers": {
+        "label": "Número de pasajeros"
+      },
+      "accessibility": {
+        "label": "Accesibilidad"
+      },
+      "luggage_space": {
+        "label": "Espacio para maletas"
+      },
+      "luggage_special": {
+        "label": "Espacio para equipaje especial"
+      }
+    }
   },
   "finishOnboarding": {
     "header": "¡Gracias por registrarte!",

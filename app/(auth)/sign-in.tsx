@@ -86,7 +86,7 @@ export default function SignIn() {
               fontSize={28}
               fontWeight={600}
               textColor={Colors.DARK_GREEN}
-              className="text-2xl font-semibold mt-12"
+              className="mt-12"
             >
               {t("signin.welcome", { ns: "auth" })}
             </Text>
@@ -136,7 +136,7 @@ export default function SignIn() {
                       isRequired
                     />
                     <Text
-                      textColor={Colors.SECONDARY}
+                      textColor={Colors.DARK_GREEN}
                       underline
                       fontSize={14}
                       onPress={() =>

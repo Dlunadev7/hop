@@ -16,32 +16,50 @@ import { Location } from "@/assets/svg";
 import { useRequestLocationPermission } from "@/hooks/use-location.hook";
 import { useAuth } from "@/context/auth.context";
 import { createUser, login } from "@/services/auth.service";
-import { userRoles } from "@/utils/enum/role.enum";
 import { ErrorWithStatus } from "@/utils/interfaces/error.interface";
 import { useToast } from "@/hooks/use-toast";
 import { RegisterType } from "@/utils/types/register.type";
+import {
+  Actionsheet,
+  ActionsheetBackdrop,
+  ActionsheetContent,
+  ActionsheetDragIndicator,
+  ActionsheetFlatList,
+} from "@/components/ui/actionsheet";
+import { ActionsheetDragIndicatorWrapper } from "@/components/ui/select/select-actionsheet";
+import { SearchIcon } from "@/components/ui/icon";
+import { useGetCoordinatesFromAddress } from "@/hooks/get-direction.hook";
 
 type formProps = {
   payloadValues: RegisterType;
   setStep: React.Dispatch<React.SetStateAction<number>>;
   payload: React.Dispatch<React.SetStateAction<{}>>;
   setId: React.Dispatch<React.SetStateAction<string>>;
+  role: string;
   extraData: string;
 };
 
 export default function Step1(props: formProps) {
-  const { setStep, setId } = props;
-  const formikRef = useRef<any>(null);
+  const { setStep, setId, role } = props;
   const { t } = useTranslation();
-  const { state, setToken } = useAuth();
-  const schema = validationSchema(t);
+  const { state, setToken, updatePayload } = useAuth();
   const { showToast } = useToast();
-
-  const [loading, setLoading] = useState(false);
   const { requestLocationPermission } = useRequestLocationPermission({
     url: AuthRoutesLink.MAP,
     step: 1,
   });
+  const { locations, setSelectedLocation, geocodeAddress } =
+    useGetCoordinatesFromAddress();
+  const formikRef = useRef<any>(null);
+  const [showActionsheet, setShowActionsheet] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const schema = validationSchema(t);
+  const { token } = useAuth();
+  const handleSearch = (searchText: string) => {
+    if (searchText.trim()) {
+      geocodeAddress(searchText);
+    }
+  };
 
   const storeTokens = async (token: string, refreshToken: string) => {
     const tokenData = JSON.stringify({ token, refreshToken });
@@ -58,7 +76,7 @@ export default function Step1(props: formProps) {
       const data = await createUser({
         email: values.email,
         password: values.password,
-        role: userRoles.USER_HOPPER,
+        role: role,
         userInfo: {
           home_address: {
             address: state.user_info.address,
@@ -92,7 +110,15 @@ export default function Step1(props: formProps) {
             duration: 3000,
             placement: "bottom",
           });
+          return;
         }
+        showToast({
+          message: t("server_error", { ns: "utils" }),
+          action: "error",
+          duration: 3000,
+          placement: "bottom",
+        });
+        return;
       }
     } finally {
       setLoading(false);
@@ -115,7 +141,6 @@ export default function Step1(props: formProps) {
         onSubmit={(values) => {
           handleRegisterUser(values);
         }}
-        enableReinitialize
       >
         {({
           handleChange,
@@ -133,79 +158,164 @@ export default function Step1(props: formProps) {
           }, [state.user_info.address]);
 
           return (
-            <VStack space="md">
-              <Input
-                label={t("signup.step_1.email.label", { ns: "auth" })}
-                onBlur={handleBlur("email")}
-                onChangeText={handleChange("email")}
-                placeholder=""
-                value={values.email}
-                error={touched.email && errors.email}
-                touched={touched.email}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-
-              <Input
-                label={t("signup.step_1.password.label", { ns: "auth" })}
-                placeholder=""
-                secureTextEntry
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-                value={values.password}
-                touched={touched.password}
-                error={touched.password && errors.password}
-                rightIcon
-              />
-
-              <Box className="gap-4 ">
+            <>
+              <VStack space="md">
                 <Input
-                  label={t("signup.step_1.address.label", { ns: "auth" })}
-                  onBlur={handleBlur("address")}
-                  onChangeText={() => {
-                    setFieldValue("address", state.user_info.address);
-                  }}
+                  label={t("signup.step_1.email.label", { ns: "auth" })}
+                  onBlur={handleBlur("email")}
+                  onChangeText={handleChange("email")}
                   placeholder=""
-                  value={String(state.user_info.address)}
-                  error={touched?.address && errors?.address}
-                  touched={touched?.address}
-                  stretch
+                  value={values.email}
+                  error={touched.email && errors.email}
+                  touched={touched.email}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
                 />
-                <Pressable onPress={() => requestLocationPermission()}>
-                  <HStack space="xs">
-                    <Location color={Colors.PRIMARY} width={14} />
-                    <Text
-                      className="text-xs font-medium"
-                      style={styles.mark_map}
-                    >
-                      {t("signup.step_1.mark_map", { ns: "auth" })}
-                    </Text>
-                  </HStack>
-                </Pressable>
-              </Box>
-              <VStack className="mt-[24px] gap-5 w-full items-center">
-                <Button
-                  style={{ alignSelf: "center" }}
-                  onPress={() => handleSubmit()}
-                >
-                  {loading ? (
-                    <ActivityIndicator color={Colors.WHITE} />
-                  ) : (
-                    t("signup.step_1.next", { ns: "auth" })
-                  )}
-                </Button>
-                <Text fontSize={14} fontWeight={300} textColor={Colors.BLACK}>
-                  {t("signup.step_1.already_have_account", { ns: "auth" })}{" "}
-                  <Text
-                    fontSize={14}
-                    fontWeight={600}
-                    onPress={() => router.push(AuthRoutesLink.SIGN_IN)}
+
+                <Input
+                  label={t("signup.step_1.password.label", { ns: "auth" })}
+                  placeholder=""
+                  secureTextEntry
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                  touched={touched.password}
+                  error={touched.password && errors.password}
+                  rightIcon
+                />
+
+                <Box className="gap-4 ">
+                  <Input
+                    label={t("signup.step_1.address.label", { ns: "auth" })}
+                    onBlur={handleBlur("address")}
+                    onChangeText={(val: string) => {
+                      setFieldValue("address", val);
+
+                      if (val.trim() === "") {
+                        updatePayload({
+                          user_info: {
+                            ...state.user_info,
+                            address: "",
+                            latitude: "",
+                            longitude: "",
+                          },
+                        });
+                      }
+                    }}
+                    placeholder=""
+                    value={
+                      values.address
+                        ? values.address
+                        : String(state.user_info.address)
+                    }
+                    error={touched?.address && errors?.address}
+                    touched={touched?.address}
+                    stretch
+                    onPress={() => setShowActionsheet(true)}
+                    editable={
+                      Boolean(values.address) ||
+                      Boolean(state.user_info.address)
+                    }
+                    pressable={
+                      !Boolean(values.address) ||
+                      !Boolean(state.user_info.address)
+                    }
+                  />
+
+                  <Pressable onPress={() => requestLocationPermission()}>
+                    <HStack space="xs">
+                      <Location color={Colors.DARK_GREEN} width={14} />
+                      <Text
+                        className="text-xs font-medium"
+                        textColor={Colors.DARK_GREEN}
+                      >
+                        {t("signup.step_1.mark_map", { ns: "auth" })}
+                      </Text>
+                    </HStack>
+                  </Pressable>
+                </Box>
+                <VStack className="mt-[24px] gap-5 w-full items-center">
+                  <Button
+                    style={{ alignSelf: "center" }}
+                    onPress={() => handleSubmit()}
                   >
-                    {t("signup.step_1.sign_in", { ns: "auth" })}
+                    {loading ? (
+                      <ActivityIndicator color={Colors.WHITE} />
+                    ) : (
+                      t("signup.step_1.next", { ns: "auth" })
+                    )}
+                  </Button>
+                  <Text fontSize={14} fontWeight={300} textColor={Colors.BLACK}>
+                    {t("signup.step_1.already_have_account", { ns: "auth" })}{" "}
+                    <Text
+                      fontSize={14}
+                      fontWeight={600}
+                      onPress={() => router.push(AuthRoutesLink.SIGN_IN)}
+                    >
+                      {t("signup.step_1.sign_in", { ns: "auth" })}
+                    </Text>
                   </Text>
-                </Text>
+                </VStack>
               </VStack>
-            </VStack>
+              <Actionsheet
+                isOpen={showActionsheet}
+                onClose={() => setShowActionsheet(false)}
+                snapPoints={[70]}
+              >
+                <ActionsheetBackdrop />
+                <ActionsheetContent className="pb-10">
+                  <ActionsheetDragIndicatorWrapper>
+                    <ActionsheetDragIndicator />
+                  </ActionsheetDragIndicatorWrapper>
+                  <View style={styles.search_bar_container}>
+                    <Input
+                      placeholder="Buscar dirección"
+                      label=""
+                      onBlur={() => {}}
+                      onChangeText={handleSearch}
+                      className=""
+                      icon={SearchIcon}
+                      rightIcon
+                      size="sm"
+                    />
+                  </View>
+                  <ActionsheetFlatList
+                    data={locations}
+                    renderItem={({ item }: any) => (
+                      <>
+                        <Pressable
+                          onPress={() => {
+                            setSelectedLocation(item);
+                            setFieldValue(
+                              "address",
+                              `${item.name.split(",")[0]},${
+                                item.name.split(",")[1]
+                              }.`
+                            );
+                            setShowActionsheet(false);
+                          }}
+                          className="py-2.5 px-4 border-b border-[#9FE4DD] bg-white rounded-lg mb-2.5"
+                        >
+                          <Box className="gap-4">
+                            <Text
+                              style={{
+                                fontSize: 16,
+                                fontWeight: "500",
+                                color: "#333",
+                              }}
+                            >
+                              {item.name}
+                            </Text>
+                          </Box>
+                        </Pressable>
+                      </>
+                    )}
+                    contentContainerClassName="gap-4"
+                    keyExtractor={(item: any) => item.id.toString()}
+                  />
+                </ActionsheetContent>
+              </Actionsheet>
+            </>
           );
         }}
       </Formik>
@@ -218,7 +328,9 @@ const styles = StyleSheet.create({
     gap: 16,
     flex: 1,
   },
-  mark_map: {
-    color: Colors.PRIMARY,
+  search_bar_container: {
+    width: "100%",
+    marginBottom: 24,
+    marginTop: 24,
   },
 });

@@ -35,12 +35,14 @@ import { RegisterType } from "@/utils/types/register.type";
 import { updateUser } from "@/services/auth.service";
 import { User, UserInfo } from "@/utils/interfaces/auth.interface";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/auth.context";
 
 type formProps = {
   payloadValues: RegisterType;
   setStep: React.Dispatch<React.SetStateAction<number>>;
   payload: React.Dispatch<React.SetStateAction<{}>>;
   extraData: string;
+  role: string;
 };
 
 export default function Step2(props: formProps) {
@@ -275,6 +277,7 @@ export default function Step2(props: formProps) {
             renderItem={({ item }: any) => (
               <Item id={item.id} title={item.name} image={item.image} />
             )}
+            contentContainerClassName="gap-4"
             keyExtractor={(item: any) => item.id.toString()}
           />
         </ActionsheetContent>

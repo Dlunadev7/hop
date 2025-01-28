@@ -21,10 +21,12 @@ import { useAuth } from "@/context/auth.context";
 import { useRoute } from "@react-navigation/native";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
+import * as Location from "expo-location";
 
 export default function MapSheet() {
   const { address, getAddress, selectedLocation } =
     useGetAddressFromCoordinates();
+  const { location } = useAuth();
   const { step } = useRoute().params as unknown as { step: string };
   const { updatePayload } = useAuth();
   const { t } = useTranslation();
@@ -71,8 +73,8 @@ export default function MapSheet() {
             style={styles.map}
             showsUserLocation={true}
             initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
+              latitude: location?.latitude || 0,
+              longitude: location?.longitude || 0,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
