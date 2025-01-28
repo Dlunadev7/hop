@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Colors } from "@/constants/Colors";
 import { StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
@@ -10,8 +10,17 @@ import { LinearGradient } from "@/components";
 import { Hop } from "@/assets/svg";
 import { Button } from "@/components/button/button.component";
 import { Text } from "@/components/text/text.component";
+import { useAuth } from "@/context/auth.context";
+
 export default function Entry() {
   const { t } = useTranslation();
+  const { token } = useAuth();
+
+  useEffect(() => {
+    if (token) {
+      router.replace("/(tabs)");
+    }
+  }, [token]);
 
   return (
     <>

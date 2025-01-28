@@ -11,6 +11,10 @@ import Onboarding1 from '@/assets/svg/onboarding_1.svg';
 import Onboarding2 from '@/assets/svg/onboarding_2.svg';
 import OnboardingHopper from '@/assets/svg/onboarding_hopper.svg';
 import OnboardingHoppy from '@/assets/svg/onboarding_hoppy.svg';
+import DocumentUpload from '@/assets/svg/document-upload.svg';
+import Gallery from '@/assets/svg/gallery.svg';
+import Documents from '@/assets/svg/documents.svg';
+import SuccessRounded from '@/assets/svg/tick-circle.svg';
 
 export {
   CircleArrowRight,
@@ -26,4 +30,8 @@ export {
   Onboarding2,
   OnboardingHopper,
   OnboardingHoppy,
+  DocumentUpload,
+  Gallery,
+  Documents,
+  SuccessRounded,
 }

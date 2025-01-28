@@ -19,18 +19,16 @@ export default function HomeScreen() {
       <Text className="text-[35px] mt-5">
         Holis {`${data?.userInfo.firstName} ${data?.userInfo.lastName}`}
       </Text>
-      <Box className="mt-auto">
-        <Button
-          onPress={() => {
-            clearToken();
-            mutate(() => true, undefined, { revalidate: false });
+      <Button
+        onPress={() => {
+          clearToken();
+          mutate(() => true, undefined, { revalidate: false });
 
-            router.replace(AuthRoutesLink.SIGN_IN);
-          }}
-        >
-          <ButtonText>Logout</ButtonText>
-        </Button>
-      </Box>
+          router.replace(AuthRoutesLink.SIGN_IN);
+        }}
+      >
+        <ButtonText>Logout</ButtonText>
+      </Button>
     </SafeAreaView>
   );
 }

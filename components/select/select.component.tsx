@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import {
   FormControl,
   FormControlError,
@@ -19,9 +19,11 @@ import {
   SelectPortal,
   SelectTrigger,
 } from "../ui/select";
-import { AlertCircleIcon, ChevronDownIcon } from "../ui/icon";
+import { AlertCircleIcon, ChevronDownIcon, Icon } from "../ui/icon";
 import { Colors } from "@/constants/Colors";
 import { Text } from "../ui/text";
+import Tooltip from "../tooltip/tooltip.component";
+import { Pressable } from "react-native";
 
 interface Option {
   label: string;
@@ -48,7 +50,11 @@ interface CustomFormControlProps {
     content?: string;
     item?: string;
   };
+  disabled?: boolean;
   value: string;
+  info?: string;
+  setShowTooltip?: Dispatch<SetStateAction<boolean>>;
+  showTooltip?: boolean;
 }
 
 export const Select = (props: CustomFormControlProps) => {
@@ -63,11 +69,17 @@ export const Select = (props: CustomFormControlProps) => {
     touched,
     customClassNames = {},
     value,
+    disabled,
+    info = "",
+    setShowTooltip,
+    showTooltip,
   } = props;
 
   return (
     <FormControl className={customClassNames.formControl}>
-      <FormControlLabel className={customClassNames.formControlLabel}>
+      <FormControlLabel
+        className={`${customClassNames.formControlLabel} gap-1`}
+      >
         <FormControlLabelText
           className={`font-semibold text-lg ${
             touched && error ? "text-[#9A0000]" : "text-[#10524B]"
@@ -75,12 +87,28 @@ export const Select = (props: CustomFormControlProps) => {
         >
           {label}
         </FormControlLabelText>
+        {info?.length > 1 && (
+          <Pressable
+            className="w-full relative"
+            onPress={() => setShowTooltip?.(true)}
+          >
+            <Icon as={AlertCircleIcon} color={Colors.PRIMARY} />
+            {showTooltip && (
+              <Tooltip
+                documentation={{ info }}
+                setShowTooltip={() => setShowTooltip?.(false)}
+              />
+            )}
+          </Pressable>
+        )}
       </FormControlLabel>
       <GSelect onValueChange={onSelect}>
         <SelectTrigger
           variant={variant}
           size={size}
           className={error ? "border-[#9A0000]" : ""}
+          style={{ height: 44 }}
+          disabled={disabled}
         >
           <SelectInput
             placeholder={placeholder}

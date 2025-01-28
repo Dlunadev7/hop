@@ -24,6 +24,7 @@ type formProps = {
   setStep: React.Dispatch<React.SetStateAction<number>>;
   payload: React.Dispatch<React.SetStateAction<{}>>;
   extraData: string;
+  role: string;
 };
 
 export default function Step3(props: formProps) {
@@ -43,7 +44,7 @@ export default function Step3(props: formProps) {
     setLoading(true);
     try {
       await updateUser(extraData, values);
-      setStep(3);
+      setStep(4);
     } catch (error) {
       showToast({
         message: t("server_error", { ns: "utils" }),
@@ -160,6 +161,6 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
   mark_map: {
-    color: Colors.PRIMARY,
+    color: Colors.DARK_GREEN,
   },
 });

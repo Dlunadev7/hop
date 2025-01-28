@@ -3,10 +3,10 @@ import React, {
   useContext,
   useState,
   useEffect,
-  ReactElement,
   ReactNode,
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Location from "expo-location";
 
 type addressType = {
   address: string;
@@ -23,6 +23,10 @@ interface AuthContextType {
     hotel_info: addressType;
   };
   updatePayload: (newData: {}) => void;
+  location: {
+    latitude: number;
+    longitude: number;
+  } | null;
 }
 
 interface AuthProviderProps {
@@ -45,6 +49,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       longitude: "",
     },
   });
+
+  const [location, setLocation] = useState<null | {
+    latitude: number;
+    longitude: number;
+  }>(null);
 
   const updatePayload = (newData: Partial<typeof state>) => {
     setState((prevState) => ({
@@ -73,6 +82,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setToken(null);
   };
 
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === "granted") {
+        const loc = await Location.getCurrentPositionAsync({});
+        const { latitude, longitude } = loc.coords;
+        setLocation({ latitude, longitude });
+      }
+    })();
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -81,6 +101,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         clearToken: handleClearToken,
         state,
         updatePayload,
+        location,
       }}
     >
       {children}

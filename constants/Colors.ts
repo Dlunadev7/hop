@@ -9,4 +9,5 @@ export const Colors = {
   ERROR: "#9A0000",
   GRAY: "#8E8E8E",
   WHITE_SECONDARY: "#FCFCFC",
+  LIGHT_GRAY: "#D1D1D1"
 }

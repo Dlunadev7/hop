@@ -24,6 +24,46 @@ export interface UserDocument {
   vehiclePictures: string | null;
 }
 
+export interface UserDocumentsPayload {
+  frontRut: null;
+  backRut: null;
+  circulationPermit: null | {
+    uri: string;
+    name: string;
+    type: string
+  }[];
+  seremiDecree: null | {
+    uri: string;
+    name: string;
+    type: string
+  }[];
+  frontDriverLicense: null | {
+    uri: string;
+    name: string;
+    type: string
+  }[];
+  backDriverLicense: null | {
+    uri: string;
+    name: string;
+    type: string
+  }[];
+  driverResume: null | {
+    uri: string;
+    name: string;
+    type: string
+  }[];
+  vehiclePictures: {
+    uri: string;
+    name: string;
+    type: string
+  }[];
+  passengerInsurance: {
+    uri: string;
+    name: string;
+    type: string
+  }[];
+}
+
 export interface CreateUserResponse {
   bank_account: string;
   bank_account_type: string;
@@ -73,4 +113,12 @@ export interface User {
   password: string;
   role: "USER_HOPPER" | string;
   userInfo: UserInfo;
+}
+
+export interface VehicleUser {
+  type: string,
+  passengers: string,
+  accessibility: string,
+  suitcases: string,
+  specialLuggage: string
 }
