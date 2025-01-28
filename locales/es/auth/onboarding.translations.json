@@ -1,0 +1,19 @@
+{
+  "first_item_carousel": {
+    "welcome_title": "¡Bienvenido!",
+    "welcome_text": "Puedes trabajar con nosotros\nregistrándote como",
+    "hopper": "Hopper",
+    "hoppers_description": "Los Hoppers son conductores seleccionados que recibirán notificaciones de viajes reservados directamente por el personal de Hoteles elite."
+  },
+  "second_item_carousel": {
+    "welcome_title": "Crea una cuenta",
+    "welcome_text": "O puedes registrarte como",
+    "hoppers_description": "Los Hoppys son empleados seleccionados de Hoteles elite que reservarán viajes para los huéspedes y asignarán conductores."
+  },
+  "third_item_carousel": {
+    "welcome_title": "Crea una cuenta",
+    "welcome_text": "Elige una opción para registrarte",
+    "register_as_hoppy": "Registrarme como Hoppy",
+    "register_as_hopper": "Registrarme como Hopper"
+  }
+}

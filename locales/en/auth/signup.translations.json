@@ -1,5 +1,6 @@
 {
   "title": "Hoppy Registration",
+  "title_hopper": "Hopper Registration",
   "subtitle": "(receptionist)",
   "step_message": "To request registration, you need to complete the following fields",
   "step_message_final": "Follow the link to confirm your identity and complete the registration request",

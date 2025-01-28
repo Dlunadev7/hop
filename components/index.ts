@@ -1,3 +1,4 @@
+import { Carousel } from "./carousel/carousel.component";
 import { Input } from "./input/input.component";
 import { LinearGradient } from "./linear-gradient/LinearGradient";
 import { Select } from "./select/select.component";
@@ -8,4 +9,5 @@ export {
   LinearGradient,
   Select,
   StepControl,
+  Carousel,
 }

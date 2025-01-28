@@ -15,13 +15,11 @@ import { useAuth } from "@/context/auth.context";
 
 export default function SignUp() {
   const queryParams = useRoute().params as any;
-  const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const [step, setStep] = useState(
     queryParams.step ? Number(queryParams.step) : 1
   );
   const [id, setId] = useState("");
-
   const { state } = useAuth();
 
   const [payload, setPayload] = useState({
@@ -127,7 +125,9 @@ export default function SignUp() {
                 textColor={Colors.DARK_GREEN}
                 fontWeight={600}
               >
-                {t("signup.title", { ns: "auth" })}
+                {queryParams.user_type === "hoppy"
+                  ? t("signup.title", { ns: "auth" })
+                  : t("signup.title_hopper", { ns: "auth" })}
               </Text>
               <Text
                 fontSize={14}
