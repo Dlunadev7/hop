@@ -64,15 +64,18 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   gradient: {
-    height: 40,
-    paddingHorizontal: 40,
+    minHeight: 40,
+    paddingHorizontal: 20,
     justifyContent: "center",
     alignItems: "center",
+    paddingVertical: 10,
   },
   text: {
     color: "#fff",
     fontSize: 16,
     fontWeight: 600,
+    textAlign: "center",
+    flexWrap: "wrap",
   },
   ghost: {
     alignItems: "center",
@@ -83,5 +86,7 @@ const styles = StyleSheet.create({
     color: Colors.DARK_GREEN,
     fontSize: 16,
     fontWeight: 600,
+    textAlign: "center",
+    flexWrap: "wrap",
   },
 });

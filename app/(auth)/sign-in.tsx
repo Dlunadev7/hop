@@ -156,7 +156,7 @@ export default function SignIn() {
                     <Text
                       fontWeight={600}
                       onPress={() => {
-                        router.navigate(AuthRoutesLink.SIGN_UP);
+                        router.navigate(AuthRoutesLink.ONBOARDING);
                       }}
                     >
                       {t("signin.create_account", { ns: "auth" })}

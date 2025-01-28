@@ -14,6 +14,10 @@ import AuthForgotPasswordEn from './en/auth/forgot-password.translations.json';
 import AuthForgotPasswordEs from './es/auth/forgot-password.translations.json';
 import ErrorsEn from './en/utils.json';
 import ErrorsEs from './es/utils.json';
+
+import OnboardingEn from './en/auth/onboarding.translations.json';
+import OnboardingEs from './es/auth/onboarding.translations.json';
+
 export {
   EntryTranslationEn,
   EntryTranslationEs,
@@ -26,5 +30,7 @@ export {
   AuthForgotPasswordEn,
   AuthForgotPasswordEs,
   ErrorsEn,
-  ErrorsEs
+  ErrorsEs,
+  OnboardingEn,
+  OnboardingEs
 }

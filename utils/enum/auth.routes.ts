@@ -7,7 +7,8 @@ export enum AuthRoutes {
   RECOVERY_PASSWORD = 'recovery-password',
   NEW_PASSWORD = 'new-password',
   FINISH_RECOVER_PASSWORD = 'finish-recover-password',
-  MAP = 'map'
+  MAP = 'map',
+  ONBOARDING = 'onboarding'
 }
 
 export enum AuthRoutesLink {
@@ -19,5 +20,6 @@ export enum AuthRoutesLink {
   RECOVERY_PASSWORD = '/(auth)/recovery-password',
   NEW_PASSWORD = '/(auth)/new-password',
   FINISH_RECOVER_PASSWORD = '/(auth)/finish-recover-password',
-  MAP = '/(auth)/map'
+  MAP = '/(auth)/map',
+  ONBOARDING = '/(auth)/onboarding'
 }

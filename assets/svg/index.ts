@@ -7,6 +7,10 @@ import Location from '@/assets/svg/location.svg';
 import LocationFilled from '@/assets/svg/location-filled.svg';
 import MarkerIcon from '@/assets/svg/marker.svg';
 import WarningToast from '@/assets/svg/warning-toast.svg';
+import Onboarding1 from '@/assets/svg/onboarding_1.svg';
+import Onboarding2 from '@/assets/svg/onboarding_2.svg';
+import OnboardingHopper from '@/assets/svg/onboarding_hopper.svg';
+import OnboardingHoppy from '@/assets/svg/onboarding_hoppy.svg';
 
 export {
   CircleArrowRight,
@@ -17,5 +21,9 @@ export {
   Location,
   LocationFilled,
   MarkerIcon,
-  WarningToast
+  WarningToast,
+  Onboarding1,
+  Onboarding2,
+  OnboardingHopper,
+  OnboardingHoppy,
 }

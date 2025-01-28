@@ -44,6 +44,10 @@ export default function _layout() {
           name={AuthRoutes.MAP}
           options={{ headerShown: false, presentation: "modal" }}
         />
+        <Stack.Screen
+          name={AuthRoutes.ONBOARDING}
+          options={{ headerShown: false }}
+        />
       </Stack>
     </>
   );
