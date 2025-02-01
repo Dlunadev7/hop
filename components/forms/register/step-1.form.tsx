@@ -54,7 +54,6 @@ export default function Step1(props: formProps) {
   const [showActionsheet, setShowActionsheet] = useState(false);
   const [loading, setLoading] = useState(false);
   const schema = validationSchema(t);
-  const { token } = useAuth();
   const handleSearch = (searchText: string) => {
     if (searchText.trim()) {
       geocodeAddress(searchText);
@@ -269,7 +268,7 @@ export default function Step1(props: formProps) {
                   </ActionsheetDragIndicatorWrapper>
                   <View style={styles.search_bar_container}>
                     <Input
-                      placeholder="Buscar dirección"
+                      placeholder={t("map_sheet", { ns: "utils" })}
                       label=""
                       onBlur={() => {}}
                       onChangeText={handleSearch}

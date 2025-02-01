@@ -17,7 +17,7 @@ export const TakeABooking = () => {
         className="gap-2 rounded-full items-center justify-center px-4"
         style={styles.badge}
       >
-        <BadgeIcon as={Car} className="w-4 h-4" color={Colors.DARK_GREEN} />
+        <Car width={16} height={16} color={Colors.DARK_GREEN} />
         <Text fontSize={14} fontWeight={400} textColor={Colors.DARK_GREEN}>
           {t("home.booking.booking_hopper", { ns: "home" })}
         </Text>

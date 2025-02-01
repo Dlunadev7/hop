@@ -38,3 +38,4 @@ config.ts
 app-example
 android/*
 eas.json
+.idea

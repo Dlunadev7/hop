@@ -102,12 +102,22 @@ export const Select = (props: CustomFormControlProps) => {
           </Pressable>
         )}
       </FormControlLabel>
-      <GSelect onValueChange={onSelect}>
+      <GSelect onValueChange={onSelect} isDisabled={disabled}>
         <SelectTrigger
           variant={variant}
           size={size}
           className={error ? "border-[#9A0000]" : ""}
-          style={{ height: 44 }}
+          style={{
+            height: 44,
+            backgroundColor: props.disabled
+              ? Colors.LIGHT_GRADIENT_1
+              : Colors.WHITE,
+            borderColor: props.disabled
+              ? Colors.LIGHT_GRADIENT_1
+              : error
+              ? Colors.ERROR
+              : Colors.PRIMARY,
+          }}
           disabled={disabled}
         >
           <SelectInput

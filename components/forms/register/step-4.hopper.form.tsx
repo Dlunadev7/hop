@@ -13,8 +13,6 @@ import { Select } from "@/components/select/select.component";
 import { vehicles } from "@/constants/vehicles.constants";
 import { Button } from "@/components/button/button.component";
 import capitalizeWords from "@/helpers/capitalize-words";
-import * as Yup from "yup";
-import { useFormik } from "formik";
 
 type formProps = {
   payloadValues: RegisterType;
@@ -67,28 +65,6 @@ export default function Step4Hopper(props: formProps) {
       setLoading(false);
     }
   };
-
-  const validationSchema = Yup.object().shape({
-    vehicleType: Yup.string().required("Selecciona un tipo de vehículo"),
-    passengers: Yup.string().required("Selecciona el número de pasajeros"),
-    accessibility: Yup.string().required("Selecciona una opción"),
-    luggageSpace: Yup.string().required("Selecciona el espacio para equipaje"),
-    specialLuggage: Yup.string().required("Selecciona una opción"),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      vehicleType: "",
-      passengers: "",
-      accessibility: "",
-      luggageSpace: "",
-      specialLuggage: "",
-    },
-    validationSchema,
-    onSubmit: (values) => {
-      console.log("Formulario enviado:", values);
-    },
-  });
 
   return (
     <Pressable onPress={() => setShowTooltip(false)}>

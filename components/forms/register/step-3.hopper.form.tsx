@@ -78,8 +78,6 @@ export default function Step3Hopper(props: formProps) {
     setOpenActionSheetIndex(null);
   };
 
-  console.log(documentsByItem);
-
   const handleRegisterStep3 = async () => {
     setLoading(true);
     try {
@@ -146,8 +144,6 @@ export default function Step3Hopper(props: formProps) {
         circulationPermit: circulationPermit,
         passengerInsurance: passengerInsurance,
       };
-
-      console.log(JSON.stringify(payload, null, 2));
 
       await updateUserDocuments(extraData, payload);
       setStep(4);

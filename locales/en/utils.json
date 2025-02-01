@@ -11,5 +11,6 @@
     "wallet": "Wallet",
     "history": "History",
     "booking": "Booking"
-  }
+  },
+  "map_sheet": "Search address..."
 }

@@ -1,0 +1,63 @@
+{
+  "drawer": {
+    "link": {
+      "privacy": "Privacy and Passwords",
+      "permissions": "Device Permissions",
+      "account_status": "Account status",
+      "logout": "Close Session"
+    }
+  },
+  "home": {
+    "title": "Profile",
+    "shortcuts": {
+      "personal_data": "Personal Information",
+      "hotel": "Hotel data",
+      "vehicle": "Vehicle data",
+      "reservations": "Reservations",
+      "history": "History",
+      "bank_account": "Bank Account"
+    }
+  },
+  "personal_data": {
+    "title": "Personal information",
+    "picture": "Change profile picture",
+    "fields": {
+      "name": {
+        "label": "Name"
+      },
+      "last_name": {
+        "label": "Surname"
+      },
+      "email": {
+        "label": "Email"
+      },
+      "password": {
+        "label": "Password"
+      },
+      "rut": {
+        "label": "RUT"
+      },
+      "address": {
+        "label": "Address"
+      },
+      "birth_date": {
+        "label": "Birth Date"
+      }
+    },
+    "button": "Save Changes"
+  },
+  "vehicle": {
+    "title": "Vehicle Data",
+    "see_docs": "See documentation"
+  },
+  "documentation": {
+    "title": "Documentation"
+  },
+  "account": {
+    "title": "Bank Account",
+    "switch": "I am the account holder"
+  },
+  "hotel": {
+    "title": "Hotel Data"
+  }
+}

@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { Text } from "@/components/text/text.component";
@@ -22,6 +23,8 @@ import { useRoute } from "@react-navigation/native";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import * as Location from "expo-location";
+import { StatusBar } from "expo-status-bar";
+import { Colors } from "@/constants/Colors";
 
 export default function MapSheet() {
   const { address, getAddress, selectedLocation } =
@@ -30,6 +33,19 @@ export default function MapSheet() {
   const { step } = useRoute().params as unknown as { step: string };
   const { updatePayload } = useAuth();
   const { t } = useTranslation();
+
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const mapRegion = useCallback(() => {
+    if (!location) return undefined;
+    return {
+      latitude: location.latitude,
+      longitude: location.longitude,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    };
+  }, [location]);
+
   const onPressMap = (e: any) => {
     const { latitude, longitude } = e.nativeEvent.coordinate;
     getAddress(latitude, longitude);
@@ -55,11 +71,15 @@ export default function MapSheet() {
     router.back();
   };
 
+  useEffect(() => {
+    if (mapRegion()) {
+      setIsLoaded(true);
+    }
+  }, [mapRegion]);
+
   return (
-    <KeyboardAvoidingView
-      className="flex-1"
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
+    <View className="flex-1">
+      <StatusBar hidden />
       <Fab
         placement="top left"
         onPress={() => router.back()}
@@ -69,33 +89,35 @@ export default function MapSheet() {
       </Fab>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View className="flex-1">
-          <MapView
-            style={styles.map}
-            showsUserLocation={true}
-            initialRegion={{
-              latitude: location?.latitude || 0,
-              longitude: location?.longitude || 0,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-            onPress={onPressMap}
-          >
-            {selectedLocation && (
-              <Marker
-                coordinate={{
-                  latitude: selectedLocation.latitude,
-                  longitude: selectedLocation.longitude,
-                }}
-              >
-                <View className="w-[30px] h-[30px]">
-                  <Image
-                    source={AssetsImages.marker_icon}
-                    className="w-full h-full"
-                  />
-                </View>
-              </Marker>
-            )}
-          </MapView>
+          {isLoaded ? (
+            <MapView
+              style={styles.map}
+              showsUserLocation={true}
+              initialRegion={mapRegion()}
+              onPress={onPressMap}
+              onMapLoaded={() => console.log("Mapa cargado")}
+            >
+              {selectedLocation && (
+                <Marker
+                  coordinate={{
+                    latitude: selectedLocation.latitude,
+                    longitude: selectedLocation.longitude,
+                  }}
+                >
+                  <View className="w-[30px] h-[30px]">
+                    <Image
+                      source={AssetsImages.marker_icon}
+                      className="w-full h-full"
+                    />
+                  </View>
+                </Marker>
+              )}
+            </MapView>
+          ) : (
+            <View className="flex-1 justify-center items-center">
+              <ActivityIndicator color={Colors.WHITE} />
+            </View>
+          )}
           <View style={styles.actionSheet}>
             <Text fontSize={24} fontWeight={400} className="mb-6">
               {t("signup.step_1.mark_map", { ns: "auth" })}
@@ -119,7 +141,7 @@ export default function MapSheet() {
           </View>
         </View>
       </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
@@ -141,7 +163,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 10,
-    paddingVertical: 24,
+    paddingVertical: 28,
     backgroundColor: "white",
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,

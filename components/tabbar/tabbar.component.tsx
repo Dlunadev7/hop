@@ -40,7 +40,7 @@ export const TabBar = (props: CustomTabBarProps) => {
                   focused: isFocused,
                   size: 0,
                 })}
-            </View>{" "}
+            </View>
             {isFocused && (
               <Text fontSize={14} style={[isFocused && styles.focusedText]}>
                 {String(options.tabBarLabel) || route.name}
