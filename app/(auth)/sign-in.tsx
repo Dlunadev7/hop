@@ -25,6 +25,7 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const { setToken } = useAuth();
   const { showToast, toastId } = useToast();
+
   const storeTokens = async (token: string, refreshToken: string) => {
     const tokenData = JSON.stringify({ token, refreshToken });
 

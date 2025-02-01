@@ -18,6 +18,9 @@ import ErrorsEs from './es/utils.json';
 import OnboardingEn from './en/auth/onboarding.translations.json';
 import OnboardingEs from './es/auth/onboarding.translations.json';
 
+import HomeEn from './en/home/home.translations.json';
+import HomeEs from './es/home/home.translations.json';
+
 export {
   EntryTranslationEn,
   EntryTranslationEs,
@@ -32,5 +35,7 @@ export {
   ErrorsEn,
   ErrorsEs,
   OnboardingEn,
-  OnboardingEs
+  OnboardingEs,
+  HomeEn,
+  HomeEs
 }

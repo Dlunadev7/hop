@@ -17,9 +17,8 @@ export default function Entry() {
   const { token } = useAuth();
 
   useEffect(() => {
-    if (token) {
-      router.replace("/(tabs)");
-    }
+    if (!token) return;
+    router.replace("/(tabs)");
   }, [token]);
 
   return (

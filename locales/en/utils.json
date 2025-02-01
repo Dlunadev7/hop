@@ -4,5 +4,12 @@
   "document": "Document",
   "max_documents_reached": "You can only select 1 files.",
   "tooltip_description": "Photos of the front, rear, sides and interior of the vehicle",
-  "accessibility": "Yes: the driver is able to assist a passenger with reduced mobility."
+  "accessibility": "Yes: the driver is able to assist a passenger with reduced mobility.",
+  "tabbar": {
+    "home": "Home",
+    "profile": "Profile",
+    "wallet": "Wallet",
+    "history": "History",
+    "booking": "Booking"
+  }
 }

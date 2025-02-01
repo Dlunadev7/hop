@@ -1,0 +1,16 @@
+{
+  "header": "Hello",
+  "balance": "Balance",
+  "booking": {
+    "title": "Booking",
+    "booking_hopper": "Book a Hopper",
+    "destinity_placeholder": "Indicates a destination..."
+  },
+  "services": {
+    "title": "Services",
+    "shortcuts": {
+      "pickup": "Pick Up",
+      "dropoff": "Drop Off"
+    }
+  }
+}

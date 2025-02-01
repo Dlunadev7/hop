@@ -15,6 +15,23 @@ import DocumentUpload from '@/assets/svg/document-upload.svg';
 import Gallery from '@/assets/svg/gallery.svg';
 import Documents from '@/assets/svg/documents.svg';
 import SuccessRounded from '@/assets/svg/tick-circle.svg';
+import Avatar from '@/assets/svg/avatar.svg';
+import Calendar from '@/assets/svg/calendar.svg';
+import CalendarActive from '@/assets/svg/calendar-active.svg';
+import Wallet from '@/assets/svg/empty-wallet.svg';
+import WalletActive from '@/assets/svg/empty-wallet-active.svg';
+import ClockActive from '@/assets/svg/clock-active.svg';
+import Profile from '@/assets/svg/profile.svg';
+import Home from '@/assets/svg/home.svg';
+import HomeActive from '@/assets/svg/home-active.svg';
+import Clock from '@/assets/svg/clock.svg';
+import ProfileActive from '@/assets/svg/profile-active.svg';
+import Car from '@/assets/svg/car.svg';
+import PickUp from '@/assets/svg/pickup.svg'
+import DropOff from '@/assets/svg/dropoff.svg'
+import Booking from '@/assets/svg/booking.svg';
+import Routing from '@/assets/svg/routing.svg';
+import UserSquare from '@/assets/svg/user-square.svg';
 
 export {
   CircleArrowRight,
@@ -34,4 +51,21 @@ export {
   Gallery,
   Documents,
   SuccessRounded,
+  Avatar,
+  Calendar,
+  Wallet,
+  Clock,
+  Profile,
+  Home,
+  ClockActive,
+  HomeActive,
+  ProfileActive,
+  WalletActive,
+  CalendarActive,
+  Car,
+  PickUp,
+  DropOff,
+  Booking,
+  Routing,
+  UserSquare
 }

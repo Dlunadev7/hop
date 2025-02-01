@@ -1,0 +1,16 @@
+{
+  "header": "Hola",
+  "balance": "Balance",
+  "booking": {
+    "title": "Reservas",
+    "booking_hopper": "Reservar un Hopper",
+    "destinity_placeholder": "Indica un destino..."
+  },
+  "services": {
+    "title": "Servicios",
+    "shortcuts": {
+      "pickup": "Pick Up",
+      "dropoff": "Drop Off"
+    }
+  }
+}
