@@ -11,7 +11,7 @@ export const initializeI18next = async (language: string) => {
       lng: language.toLowerCase(),
       fallbackLng: 'en',
       compatibilityJSON: 'v4',
-      ns: ['auth', 'utils'],
+      ns: ['auth', 'utils', 'home'],
       resources,
       interpolation: {
         escapeValue: false,

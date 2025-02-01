@@ -1,0 +1,27 @@
+<svg width="184" height="190" viewBox="0 0 184 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_d_407_5375)">
+<rect x="2.22021" y="1.79248" width="180.22" height="180.22" rx="31.5385" fill="url(#paint0_linear_407_5375)" shape-rendering="crispEdges"/>
+<g clip-path="url(#clip0_407_5375)">
+<path d="M139.413 129.073H45.2481C43.8852 129.073 42.7701 130.467 42.7701 132.171V138.366C42.7701 140.069 43.8852 141.463 45.2481 141.463H139.413C140.776 141.463 141.891 140.069 141.891 138.366V132.171C141.891 130.467 140.776 129.073 139.413 129.073ZM55.2532 108.416C56.2289 109.733 57.5918 110.488 59.0167 110.488L79.2281 110.449C80.8213 110.447 82.3917 109.976 83.8124 109.075L128.882 80.4805C133.017 77.8476 136.734 74.1112 139.258 69.1938C142.093 63.6763 142.402 59.6883 141.287 56.8618C140.172 54.0353 137.462 51.9638 132.258 51.5379C127.627 51.1701 123.043 52.6801 118.892 55.313L103.637 64.9928L69.7651 49.0986C69.3577 48.756 68.8845 48.5556 68.3944 48.5181C67.9043 48.4807 67.4151 48.6076 66.9773 48.8856L56.8019 55.3711C55.1448 56.4165 54.7421 59.1849 55.9966 60.8886L80.1883 79.8803L64.205 90.0248L52.992 82.9585C52.6056 82.7136 52.1784 82.586 51.7452 82.586C51.312 82.586 50.8849 82.7136 50.4985 82.9585L44.3034 86.9079C42.6927 87.9339 42.259 90.6055 43.4361 92.3479L55.2377 108.416H55.2532Z" fill="#9FE4DD"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_d_407_5375" x="0.220215" y="0.79248" width="188.22" height="188.22" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="2" dy="3"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_407_5375"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_407_5375" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear_407_5375" x1="162.328" y1="220.648" x2="33.792" y2="-19.7613" gradientUnits="userSpaceOnUse">
+<stop stop-color="#10524B"/>
+<stop offset="0.986069" stop-color="#56CFC3"/>
+</linearGradient>
+<clipPath id="clip0_407_5375">
+<rect width="99.1211" height="99.1211" fill="white" transform="translate(42.7698 42.3423)"/>
+</clipPath>
+</defs>
+</svg>

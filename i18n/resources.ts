@@ -1,4 +1,4 @@
-import { AuthForgotPasswordEn, AuthForgotPasswordEs, AuthSignUpEn, AuthSignUpEs, AuthValidationsEn, AuthValidationsEs, EntryTranslationEn, EntryTranslationEs, ErrorsEn, ErrorsEs, OnboardingEn, OnboardingEs, SignInTranslationsEn, SignInTranslationsEs, } from "@/locales";
+import { AuthForgotPasswordEn, AuthForgotPasswordEs, AuthSignUpEn, AuthSignUpEs, AuthValidationsEn, AuthValidationsEs, EntryTranslationEn, EntryTranslationEs, ErrorsEn, ErrorsEs, HomeEn, HomeEs, OnboardingEn, OnboardingEs, SignInTranslationsEn, SignInTranslationsEs, } from "@/locales";
 
 
 export const resources = {
@@ -11,6 +11,9 @@ export const resources = {
       forgot_password: AuthForgotPasswordEn,
       onboarding: OnboardingEn
     },
+    home: {
+      home: HomeEn
+    },
     utils: ErrorsEn
   },
   es: {
@@ -21,6 +24,9 @@ export const resources = {
       validations: AuthValidationsEs,
       forgot_password: AuthForgotPasswordEs,
       onboarding: OnboardingEs
+    },
+    home: {
+      home: HomeEs
     },
     utils: ErrorsEs
   }

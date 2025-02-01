@@ -4,5 +4,12 @@
   "document": "Documentos",
   "max_documents_reached": "Solo puedes seleccionar 1 archivos.",
   "tooltip_description": "Fotos del frente, trasera, laterales y del interior del vehículo",
-  "accessibility": "Sí: el conductor es capaz de asistir a un pasajero con movilidad reducida"
+  "accessibility": "Sí: el conductor es capaz de asistir a un pasajero con movilidad reducida",
+  "tabbar": {
+    "profile": "Perfil",
+    "home": "Inicio",
+    "wallet": "Billetera",
+    "history": "Historial",
+    "booking": "Reservas"
+  }
 }
