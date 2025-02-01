@@ -19,6 +19,7 @@ import { initializeI18next } from "@/i18n/i18next";
 import { getLocales } from "expo-localization";
 import { AuthProvider } from "@/context/auth.context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { DrawerProvider } from "@/context/drawer.context";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -107,16 +108,18 @@ export default function RootLayout() {
         }}
       >
         <GluestackUIProvider mode="light">
-          <Stack screenOptions={{ headerShown: false }}>
-            {token ? (
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            ) : (
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            )}
-            <Stack.Screen name="+not-found" />
-            <Stack.Screen name="error" />
-          </Stack>
-          <StatusBar style="auto" />
+          <DrawerProvider>
+            <Stack screenOptions={{ headerShown: false }}>
+              {token ? (
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              ) : (
+                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              )}
+              <Stack.Screen name="+not-found" />
+              <Stack.Screen name="error" />
+            </Stack>
+            <StatusBar style="auto" />
+          </DrawerProvider>
         </GluestackUIProvider>
       </SWRConfig>
     </AuthProvider>

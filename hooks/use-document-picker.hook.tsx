@@ -95,57 +95,67 @@ export const useFilePicker = () => {
   );
 
   // Función para seleccionar imágenes
-  const pickImage = useCallback(async (itemId: number) => {
-    try {
-      setIsLoading(true);
-      setError(null);
+  const pickImage = useCallback(
+    async (itemId: number, isMultiple: boolean = true) => {
+      try {
+        setIsLoading(true);
+        setError(null);
 
-      const result: any = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        const resultImage = result.assets[0];
-        const newDocument = {
-          itemId,
-          uri: resultImage.uri,
-          name: resultImage.uri.split("/").pop() ?? "image.png",
-          size: resultImage.expoSize,
-          type: "image/png",
-        };
-
-        setSelectedImages((prevImages) => {
-          // Verificar si ya existe en la lista
-          const alreadyExists = prevImages.some(
-            (doc) =>
-              doc.uri === newDocument.uri &&
-              doc.itemId === newDocument.itemId &&
-              doc.name === newDocument.name
-          );
-          return alreadyExists ? prevImages : [...prevImages, newDocument];
+        const result: any = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          quality: 1,
         });
 
-        setDocumentNames((prevNames) => {
-          const alreadyExists = selectedDocuments.some(
-            (doc) => doc.name === newDocument.name
-          );
-          return alreadyExists
-            ? prevNames
-            : prevNames
-            ? `${prevNames}, ${newDocument.name}`
-            : newDocument.name;
-        });
-      } else {
-        setError("La selección de imagen fue cancelada.");
+        if (!result.canceled) {
+          const resultImage = result.assets[0];
+          const newDocument = {
+            itemId,
+            uri: resultImage.uri,
+            name: resultImage.uri.split("/").pop() ?? "image.png",
+            size: resultImage.expoSize,
+            type: "image/png",
+          };
+
+          setSelectedImages((prevImages) => {
+            if (isMultiple) {
+              // Acumular imágenes si no existen previamente
+              const alreadyExists = prevImages.some(
+                (doc) =>
+                  doc.uri === newDocument.uri &&
+                  doc.itemId === newDocument.itemId &&
+                  doc.name === newDocument.name
+              );
+              return alreadyExists ? prevImages : [...prevImages, newDocument];
+            }
+            // Reemplazar imágenes
+            return [newDocument];
+          });
+
+          setDocumentNames(() => {
+            if (isMultiple) {
+              const alreadyExists = selectedDocuments.some(
+                (doc) => doc.name === newDocument.name
+              );
+              return alreadyExists
+                ? documentNames
+                : documentNames
+                ? `${documentNames}, ${newDocument.name}`
+                : newDocument.name;
+            }
+            return newDocument.name; // Reemplazar nombre
+          });
+        } else {
+          setError("La selección de imagen fue cancelada.");
+        }
+      } catch (err: any) {
+        setError(err.message || "Ocurrió un error al seleccionar la imagen.");
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err: any) {
-      setError(err.message || "Ocurrió un error al seleccionar la imagen.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    [selectedDocuments, documentNames]
+  );
 
   const removeDocument = useCallback(
     (itemId: number, documentToRemove: DocumentInfo) => {

@@ -77,20 +77,9 @@ export const getUserLogged = async (): Promise<User> => {
 
 export const updateUser = async (id: string, data: Partial<UserInfo>): Promise<User> => {
   try {
-    const response: AxiosResponse = await axiosInstance.put(`/user-info/${id}`, {
-      body: {
-        bank_name: {
-          name: data.bank_name?.name,
-          id: data.bank_name?.id
-        },
-        bank_account_holder: data.bank_account_holder,
-        bank_account_rut: data.bank_account_rut,
-        bank_account_type: data.bank_account_type,
-        bank_account: data.bank_account,
-      }
-    },
-    );
+    const response: AxiosResponse = await axiosInstance.put(`/user-info/${id}`, data);
     return response.data;
+
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       throw error.response || error;

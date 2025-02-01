@@ -40,7 +40,7 @@ export default function HomeScreen() {
   }, [navigator, data]);
 
   return (
-    <Container className="flex-1">
+    <Container>
       <KeyboardContainer>
         <VStack className="mt-4">
           <Balance />

@@ -16,6 +16,7 @@ import Gallery from '@/assets/svg/gallery.svg';
 import Documents from '@/assets/svg/documents.svg';
 import SuccessRounded from '@/assets/svg/tick-circle.svg';
 import Avatar from '@/assets/svg/avatar.svg';
+import AvatarHopper from '@/assets/svg/avatar_hopper.svg';
 import Calendar from '@/assets/svg/calendar.svg';
 import CalendarActive from '@/assets/svg/calendar-active.svg';
 import Wallet from '@/assets/svg/empty-wallet.svg';
@@ -32,6 +33,10 @@ import DropOff from '@/assets/svg/dropoff.svg'
 import Booking from '@/assets/svg/booking.svg';
 import Routing from '@/assets/svg/routing.svg';
 import UserSquare from '@/assets/svg/user-square.svg';
+import Menu from '@/assets/svg/menu.svg';
+import CourtHouse from '@/assets/svg/courthouse.svg';
+import Edit from '@/assets/svg/edit.svg';
+import ArrowLeftColored from '@/assets/svg/arrow-left-rounded-colored.svg';
 
 export {
   CircleArrowRight,
@@ -67,5 +72,10 @@ export {
   DropOff,
   Booking,
   Routing,
-  UserSquare
+  UserSquare,
+  Menu,
+  CourtHouse,
+  AvatarHopper,
+  Edit,
+  ArrowLeftColored
 }

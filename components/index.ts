@@ -9,6 +9,7 @@ import { Balance } from "./balance/balance.component";
 import { TakeABooking } from "./take_booking/take_booking.component";
 import { Services } from "./services/services.component";
 import { Booking } from "./booking/booking.component";
+import Switch from "./switch/switch.comonent";
 
 export {
   Input,
@@ -21,5 +22,6 @@ export {
   Balance,
   TakeABooking,
   Services,
-  Booking
+  Booking,
+  Switch
 }

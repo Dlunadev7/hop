@@ -21,7 +21,47 @@ export interface UserDocument {
   id: string;
   seremiDecree: string | null;
   updated_at: string;
-  vehiclePictures: string | null;
+  vehiclePictures: string[] | null;
+}
+
+export interface UserDocumentsPayload {
+  frontRut: null;
+  backRut: null;
+  circulationPermit: null | {
+    uri: string;
+    name: string;
+    type: string
+  }[];
+  seremiDecree: null | {
+    uri: string;
+    name: string;
+    type: string
+  }[];
+  frontDriverLicense: null | {
+    uri: string;
+    name: string;
+    type: string
+  }[];
+  backDriverLicense: null | {
+    uri: string;
+    name: string;
+    type: string
+  }[];
+  driverResume: null | {
+    uri: string;
+    name: string;
+    type: string
+  }[];
+  vehiclePictures: {
+    uri: string;
+    name: string;
+    type: string
+  }[];
+  passengerInsurance: {
+    uri: string;
+    name: string;
+    type: string
+  }[];
 }
 
 export interface UserDocumentsPayload {
@@ -81,16 +121,22 @@ interface HomeAddress {
   address: string;
 }
 
-interface BankName {
-  id: string;
-  name: string;
-}
-
 interface HotelLocation {
   lat: number | string;
   lng: number | string;
   address: string;
 }
+
+export interface BankName {
+  id: string;
+  created_at?: Date;
+  updated_at?: Date;
+  deleted_at?: null;
+  name: string;
+  image?: string;
+  country?: string;
+}
+
 
 export interface UserInfo {
   firstName?: string;
@@ -105,6 +151,7 @@ export interface UserInfo {
   bank_account_type?: string;
   hotel_name?: string;
   hotel_location?: HotelLocation;
+  profilePic?: string;
 }
 
 export interface User {

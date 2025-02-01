@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import React, { ReactElement } from "react";
 import { Colors } from "@/constants/Colors";
 
@@ -7,12 +7,17 @@ export const Container = ({
   className,
 }: {
   children: ReactElement | ReactElement[];
-  className: string;
+  className?: string;
 }) => {
   return (
-    <View className={`px-4 ${className}`} style={styles.container}>
+    <ScrollView
+      className={`px-4 ${className}`}
+      style={styles.container}
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+    >
       {children}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -20,5 +25,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.WHITE,
+  },
+  content: {
+    paddingBottom: 150,
   },
 });

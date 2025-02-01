@@ -50,7 +50,7 @@ export const Input = (
     editable = true,
     pressable = false,
     isRequired,
-    style,
+    style = {},
   } = props;
 
   const [secureTextEntry, setSecureTextEntry] = useState(props.secureTextEntry);
@@ -61,7 +61,21 @@ export const Input = (
       variant="rounded"
       pointerEvents={pressable ? "none" : "auto"}
       // @ts-ignore
-      style={[styles.input, style]}
+      style={[
+        style as any,
+        styles.input,
+        {
+          borderColor: props.isDisabled
+            ? Colors.LIGHT_GRADIENT_1
+            : error
+            ? Colors.ERROR
+            : Colors.PRIMARY,
+          backgroundColor: props.isDisabled
+            ? Colors.LIGHT_GRADIENT_1
+            : Colors.WHITE,
+        },
+      ]}
+      isDisabled={props.isDisabled}
     >
       {leftIcon && (
         <InputSlot className="pl-3">
@@ -78,6 +92,11 @@ export const Input = (
         secureTextEntry={secureTextEntry}
         autoCapitalize={props.autoCapitalize}
         placeholderClassName={props.placeholder}
+        style={{
+          backgroundColor: props.isDisabled
+            ? Colors.LIGHT_GRADIENT_1
+            : Colors.WHITE,
+        }}
       />
       {rightIcon && (
         <InputSlot

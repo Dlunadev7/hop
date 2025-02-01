@@ -81,6 +81,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     await AsyncStorage.removeItem("auth_token");
     setToken(null);
   };
+  useEffect(() => {
+    let subscription: Location.LocationSubscription | null = null;
+
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === "granted") {
+        subscription = await Location.watchPositionAsync(
+          {
+            accuracy: Location.Accuracy.High,
+            timeInterval: 1000,
+            distanceInterval: 1,
+          },
+          (loc) => {
+            const { latitude, longitude } = loc.coords;
+            setLocation({ latitude, longitude });
+          }
+        );
+      } else {
+        console.warn("Permiso de ubicación denegado");
+      }
+    })();
+
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     (async () => {

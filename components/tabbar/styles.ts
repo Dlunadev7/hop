@@ -41,7 +41,6 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   focusedText: {
-    fontWeight: "bold",
     color: Colors.PRIMARY,
   },
   indexTabItem: {

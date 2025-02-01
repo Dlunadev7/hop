@@ -40,9 +40,10 @@ export default function _layout() {
           name={AuthRoutes.FINISH_RECOVER_PASSWORD}
           options={{ headerShown: false }}
         />
+        <Stack.Screen name={AuthRoutes.MAP} options={{ headerShown: false }} />
         <Stack.Screen
-          name={AuthRoutes.MAP}
-          options={{ headerShown: false, presentation: "modal" }}
+          name={AuthRoutes.ONBOARDING}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={AuthRoutes.ONBOARDING}

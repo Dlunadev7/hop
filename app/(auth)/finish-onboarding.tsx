@@ -31,7 +31,7 @@ export default function FinishOnboarding() {
           <Button
             onPress={() =>
               router.replace({
-                pathname: "/(tabs)/explore",
+                pathname: "/(tabs)/index",
                 params: { step: 4 },
               })
             }
