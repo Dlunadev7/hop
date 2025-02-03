@@ -24,7 +24,8 @@ export const validationSchema = (t: i18NextType) => Yup.object().shape({
     .matches(/[a-z]/, t('validations.signup.password.lowercase', { ns: 'auth' }))
     .matches(/\d/, t('validations.signup.password.number', { ns: 'auth' }))
     .matches(
-      /[!@#$%^&*(),.-/'+?":{}|<>]/,
+      /[!#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/
+      ,
       t('validations.signup.password.special_char', { ns: 'auth' })
     ),
 

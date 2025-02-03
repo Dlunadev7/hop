@@ -15,7 +15,6 @@ export const useRequestLocationPermission = ({ url, step }: UseRequestLocationPe
     try {
       if (!location) {
         const { status } = await ExpoLocation.requestForegroundPermissionsAsync();
-        console.log(status)
         if (status !== "granted") {
           alert("Permiso de ubicación denegado");
           return;

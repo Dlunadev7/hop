@@ -24,6 +24,15 @@ import HomeEs from './es/home/home.translations.json';
 import ProfileEn from './en/profile/profile.translations.json';
 import ProfileEs from './es/profile/profile.translations.json';
 
+import HistoryEn from './en/history/history.translations.json';
+import HistoryEs from './es/history/history.translations.json';
+
+import BookingEn from './en/booking/booking.translations.json';
+import BookingEs from './es/booking/booking.translations.json';
+
+import WalletEn from './en/wallet/wallet.translations.json';
+import WalletEs from './es/wallet/wallet.translations.json';
+
 
 export {
   EntryTranslationEn,
@@ -43,5 +52,11 @@ export {
   HomeEn,
   HomeEs,
   ProfileEn,
-  ProfileEs
+  ProfileEs,
+  HistoryEn,
+  HistoryEs,
+  BookingEn,
+  BookingEs,
+  WalletEn,
+  WalletEs
 }

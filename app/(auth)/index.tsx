@@ -17,7 +17,7 @@ export default function Entry() {
   const { token } = useAuth();
 
   useEffect(() => {
-    if (!token) return;
+    if (!token?.length) return;
     router.replace("/(tabs)");
   }, [token]);
 
@@ -26,12 +26,7 @@ export default function Entry() {
       <StatusBar translucent style="light" />
       <LinearGradient colors={[Colors.SECONDARY, Colors.PRIMARY]}>
         <VStack className="justify-center self-center items-center max-w-[270px]">
-          <Hop
-            width={200}
-            height={200}
-            color={Colors.WHITE}
-            className="self-center items-center justify-center"
-          />
+          <Hop width={200} height={200} color={Colors.WHITE} />
           <Text
             fontSize={20}
             fontWeight={600}

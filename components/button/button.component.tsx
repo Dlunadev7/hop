@@ -17,6 +17,7 @@ interface GradientButtonProps {
   textClassName?: object;
   type?: string;
   loading?: boolean;
+  stretch?: boolean;
 }
 
 export const Button: React.FC<GradientButtonProps> = ({
@@ -27,11 +28,17 @@ export const Button: React.FC<GradientButtonProps> = ({
   textClassName = {},
   type,
   loading,
+  stretch,
 }) => {
+  const width = stretch ? "100%" : "auto";
+
   return (
     <>
       {type === "ghost" ? (
-        <Pressable onPress={onPress} style={[styles.ghost, style]}>
+        <Pressable
+          onPress={onPress}
+          style={[styles.ghost, style, { width: width }]}
+        >
           {loading ? (
             <ActivityIndicator color={Colors.WHITE} />
           ) : (
@@ -41,7 +48,10 @@ export const Button: React.FC<GradientButtonProps> = ({
           )}
         </Pressable>
       ) : (
-        <Pressable onPress={onPress} style={[styles.button, style]}>
+        <Pressable
+          onPress={onPress}
+          style={[styles.button, style, { width: width }]}
+        >
           <LinearGradient colors={colors} style={styles.gradient}>
             {loading ? (
               <ActivityIndicator color={Colors.WHITE} />

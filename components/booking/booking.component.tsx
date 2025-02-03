@@ -1,5 +1,5 @@
-import { FlatList, StyleSheet, View } from "react-native";
-import React from "react";
+import { FlatList, Pressable, StyleSheet, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import { Text } from "../text/text.component";
 import { Card } from "../ui/card";
 import { HStack } from "../ui/hstack";
@@ -12,61 +12,168 @@ import {
 import { Colors } from "@/constants/Colors";
 import { Box } from "../ui/box";
 import { useTranslation } from "react-i18next";
+import useSWR from "swr";
+import { getUserLogged } from "@/services/auth.service";
+import { getTravels } from "@/services/book.service";
+import { userRoles } from "@/utils/enum/role.enum";
+import dayjs from "dayjs";
+import { router } from "expo-router";
+import { travelTypeValues } from "@/utils/enum/travel.enum";
 
 export const Booking = () => {
   const { t } = useTranslation();
+
+  const { data: dataUser } = useSWR("/user/logged", getUserLogged);
+  const [isDataTrue, setIsDataTrue] = useState<boolean | null>(null);
+
+  const [page, setPage] = useState(0);
+  const [bookingDataPaginated, setBookingDataPaginated] = useState<any[]>([]);
+
+  const { data, error, isLoading } = useSWR(
+    ["/travels/bookings", page],
+    () =>
+      getTravels(
+        dataUser?.id,
+        dataUser?.role === userRoles.USER_HOPPER ? "hopper" : "hoppy",
+        true,
+        false,
+        page
+      ),
+    {
+      refreshInterval: 1000,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+      revalidateOnMount: true,
+    }
+  );
+
+  useEffect(() => {
+    if (data?.result) {
+      setPage(0);
+    }
+  }, [data?.result]);
+
+  useEffect(() => {
+    if (data?.result) {
+      setBookingDataPaginated((prevData) => {
+        const newData = [...prevData];
+        data.result.forEach((newItem) => {
+          const existingItemIndex = newData.findIndex(
+            (existingItem) => existingItem.id === newItem.id
+          );
+
+          if (existingItemIndex !== -1) {
+            newData[existingItemIndex] = newItem;
+          } else {
+            newData.push(newItem);
+          }
+        });
+
+        return newData;
+      });
+    }
+  }, [data?.result]);
+
+  const handleEndReached = () => {
+    if (
+      data?.pagination &&
+      data.pagination.page < data.pagination.totalPages - 1
+    ) {
+      setPage(page + 1);
+    }
+  };
+
+  const formattedDate = (date: Date) => ({
+    date: dayjs(date).utc(false).format("DD MMM. YYYY"),
+    time: dayjs(date).utc(false).format("HH:mm A"),
+  });
+
+  useEffect(() => {
+    if (isLoading === false && isDataTrue === true) {
+      setIsDataTrue(false);
+    } else if (isLoading === true) {
+      setIsDataTrue(true);
+    }
+  }, [data]);
+
+  const status: Record<travelTypeValues, string> = {
+    PICKUP: "Pick Up",
+    DROPOFF: "Drop Off",
+    PROGRAMED: "Programmed",
+  };
+
   return (
     <View style={styles.bookings}>
       <Text fontSize={18} fontWeight={400} textColor={Colors.DARK_GREEN}>
         {t("home.booking.title", { ns: "home" })}
       </Text>
       <FlatList
-        data={[0, 1, 2, 3]}
+        data={bookingDataPaginated}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerClassName="gap-3"
-        renderItem={() => (
-          <Card variant="outline" style={styles.card}>
-            <HStack className="gap-1 items-center">
-              <CalendarActive width={16} height={16} />
-              <Text
-                className="items-center gap-2"
-                textColor={Colors.SECONDARY}
-                fontWeight={600}
-                fontSize={14}
-              >
-                Feb.20,2025 - 12:00 pm
-              </Text>
-            </HStack>
-            <HStack style={styles.card_description}>
-              <BookingSVG />
-              <Box className="gap-1">
-                <Text
-                  fontSize={20}
-                  fontWeight={600}
-                  textColor={Colors.DARK_GREEN}
-                >
-                  {t("home.services.shortcuts.pickup", { ns: "home" })}
-                </Text>
-                <Box className="flex-row gap-2">
-                  <Routing />
-                  <Text fontSize={16} fontWeight={400}>
-                    Aeropuerto Int. - Hotel
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.5}
+        renderItem={({ item }: any) => {
+          const { date, time } = formattedDate(item.programedTo);
+
+          return (
+            <Pressable
+              onPress={() =>
+                router.push({
+                  pathname: "/(booking)/[id]",
+                  params: { id: item.id },
+                })
+              }
+              className="min-w-[350]"
+            >
+              <Card variant="outline" style={styles.card}>
+                <HStack className="gap-1 items-center">
+                  <CalendarActive width={16} height={16} />
+                  <Text
+                    className="items-center gap-2"
+                    textColor={Colors.SECONDARY}
+                    fontWeight={600}
+                    fontSize={14}
+                  >
+                    {date} - {time}
                   </Text>
-                </Box>
-                <Box className="flex-row gap-2">
-                  <UserSquare />
-                  <Text fontSize={16} fontWeight={400}>
-                    Ricardo Darin
-                  </Text>
-                </Box>
-                <Text textColor={Colors.GRAY} fontSize={14} fontWeight={400}>
-                  Aerolinea Chile , Num. de Vuelo D1122
-                </Text>
-              </Box>
-            </HStack>
-          </Card>
-        )}
+                </HStack>
+                <HStack style={styles.card_description}>
+                  <BookingSVG />
+                  <Box className="gap-1 ">
+                    <Text
+                      fontSize={20}
+                      fontWeight={600}
+                      textColor={Colors.DARK_GREEN}
+                    >
+                      {status[item.type as travelTypeValues]}
+                    </Text>
+                    <Box className="flex-row gap-2 shrink-1 max-w-[250] pr-2">
+                      <Routing />
+                      <Text fontSize={16} fontWeight={400} maxLength={5}>
+                        {item.from.address} - {item.to.address}
+                      </Text>
+                    </Box>
+                    <Box className="flex-row gap-2">
+                      <UserSquare />
+                      <Text fontSize={16} fontWeight={400}>
+                        {item.passengerName}
+                      </Text>
+                    </Box>
+                    <Text
+                      textColor={Colors.GRAY}
+                      fontSize={14}
+                      fontWeight={400}
+                    >
+                      Aerolinea Chile , Num. de Vuelo {item.passengerFligth}
+                    </Text>
+                  </Box>
+                </HStack>
+              </Card>
+            </Pressable>
+          );
+        }}
       />
     </View>
   );
@@ -78,10 +185,10 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   card: {
-    height: 176,
     borderColor: Colors.PRIMARY,
     borderWidth: 2,
     borderRadius: 20,
+    flex: 1,
   },
   card_description: {
     marginTop: 20,

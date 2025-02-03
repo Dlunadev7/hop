@@ -37,6 +37,28 @@ import Menu from '@/assets/svg/menu.svg';
 import CourtHouse from '@/assets/svg/courthouse.svg';
 import Edit from '@/assets/svg/edit.svg';
 import ArrowLeftColored from '@/assets/svg/arrow-left-rounded-colored.svg';
+import Send from '@/assets/svg/send.svg';
+import ElectricCar from '@/assets/svg/electric_car.svg';
+import Sedan from '@/assets/svg/sedan.svg';
+import Van from '@/assets/svg/van.svg';
+import Luggage from '@/assets/svg/luggage.svg';
+import WaitingHopper from '@/assets/svg/waiting_hopper.svg';
+import Ticket from '@/assets/svg/ticket.svg';
+import Star from '@/assets/svg/star.svg';
+import Round from '@/assets/svg/round.svg';
+import ClockCustom from '@/assets/svg/clock-custom.svg';
+import DolarCircle from '@/assets/svg/dollar-circle.svg';
+import Notification from '@/assets/svg/notification.svg';
+import AirplaneOutlined from '@/assets/svg/airplane-outlined.svg';
+import AirplaneArrival from '@/assets/svg/plane-arrival-outlined.svg';
+import Messages from '@/assets/svg/messages-outlined.svg';
+import UserSquareOutlined from '@/assets/svg/user-square-outlined.svg';
+import ArrowLeftFilled from '@/assets/svg/arrow-left-filled.svg';
+import ArrowRightFilled from '@/assets/svg/arrow-right-filled.svg';
+import MockupChart1 from '@/assets/svg/mockup-chart-1.svg';
+import MockupChart2 from '@/assets/svg/mockup-chart-2.svg';
+import TrendUp from '@/assets/svg/trend-up.svg';
+import TrendDown from '@/assets/svg/trend-down.svg';
 
 export {
   CircleArrowRight,
@@ -77,5 +99,27 @@ export {
   CourtHouse,
   AvatarHopper,
   Edit,
-  ArrowLeftColored
+  ArrowLeftColored,
+  Send,
+  ElectricCar,
+  Sedan,
+  Van,
+  Luggage,
+  WaitingHopper,
+  Ticket,
+  Star,
+  Round,
+  ClockCustom,
+  DolarCircle,
+  Notification,
+  AirplaneOutlined,
+  AirplaneArrival,
+  Messages,
+  UserSquareOutlined,
+  ArrowLeftFilled,
+  ArrowRightFilled,
+  MockupChart1,
+  MockupChart2,
+  TrendUp,
+  TrendDown
 }

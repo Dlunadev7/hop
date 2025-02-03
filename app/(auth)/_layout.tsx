@@ -45,10 +45,6 @@ export default function _layout() {
           name={AuthRoutes.ONBOARDING}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name={AuthRoutes.ONBOARDING}
-          options={{ headerShown: false }}
-        />
       </Stack>
     </>
   );

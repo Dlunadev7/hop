@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "icon": "./assets/images/icon-ios.png",
+      "icon": "./assets/images/icon.png",
       "supportsTablet": true,
       "infoPlist": {
         "NSAppTransportSecurity": {
@@ -27,7 +27,8 @@
         "googleMaps": {
           "apiKey": "AIzaSyA-ZmtD-z4aZum_q86kpI2qJCJt-bNe5ts"
         }
-      }
+      },
+      "bundleIdentifier": "com.novexisconsulting.hop"
     },
     "android": {
       "adaptiveIcon": {
@@ -51,7 +52,7 @@
           "apiKey": "AIzaSyA-ZmtD-z4aZum_q86kpI2qJCJt-bNe5ts"
         }
       },
-      "package": "com.dlunadev7.hop"
+      "package": "com.novexisconsulting.hop"
     },
     "web": {
       "bundler": "metro",

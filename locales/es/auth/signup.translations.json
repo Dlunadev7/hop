@@ -8,7 +8,7 @@
   "step_message_final": "Sigue el link para confirmar tu identidad y finalizar la solicitud de registro",
   "step_label": "Paso {{step}} de 4",
   "step_1": {
-    "title": "Informacion Personal",
+    "title": "Información Personal",
     "name": {
       "label": "Nombre"
     },

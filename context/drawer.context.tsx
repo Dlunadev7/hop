@@ -16,10 +16,6 @@ const DrawerContext = createContext<DrawerContextType | undefined>(undefined);
 export const DrawerProvider = ({ children }: { children: ReactNode }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log(isDrawerOpen);
-  }, [setIsDrawerOpen]);
-
   return (
     <DrawerContext.Provider value={{ isDrawerOpen, setIsDrawerOpen }}>
       {children}

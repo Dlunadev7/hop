@@ -1,0 +1,12 @@
+{
+  "title": "Reservas",
+  "card": {
+    "passengers": "Pasajeros",
+    "passenger": "Pasajero",
+    "luggage": "Maleta",
+    "luggages": "Meletas",
+    "button": "Contactar al pasajero",
+    "cancel": "Cancelar viaje",
+    "commission": "Comisión correspondiente"
+  }
+}

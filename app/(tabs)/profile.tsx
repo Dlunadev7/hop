@@ -32,6 +32,7 @@ const CustomDrawerContent = () => {
       style={{
         backgroundColor: Colors.LIGHT_GRADIENT_1,
         paddingTop: insets.top + 16,
+        paddingBottom: insets.bottom + 8,
       }}
       className="flex-1"
     >
@@ -63,7 +64,7 @@ const CustomDrawerContent = () => {
           className="p-2"
         >
           <Text textColor={Colors.DARK_GREEN} fontSize={20} fontWeight={400}>
-            {t("profile.drawer.link.account_status", { ns: "profile" })}
+            {t("profile.drawer.link.report_issue", { ns: "profile" })}
           </Text>
           <Divider className="my-1" style={styles.divider} />
         </Pressable>

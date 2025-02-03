@@ -293,8 +293,6 @@ export default function Documentation() {
     });
   }, [navigator]);
 
-  console.log(JSON.stringify(data, null, 2));
-
   const imageWidth = (width - 2 * 28) / 3;
 
   return (

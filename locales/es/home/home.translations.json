@@ -1,8 +1,8 @@
 {
   "header": "Hola",
-  "balance": "Balance",
+  "balance": "Saldo",
   "booking": {
-    "title": "Reservas",
+    "title": "Reservación",
     "booking_hopper": "Reservar un Hopper",
     "destinity_placeholder": "Indica un destino..."
   },
@@ -12,5 +12,81 @@
       "pickup": "Pick Up",
       "dropoff": "Drop Off"
     }
-  }
+  },
+  "map_home": {
+    "first_sheet": {
+      "title": "Reservar un Hopper",
+      "fields": {
+        "starting_point": "Punto de partida...",
+        "destination": "Indica un destino..."
+      },
+      "usual_destinations": "Destinos habituales",
+      "mark_map": "Marca la dirección en el mapa",
+      "usual_location": "Puntos de partida habituales"
+    },
+    "second_sheet": {
+      "title": "Datos del pasajero",
+      "fields": {
+        "name": {
+          "label": "Nombre completo"
+        },
+        "contact": {
+          "label": "Contacto"
+        },
+        "airline": {
+          "label": "Aerolínea"
+        },
+        "flightNumber": {
+          "label": "Número de vuelo"
+        },
+        "room": {
+          "label": "Número de habitación"
+        },
+        "passengers": {
+          "label": "Número de pasajeros"
+        },
+        "luggage": {
+          "label": "Cantidad de equipaje"
+        }
+      }
+    },
+    "third_sheet": {
+      "title": "Elige el tipo de vehículo",
+      "accessibility": "Apto para movilidad reducida",
+      "vehicle": {
+        "sedan": {
+          "title": "Sedán/SUV",
+          "passengers": "1-3 pasajeros",
+          "luggage": "30 Kg."
+        },
+        "electric_car": {
+          "title": "Auto eléctrico",
+          "passengers": "1-3 pasajeros",
+          "luggage": "30 Kg."
+        },
+        "van": {
+          "title": "Van",
+          "passengers": "1-10 pasajeros",
+          "luggage": "50 Kg."
+        }
+      },
+      "cancel": "Cancelar búsqueda"
+    },
+    "fourthy_sheet": {
+      "title": "Esperando confirmación de un Hopper",
+      "confirm": "Confirmar viaje"
+    },
+    "fifty_sheet": {
+      "accept_reservation": "ha aceptado la reservación",
+      "trips": "Viajes",
+      "value": "Valor del viaje"
+    }
+  },
+  "confirmation": {
+    "title": "Reservación confirmada con éxito",
+    "subtitle": "Ganaste comisión por este viaje",
+    "go_payments": "Mis pagos",
+    "go_home": "Ir al inicio"
+  },
+  "next": "Siguiente"
 }

@@ -151,7 +151,8 @@ export default function PersonalData() {
                     <HStack space="xs">
                       <Location color={Colors.DARK_GREEN} width={14} />
                       <Text
-                        className="text-xs font-medium"
+                        fontWeight={400}
+                        fontSize={12}
                         textColor={Colors.DARK_GREEN}
                       >
                         {t("signup.step_1.mark_map", { ns: "auth" })}

@@ -3,7 +3,7 @@
     "link": {
       "privacy": "Privacy and Passwords",
       "permissions": "Device Permissions",
-      "account_status": "Account status",
+      "report_issue": "Report an Issue",
       "logout": "Close Session"
     }
   },

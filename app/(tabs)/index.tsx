@@ -1,3 +1,4 @@
+import { Notification } from "@/assets/svg";
 import {
   Balance,
   TakeABooking,
@@ -12,7 +13,7 @@ import { VStack } from "@/components/ui/vstack";
 import { useAuth } from "@/context/auth.context";
 import capitalizeWords from "@/helpers/capitalize-words";
 import { getUserLogged } from "@/services/auth.service";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import useSWR from "swr";
@@ -23,7 +24,6 @@ export default function HomeScreen() {
   const { token } = useAuth();
   const { data, error } = useSWR("/user/logged", getUserLogged, {
     revalidateOnFocus: true,
-    refreshInterval: 5,
   });
 
   useEffect(() => {
@@ -33,7 +33,8 @@ export default function HomeScreen() {
           title={`${t("home.header", { ns: "home" })} ${capitalizeWords(
             data?.userInfo.firstName || ""
           )}!`}
-          avatar
+          icon={<Notification />}
+          onPressIcon={() => router.push("/notification")}
         />
       ),
     });

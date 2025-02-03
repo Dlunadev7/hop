@@ -12,5 +12,6 @@
     "history": "History",
     "booking": "Booking"
   },
-  "map_sheet": "Search address..."
+  "map_sheet": "Search address...",
+  "accept": "Accept"
 }

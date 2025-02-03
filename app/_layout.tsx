@@ -20,11 +20,19 @@ import { getLocales } from "expo-localization";
 import { AuthProvider } from "@/context/auth.context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DrawerProvider } from "@/context/drawer.context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { refreshToken } from "@/services/auth.service";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [token, setToken] = useState<string | null>();
+  const [token, setToken] = useState<{
+    token: string;
+    refreshToken: string;
+  } | null>({
+    token: "",
+    refreshToken: "",
+  });
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     "Outfit-Black": require("../assets/fonts/Outfit-Black.ttf"),
@@ -52,7 +60,11 @@ export default function RootLayout() {
     };
 
     const loadToken = async () => {
-      const token = await AsyncStorage.getItem("auth_token");
+      const token: { token: string; refreshToken: string } =
+        (await AsyncStorage.getItem("auth_token")) as unknown as {
+          token: string;
+          refreshToken: string;
+        };
       setToken(token || null);
     };
 
@@ -107,20 +119,28 @@ export default function RootLayout() {
           },
         }}
       >
-        <GluestackUIProvider mode="light">
-          <DrawerProvider>
-            <Stack screenOptions={{ headerShown: false }}>
-              {token ? (
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              ) : (
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              )}
-              <Stack.Screen name="+not-found" />
-              <Stack.Screen name="error" />
-            </Stack>
-            <StatusBar style="auto" />
-          </DrawerProvider>
-        </GluestackUIProvider>
+        <GestureHandlerRootView>
+          <GluestackUIProvider mode="light">
+            <DrawerProvider>
+              <Stack screenOptions={{ headerShown: false }}>
+                {Boolean(token?.token) ? (
+                  <Stack.Screen
+                    name="(tabs)"
+                    options={{ headerShown: false }}
+                  />
+                ) : (
+                  <Stack.Screen
+                    name="(auth)"
+                    options={{ headerShown: false }}
+                  />
+                )}
+                <Stack.Screen name="+not-found" />
+                <Stack.Screen name="error" />
+              </Stack>
+              <StatusBar style="auto" />
+            </DrawerProvider>
+          </GluestackUIProvider>
+        </GestureHandlerRootView>
       </SWRConfig>
     </AuthProvider>
   );

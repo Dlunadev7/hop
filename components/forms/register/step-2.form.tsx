@@ -231,7 +231,7 @@ export default function Step2(props: formProps) {
                 value={values.bank_account_rut}
                 error={touched.bank_account_rut && errors.bank_account_rut}
                 touched={touched.bank_account_rut}
-                keyboardType="number-pad"
+                keyboardType="numbers-and-punctuation"
               />
               <StepControl
                 handleBack={() => setStep(3)}

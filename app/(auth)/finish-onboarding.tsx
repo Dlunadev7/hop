@@ -11,6 +11,7 @@ import { Button } from "@/components/button/button.component";
 import { router } from "expo-router";
 import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 import { Colors } from "@/constants/Colors";
+import { TabsRoutesLink } from "@/utils/enum/tabs.routes";
 
 export default function FinishOnboarding() {
   const { t } = useTranslation();
@@ -31,7 +32,7 @@ export default function FinishOnboarding() {
           <Button
             onPress={() =>
               router.replace({
-                pathname: "/(tabs)/index",
+                pathname: "/(tabs)",
                 params: { step: 4 },
               })
             }

@@ -83,5 +83,14 @@
     "address": {
       "required": "La direccion es requerida"
     }
+  },
+  "booking": {
+    "fullName": "El nombre completo es obligatorio",
+    "contact": "El contacto es obligatorio",
+    "roomNumber": "El número de habitación es obligatorio",
+    "flightNumber": "El número de vuelo es obligatorio",
+    "airline": "La aerolina es obligatoria",
+    "passengers": "El número de pasajeros es obligatorio",
+    "luggages": "La cantidad de equipaje es obligatoria"
   }
 }

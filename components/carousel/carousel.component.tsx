@@ -74,7 +74,7 @@ const FirstItemCarousel = () => {
   return (
     <LinearGradient locations={[0, 0.3]}>
       <Box className="flex-1 items-center pt-6">
-        <Hop color={Colors.PRIMARY} />
+        <Hop color={Colors.SECONDARY} />
         <VStack space="lg" className="items-center mt-[32px] mb-[48px]">
           <Text textColor={Colors.DARK_GREEN} fontSize={28} fontWeight={600}>
             {t("onboarding.first_item_carousel.welcome_title")}
@@ -103,7 +103,7 @@ const SecondItemCarousel = () => {
   return (
     <LinearGradient locations={[0, 0.3]}>
       <Box className="flex-1 items-center pt-6">
-        <Hop color={Colors.PRIMARY} />
+        <Hop color={Colors.SECONDARY} />
         <VStack space="lg" className="items-center mt-[32px] mb-[48px]">
           <Text textColor={Colors.DARK_GREEN} fontSize={28} fontWeight={600}>
             {t("onboarding.second_item_carousel.welcome_title")}
@@ -111,7 +111,7 @@ const SecondItemCarousel = () => {
           <Text fontSize={16} fontWeight={400} textAlign="center">
             {t("onboarding.second_item_carousel.welcome_text")}{" "}
             <Text fontWeight={600} fontSize={16}>
-              {t("onboarding.first_item_carousel.hopper")}
+              {t("onboarding.first_item_carousel.hoppy")}
             </Text>
           </Text>
         </VStack>
@@ -132,7 +132,7 @@ const ThirdItemCarousel = () => {
   return (
     <LinearGradient locations={[0, 0.3]}>
       <Box className="flex-1 items-center pt-[24px]">
-        <Hop color={Colors.PRIMARY} />
+        <Hop color={Colors.SECONDARY} />
         <VStack space="lg" className="items-center mt-[32px] mb-[48px]">
           <Text
             textColor={Colors.DARK_GREEN}

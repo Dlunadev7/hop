@@ -1,0 +1,12 @@
+{
+  "title": "Bookings",
+  "card": {
+    "passengers": "Passengers",
+    "passenger": "Passenger",
+    "luggage": "Luggage",
+    "luggages": "Luggages",
+    "button": "Contact passenger",
+    "cancel": "Cancel trip",
+    "commission": "Corresponding Commission"
+  }
+}
