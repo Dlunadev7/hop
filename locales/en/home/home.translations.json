@@ -12,5 +12,81 @@
       "pickup": "Pick Up",
       "dropoff": "Drop Off"
     }
-  }
+  },
+  "map_home": {
+    "first_sheet": {
+      "title": "Book a Hopper",
+      "fields": {
+        "starting_point": "Starting Point...",
+        "destination": "Indicates a destination..."
+      },
+      "usual_destinations": "Usual Destinations",
+      "mark_map": "Mark the address on the map",
+      "usual_location": "Usual Starting Points"
+    },
+    "second_sheet": {
+      "title": "Passenger data",
+      "fields": {
+        "name": {
+          "label": "Full name"
+        },
+        "contact": {
+          "label": "Contact"
+        },
+        "airline": {
+          "label": "Airline"
+        },
+        "flightNumber": {
+          "label": "Flight number"
+        },
+        "room": {
+          "label": "Room number"
+        },
+        "passengers": {
+          "label": "Number of passengers"
+        },
+        "luggage": {
+          "label": "Number of luggages"
+        }
+      }
+    },
+    "third_sheet": {
+      "title": "Choose the type of vehicle",
+      "accessibility": "Reduced mobility apt.",
+      "vehicle": {
+        "sedan": {
+          "title": "Sedan/SUV",
+          "passengers": "1-3 passengers",
+          "luggage": "30 Kg."
+        },
+        "electric_car": {
+          "title": "Electric Car",
+          "passengers": "1-3 passengers",
+          "luggage": "30 Kg."
+        },
+        "van": {
+          "title": "Van",
+          "passengers": "1-10 passengers",
+          "luggage": "50 Kg."
+        }
+      },
+      "cancel": "Cancel search"
+    },
+    "fourthy_sheet": {
+      "title": "Waiting for confirmation from a Hopper",
+      "confirm": "Confirm trip"
+    },
+    "fifty_sheet": {
+      "accept_reservation": "has accepted the reservation",
+      "trips": "Trips",
+      "value": "Value of the trip"
+    }
+  },
+  "confirmation": {
+    "title": "Reservation confirmed successfully",
+    "subtitle": "You earned commission for this trip",
+    "go_payments": "My payments",
+    "go_home": "Go to the beginning"
+  },
+  "next": "Next"
 }

@@ -26,6 +26,7 @@ import { Divider } from "@/components/ui/divider";
 import { useTranslation } from "react-i18next";
 import { ProfileRoutesLink } from "@/utils/enum/profile.routes";
 import { Skeleton, SkeletonText } from "@/components/ui/skeleton";
+import { TabsRoutesLink } from "@/utils/enum/tabs.routes";
 
 export default function Profile() {
   const { data, isLoading } = useSWR("/user/logged", getUserLogged, {
@@ -91,6 +92,7 @@ export default function Profile() {
     {
       icon: ClockActive,
       name: t("profile.home.shortcuts.history", { ns: "profile" }),
+      to: TabsRoutesLink.HISTORY,
     },
     {
       icon: WalletActive,
@@ -159,46 +161,48 @@ export default function Profile() {
             i
           ) => {
             return (
-              <Pressable
-                onPress={() => router.push(to)}
-                disabled={!to}
-                key={name}
-              >
-                <HStack
-                  className="items-center justify-between px-4 w-full rounded-2xl"
-                  style={{
-                    backgroundColor:
-                      hoveredIndex === i ? Colors.SECONDARY : "transparent",
-                    paddingVertical: 8,
-                  }}
-                  onTouchStart={() => handleHover(i, true)}
-                  onTouchEnd={() => handleHover(i, false)}
+              <React.Fragment key={name}>
+                <Pressable
+                  onPress={() => router.push(to)}
+                  disabled={!to}
+                  key={name}
                 >
-                  <Box className="flex-row gap-2 items-center">
-                    <View style={styles.link_icon}>
-                      <IconItem
-                        width={16}
-                        height={16}
-                        color={Colors.SECONDARY}
-                      />
-                    </View>
-                    <Text
-                      textColor={Colors.DARK_GREEN}
-                      fontWeight={400}
-                      fontSize={16}
-                    >
-                      {name}
-                    </Text>
-                  </Box>
-                  <Icon
-                    as={ChevronRightIcon}
-                    color={Colors.DARK_GREEN}
-                    width={12}
-                    height={12}
-                  />
-                </HStack>
+                  <HStack
+                    className="items-center justify-between px-4 w-full rounded-2xl"
+                    style={{
+                      backgroundColor:
+                        hoveredIndex === i ? Colors.SECONDARY : "transparent",
+                      paddingVertical: 8,
+                    }}
+                    onTouchStart={() => handleHover(i, true)}
+                    onTouchEnd={() => handleHover(i, false)}
+                  >
+                    <Box className="flex-row gap-2 items-center">
+                      <View style={styles.link_icon}>
+                        <IconItem
+                          width={16}
+                          height={16}
+                          color={Colors.SECONDARY}
+                        />
+                      </View>
+                      <Text
+                        textColor={Colors.DARK_GREEN}
+                        fontWeight={400}
+                        fontSize={16}
+                      >
+                        {name}
+                      </Text>
+                    </Box>
+                    <Icon
+                      as={ChevronRightIcon}
+                      color={Colors.DARK_GREEN}
+                      width={12}
+                      height={12}
+                    />
+                  </HStack>
+                </Pressable>
                 {i !== 4 && <Divider style={styles.divider} />}
-              </Pressable>
+              </React.Fragment>
             );
           }
         )}

@@ -13,6 +13,7 @@ import { Pressable, StyleSheet, TextInputProps } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { IInputFieldProps } from "@gluestack-ui/input/lib/types";
 import { Text } from "../text/text.component";
+import { UserSquare } from "@/assets/svg";
 
 interface CustomInputProps {
   label: string;
@@ -84,6 +85,7 @@ export const Input = (
       )}
       <InputField
         placeholder={placeholder}
+        autoFocus={props.autoFocus}
         value={value}
         onChangeText={onChangeText}
         keyboardType={keyboardType}
@@ -149,7 +151,7 @@ export const Input = (
 
 const styles = StyleSheet.create({
   input: {
-    height: 44,
+    minHeight: 44,
   },
 });
 

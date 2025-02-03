@@ -25,6 +25,7 @@ import { useTranslation } from "react-i18next";
 import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
 import { Colors } from "@/constants/Colors";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function MapSheet() {
   const { address, getAddress, selectedLocation } =
@@ -33,7 +34,7 @@ export default function MapSheet() {
   const { step } = useRoute().params as unknown as { step: string };
   const { updatePayload } = useAuth();
   const { t } = useTranslation();
-
+  const insets = useSafeAreaInsets();
   const [isLoaded, setIsLoaded] = useState(false);
 
   const mapRegion = useCallback(() => {
@@ -53,7 +54,7 @@ export default function MapSheet() {
 
   const onConfirmData = () => {
     const newPayload = {
-      address: address,
+      address: address || "",
       latitude: selectedLocation?.latitude,
       longitude: selectedLocation?.longitude,
     };
@@ -118,7 +119,9 @@ export default function MapSheet() {
               <ActivityIndicator color={Colors.WHITE} />
             </View>
           )}
-          <View style={styles.actionSheet}>
+          <View
+            style={[styles.actionSheet, { paddingBottom: insets.bottom + 24 }]}
+          >
             <Text fontSize={24} fontWeight={400} className="mb-6">
               {t("signup.step_1.mark_map", { ns: "auth" })}
             </Text>

@@ -3,7 +3,7 @@
     "link": {
       "privacy": "Privacidad y Contraseñas",
       "permissions": "Permisos del Dispositivo",
-      "account_status": "Estado de la Cuenta",
+      "report_issue": "Reportar un problema",
       "logout": "Cerrar Sesión"
     }
   },
@@ -57,5 +57,7 @@
     "title": "Cuenta Bancaria",
     "switch": "Soy el titular de la cuenta"
   },
-  "hotel": "Datos del Hotel"
+  "hotel": {
+    "title": "Datos del hotel"
+  }
 }

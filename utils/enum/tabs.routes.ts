@@ -8,7 +8,7 @@ export enum TabsRoutes {
 
 export enum TabsRoutesLink {
   PROFILE = '/(tabs)/profile',
-  HOME = '/(tabs)/',
+  HOME = '/(tabs)/index',
   WALLET = '/(tabs)/wallet',
   HISTORY = '/(tabs)/history',
   BOOKING = '/(tabs)/booking',

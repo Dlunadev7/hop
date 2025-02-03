@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Platform } from "react-native";
 import DateTimePicker, {
   DateTimePickerAndroid,
@@ -7,46 +7,68 @@ import { Modal, ModalBackdrop } from "../ui/modal";
 import { Colors } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import dayjs from "dayjs";
+import { Button } from "../button/button.component";
+import { useTranslation } from "react-i18next";
 
 interface CalendarProps {
   isVisible: boolean;
   date: Date;
   maximumDate?: Date;
+  minimumDate?: Date;
   onDateChange: (date: Date) => void;
   onClose: () => void;
   setOpen?: (open: boolean) => void;
+  type?: "date" | "time";
 }
 
 const CalendarPickerIOS: React.FC<CalendarProps> = ({
   isVisible,
   date,
+  type = "date",
   maximumDate,
+  minimumDate,
   onDateChange,
   onClose,
   setOpen,
 }) => {
+  const { t } = useTranslation();
   const onChange = (event: unknown, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
 
-    // Verificamos si la fecha seleccionada es un día diferente al actual
     if (currentDate.getDate() !== date.getDate()) {
-      onDateChange(currentDate); // Solo actualizamos si el día cambió
-      setOpen && setOpen(false);
+      onDateChange(currentDate);
+      onClose();
     }
   };
+
+  const onChangeTime = (event: unknown, selectedDate?: Date) => {
+    const currentDate = selectedDate || date;
+
+    if (currentDate.getTime() !== date.getTime()) {
+      onDateChange(currentDate);
+    }
+  };
+
   return (
     <Modal onClose={onClose} isOpen={isVisible} useRNModal className="px-4">
       <ModalBackdrop />
 
-      <DateTimePicker
-        value={date}
-        mode="date"
-        display="inline"
-        onChange={onChange}
-        maximumDate={maximumDate}
-        accentColor={Colors.PRIMARY}
-        style={styles.calendar}
-      />
+      <View style={styles.calendar}>
+        <DateTimePicker
+          value={date}
+          mode={type}
+          display={type === "date" ? "inline" : "spinner"}
+          onChange={type === "date" ? onChange : onChangeTime}
+          maximumDate={maximumDate}
+          minimumDate={minimumDate}
+        />
+
+        {type === "time" && (
+          <Button onPress={() => onClose()}>
+            {t("accept", { ns: "utils" })}
+          </Button>
+        )}
+      </View>
     </Modal>
   );
 };
@@ -54,7 +76,8 @@ const CalendarPickerIOS: React.FC<CalendarProps> = ({
 const CalendarPickerAndroid: React.FC<CalendarProps> = ({
   isVisible,
   date,
-  maximumDate,
+  type = "date",
+  minimumDate,
   onDateChange,
   onClose,
 }) => {
@@ -67,9 +90,9 @@ const CalendarPickerAndroid: React.FC<CalendarProps> = ({
           onDateChange(currentDate);
           onClose();
         },
-        mode: "date",
+        mode: type,
         display: "default",
-        maximumDate: maximumDate,
+        minimumDate: minimumDate,
       });
     }
   }, [isVisible]);
@@ -78,13 +101,11 @@ const CalendarPickerAndroid: React.FC<CalendarProps> = ({
 };
 
 export const Calendar = (props: CalendarProps) => {
-  const { setOpen, ...rest } = props;
-  const maximumDate = dayjs().subtract(18, "year").toDate();
-
+  const { setOpen, maximumDate, minimumDate, ...rest } = props;
   return Platform.OS === "ios" ? (
-    <CalendarPickerIOS {...rest} setOpen={setOpen} maximumDate={maximumDate} />
+    <CalendarPickerIOS {...rest} minimumDate={minimumDate} setOpen={setOpen} />
   ) : (
-    <CalendarPickerAndroid {...rest} maximumDate={maximumDate} />
+    <CalendarPickerAndroid {...rest} minimumDate={minimumDate} />
   );
 };
 

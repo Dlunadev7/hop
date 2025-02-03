@@ -12,5 +12,6 @@
     "history": "Historial",
     "booking": "Reservas"
   },
-  "map_sheet": "Buscar dirección..."
+  "map_sheet": "Buscar dirección...",
+  "accept": "Acceptar"
 }

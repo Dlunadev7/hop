@@ -1,4 +1,10 @@
-import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  Keyboard,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { Formik } from "formik";
 import { validationSchema } from "@/schemas/register.schema";
@@ -71,6 +77,7 @@ export default function Step1(props: formProps) {
     password: string;
   }) => {
     setLoading(true);
+    Keyboard.dismiss();
     try {
       const data = await createUser({
         email: values.email,
@@ -225,7 +232,8 @@ export default function Step1(props: formProps) {
                     <HStack space="xs">
                       <Location color={Colors.DARK_GREEN} width={14} />
                       <Text
-                        className="text-xs font-medium"
+                        fontSize={14}
+                        fontWeight={500}
                         textColor={Colors.DARK_GREEN}
                       >
                         {t("signup.step_1.mark_map", { ns: "auth" })}

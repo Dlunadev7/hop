@@ -1,0 +1,7 @@
+export const METAMAP_API_URL = "https://signup.metamap.com/"
+export const METAMAP_API_KEY = "677d56c40b01cf001d58b796"
+export const METAMAP_FLOW_ID = "677d56c40b01cf001d58b795"
+export const API_URL = "https://hop.api.novexisconsulting.xyz/api"
+export const PUBLIC_MAPBOX_API_URL = "https://api.mapbox.com/geocoding/v5/mapbox.places"
+export const PUBLIC_MAPBOX_DIRECTIONS_API_URL = "https://api.mapbox.com/directions/v5/mapbox/driving"
+export const MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoiZGx1bmFkZXYiLCJhIjoiY2x6bG9kamtlMDR0NjJxb25tcmFxYjZ5eiJ9.m31EMqqEeF7NOMTPGCbpJQ"

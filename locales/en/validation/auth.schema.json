@@ -83,5 +83,14 @@
     "address": {
       "required": "Address is required"
     }
+  },
+  "booking": {
+    "fullName": "Fullname is required",
+    "contact": "Contact is required",
+    "roomNumber": "Room number is required",
+    "flightNumber": "Flight number is required",
+    "airline": "Airline is required",
+    "passengers": "Number of passengers is required",
+    "luggages": "Number of luggages is required"
   }
 }

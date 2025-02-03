@@ -28,5 +28,6 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingBottom: 150,
+    flexGrow: 1,
   },
 });

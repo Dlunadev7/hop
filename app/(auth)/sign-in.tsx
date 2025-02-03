@@ -82,7 +82,7 @@ export default function SignIn() {
       <KeyboardContainer>
         <View style={styles.container}>
           <VStack space="lg" className="items-center mb-9 w-[100%]">
-            <Hop color={Colors.PRIMARY} />
+            <Hop color={Colors.SECONDARY} />
             <Text
               fontSize={28}
               fontWeight={600}

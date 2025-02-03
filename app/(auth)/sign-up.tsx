@@ -13,6 +13,9 @@ import { userRoles } from "@/utils/enum/role.enum";
 import Step3Hopper from "@/components/forms/register/step-3.hopper.form";
 import Step4Hopper from "@/components/forms/register/step-4.hopper.form";
 import { i18NextType } from "@/utils/types/i18n.type";
+import { Fab, FabIcon } from "@/components/ui/fab";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ArrowLeftRounded } from "@/assets/svg";
 
 export default function SignUp() {
   const queryParams = useRoute().params as any;
@@ -22,6 +25,7 @@ export default function SignUp() {
   );
   const [id, setId] = useState("");
   const { state } = useAuth();
+  const insets = useSafeAreaInsets();
 
   const [payload, setPayload] = useState({
     email: "",
@@ -138,7 +142,7 @@ export default function SignUp() {
 
   return (
     <LinearGradient locations={[0, 0.3]}>
-      {/* {!(step === 1) ? (
+      {!(step === 1) ? (
         <Fab
           placement="top left"
           onPress={() => setStep(step === 1 ? step : step - 1)}
@@ -151,7 +155,7 @@ export default function SignUp() {
         </Fab>
       ) : (
         <></>
-      )} */}
+      )}
       <KeyboardContainer>
         <View style={styles.container}>
           <View style={styles.header}>

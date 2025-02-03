@@ -57,9 +57,11 @@ export default function Step4(props: formProps) {
         {({ handleSubmit }) => (
           <VStack
             space="lg"
-            className={`justify-between ${
-              Platform.OS === "ios" ? "h-[80%]" : "h-[82%]"
-            }`}
+            className="flex-1 justify-between w-full items-center"
+            style={{
+              flex: 1,
+              height: 400,
+            }}
           >
             <Pressable
               style={{ backgroundColor: Colors.PRIMARY }}
@@ -88,7 +90,7 @@ export default function Step4(props: formProps) {
                   <ActionsheetDragIndicatorWrapper>
                     <ActionsheetDragIndicator />
                   </ActionsheetDragIndicatorWrapper>
-                  <ActionsheetItem className="flex-1 w-[100%]" disabled>
+                  <ActionsheetItem className="w-[100%]" disabled>
                     <VStack className="flex-1">
                       <WebView
                         source={{
@@ -122,6 +124,7 @@ export default function Step4(props: formProps) {
                 </ActionsheetContent>
               </Actionsheet>
             )}
+            <View className="flex-1 bg-slate-500" />
             {isDone ? (
               <Button
                 onPress={() => router.replace(AuthRoutesLink.FINISH_ONBOARDING)}
@@ -144,6 +147,6 @@ export default function Step4(props: formProps) {
 const styles = StyleSheet.create({
   formulary: {
     gap: 16,
-    paddingBottom: Platform.OS === "ios" ? 120 : 0,
+    flex: 1,
   },
 });

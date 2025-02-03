@@ -30,7 +30,7 @@ type formProps = {
 export default function Step3(props: formProps) {
   const { setStep, extraData } = props;
   const { t } = useTranslation();
-  const { state } = useAuth();
+  const { state, updatePayload } = useAuth();
   const [loading, setLoading] = useState(false);
   const { showToast } = useToast();
 
@@ -65,7 +65,7 @@ export default function Step3(props: formProps) {
         </Text>
         <Formik
           initialValues={{
-            hotel_name: state.hotel_info.address,
+            hotel_name: "",
             home_address: {
               address: state.hotel_info.address,
               latitude: state.hotel_info.latitude,
@@ -73,8 +73,9 @@ export default function Step3(props: formProps) {
             },
           }}
           validationSchema={schema}
-          onSubmit={() => {
+          onSubmit={(values) => {
             handleRegisterStep3({
+              hotel_name: values.hotel_name,
               hotel_location: {
                 address: state.hotel_info.address,
                 lat: state.hotel_info.latitude,
@@ -97,6 +98,7 @@ export default function Step3(props: formProps) {
                 setFieldValue("home_address", state.hotel_info.address);
               }
             }, [state.hotel_info.address]);
+
             return (
               <VStack space="lg" className="justify-between flex-1 mt-[32px]">
                 <Box className="gap-4 mb-12">
@@ -110,7 +112,7 @@ export default function Step3(props: formProps) {
                     touched={touched.hotel_name}
                   />
 
-                  <Input
+                  {/* <Input
                     label={t("signup.step_3.address.label")}
                     onBlur={handleBlur("home_address")}
                     onChangeText={handleChange("home_address")}
@@ -121,6 +123,33 @@ export default function Step3(props: formProps) {
                       errors.home_address?.address
                     }
                     touched={touched.home_address?.address}
+                  /> */}
+
+                  <Input
+                    label={t("signup.step_3.address.label", { ns: "auth" })}
+                    onBlur={handleBlur("home_address")}
+                    onChangeText={(val: string) => {
+                      setFieldValue("home_address", val);
+
+                      if (val.trim() === "") {
+                        updatePayload({
+                          hotel_info: {
+                            ...state.hotel_info,
+                            home_address: "",
+                            latitude: "",
+                            longitude: "",
+                          },
+                        });
+                      }
+                    }}
+                    placeholder=""
+                    value={values.home_address as any}
+                    error={
+                      touched.home_address?.address &&
+                      errors.home_address?.address
+                    }
+                    touched={touched.home_address?.address}
+                    stretch
                   />
                   <Pressable onPress={() => requestLocationPermission()}>
                     <HStack space="xs">
@@ -159,6 +188,7 @@ const styles = StyleSheet.create({
   formulary: {
     gap: 16,
     paddingBottom: 120,
+    flex: 1,
   },
   mark_map: {
     color: Colors.DARK_GREEN,

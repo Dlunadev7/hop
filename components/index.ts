@@ -9,7 +9,14 @@ import { Balance } from "./balance/balance.component";
 import { TakeABooking } from "./take_booking/take_booking.component";
 import { Services } from "./services/services.component";
 import { Booking } from "./booking/booking.component";
-import Switch from "./switch/switch.comonent";
+import { Switch } from "./switch/switch.component";
+import { Step1Booking } from "./map_home/step-1.component";
+import { Step2Booking } from "./map_home/step-2.component";
+import { Step3Booking } from "./map_home/step-3.component";
+import { Step4Booking } from "./map_home/step-4.component";
+import { Step5Booking } from "./map_home/step-5.component";
+import { Step2BookingPickup } from "./map_home/step-2.pickup.component";
+import { LineChartComponent } from "./chart/chart.component";
 
 export {
   Input,
@@ -23,5 +30,12 @@ export {
   TakeABooking,
   Services,
   Booking,
-  Switch
+  Switch,
+  Step1Booking,
+  Step2Booking,
+  Step3Booking,
+  Step4Booking,
+  Step5Booking,
+  Step2BookingPickup,
+  LineChartComponent
 }

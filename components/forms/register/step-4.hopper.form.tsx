@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
   formulary: {
     gap: 16,
     paddingBottom: 120,
+    flex: 1,
   },
   mark_map: {
     color: Colors.PRIMARY,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { HStack } from "../ui/hstack";
 import { Text } from "../text/text.component";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -18,9 +18,11 @@ type HeaderProps = {
   menu?: boolean;
   edit?: boolean;
   arrow?: boolean;
+  icon?: ReactElement;
   onPressArrow?: VoidFunction;
   onPressEdit?: VoidFunction;
   onPressMenu?: VoidFunction;
+  onPressIcon?: VoidFunction;
 };
 
 export const Header = (props: HeaderProps) => {
@@ -30,6 +32,8 @@ export const Header = (props: HeaderProps) => {
     menu,
     edit,
     arrow,
+    icon,
+    onPressIcon,
     onPressArrow,
     onPressEdit,
     onPressMenu,
@@ -66,6 +70,7 @@ export const Header = (props: HeaderProps) => {
           <Edit width={36} height={36} />
         </Pressable>
       )}
+      {icon && <Pressable onPress={() => onPressIcon?.()}>{icon}</Pressable>}
     </HStack>
   );
 };

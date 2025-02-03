@@ -12,7 +12,6 @@ export default function Tooltip({
   documentation,
   setShowTooltip,
 }: TooltipProps) {
-  console.log("asd", documentation);
   return (
     <Pressable style={styles.tooltip} onPress={() => setShowTooltip(false)}>
       <View style={styles.tooltip_description} />

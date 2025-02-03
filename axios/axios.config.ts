@@ -48,8 +48,10 @@ axiosInstance.interceptors.response.use(
         try {
           const refreshTokenValue = await AsyncStorage.getItem('auth_token') as string;
           const refreshTokenParsed = JSON.parse(refreshTokenValue);
-          const refreshResponse = await axios.post(`${API_URL}/api/auth/refresh`, {
-            refreshToken: refreshTokenParsed.refreshToken,
+          const refreshResponse = await axios.get(`${API_URL}/auth/refresh`, {
+            headers: {
+              Authorization: `Bearer ${refreshTokenParsed.refreshToken}`,
+            },
           });
 
           const { token, refreshToken } = refreshResponse.data;
