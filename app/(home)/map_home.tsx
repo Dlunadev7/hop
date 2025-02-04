@@ -230,8 +230,6 @@ export default function MapHome() {
     ),
   };
 
-  console.log(type);
-
   return (
     <View className="flex-1">
       <StatusBar hidden />

@@ -19,6 +19,7 @@ import {
 import { KeyboardContainer } from "../keyboard/keyboard.component";
 import { useRoute } from "@react-navigation/native";
 import { travelTypeValues } from "@/utils/enum/travel.enum";
+import { PhoneNumber } from "../phone-number/phone-number.component";
 
 export const Step2BookingPickup = (props: {
   setStepper: React.Dispatch<React.SetStateAction<number>>;
@@ -88,7 +89,7 @@ export const Step2BookingPickup = (props: {
                     error={touched.fullName && errors.fullName}
                     touched={touched.fullName}
                   />
-                  <Input
+                  <PhoneNumber
                     label={t(
                       "home.map_home.second_sheet.fields.contact.label",
                       {

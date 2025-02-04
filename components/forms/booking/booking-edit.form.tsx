@@ -27,6 +27,7 @@ import { KeyboardContainer } from "@/components/keyboard/keyboard.component";
 import { updateTravel } from "@/services/book.service";
 import { router } from "expo-router";
 import { travelTypeValues } from "@/utils/enum/travel.enum";
+import { PhoneNumber } from "@/components";
 
 export default function BookingEditForm(props: {
   formattedDate: string;
@@ -247,7 +248,7 @@ export default function BookingEditForm(props: {
                   stretch
                   error={touched.passengerName && errors.passengerName}
                 />
-                <Input
+                <PhoneNumber
                   label="Contacto"
                   onBlur={handleBlur("passengerContact")}
                   onChangeText={handleChange("passengerContact")}

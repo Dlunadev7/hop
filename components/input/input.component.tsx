@@ -29,6 +29,7 @@ interface CustomInputProps {
   leftIcon?: boolean;
   icon?: ElementType | undefined;
   pressable?: boolean;
+  custom?: any;
 }
 
 export const Input = (
@@ -52,6 +53,7 @@ export const Input = (
     pressable = false,
     isRequired,
     style = {},
+    custom = false,
   } = props;
 
   const [secureTextEntry, setSecureTextEntry] = useState(props.secureTextEntry);
@@ -80,7 +82,7 @@ export const Input = (
     >
       {leftIcon && (
         <InputSlot className="pl-3">
-          <InputIcon as={icon} />
+          {custom ? custom : <InputIcon as={icon} />}
         </InputSlot>
       )}
       <InputField
