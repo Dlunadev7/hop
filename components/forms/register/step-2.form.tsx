@@ -36,6 +36,8 @@ import { updateUser } from "@/services/auth.service";
 import { User, UserInfo } from "@/utils/interfaces/auth.interface";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth.context";
+import { validateRut } from "@/helpers/validate-rut";
+import { formatRut } from "rutlib";
 
 type formProps = {
   payloadValues: RegisterType;
@@ -61,7 +63,7 @@ export default function Step2(props: formProps) {
   });
   const [loading, setLoading] = useState(false);
   const { data } = useSWR("/banks", getBanks);
-
+  const [rutError, setRutError] = useState("");
   const { showToast } = useToast();
 
   const handleInputChange = (text: string) => {
@@ -146,10 +148,30 @@ export default function Step2(props: formProps) {
           handleChange,
           handleBlur,
           handleSubmit,
+          setFieldValue,
           values,
           errors,
           touched,
         }) => {
+          useEffect(() => {
+            console.log(validateRut(values.bank_account_rut));
+            const formattedRUT = formatRut(values.bank_account_rut);
+
+            setFieldValue("bank_account_rut", formattedRUT);
+            if (
+              values.bank_account_rut &&
+              !validateRut(values.bank_account_rut)
+            ) {
+              setRutError(
+                t("validations.signup.rut.validate", {
+                  ns: "auth",
+                })
+              );
+            } else {
+              setRutError("");
+            }
+          }, [values.bank_account_rut, setRutError]);
+
           return (
             <VStack space="md" className="mt-[32px]">
               <Input
@@ -229,7 +251,10 @@ export default function Step2(props: formProps) {
                 onChangeText={handleChange("bank_account_rut")}
                 placeholder=""
                 value={values.bank_account_rut}
-                error={touched.bank_account_rut && errors.bank_account_rut}
+                error={
+                  (touched.bank_account_rut && errors.bank_account_rut) ||
+                  rutError
+                }
                 touched={touched.bank_account_rut}
                 keyboardType="numbers-and-punctuation"
               />

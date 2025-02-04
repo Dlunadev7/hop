@@ -138,7 +138,7 @@ export const Input = (
         InputContent
       )}
       {touched && error && (
-        <FormControlError>
+        <FormControlError className="mt-2">
           {!isRequired && (
             <FormControlErrorIcon as={AlertCircleIcon} color={Colors.ERROR} />
           )}

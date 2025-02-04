@@ -33,8 +33,7 @@
       "special_char": "La contraseña debe tener al menos un carácter especial."
     },
     "rut": {
-      "length": "El RUT debe tener exactamente 12 caracteres.",
-      "format": "El RUT debe ser un número válido de 12 dígitos.",
+      "validate": "El RUT invalido",
       "required": "El RUT es obligatorio."
     },
     "address": {
