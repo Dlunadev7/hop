@@ -17,6 +17,7 @@ import { Step4Booking } from "./map_home/step-4.component";
 import { Step5Booking } from "./map_home/step-5.component";
 import { Step2BookingPickup } from "./map_home/step-2.pickup.component";
 import { LineChartComponent } from "./chart/chart.component";
+import { PhoneNumber } from "./phone-number/phone-number.component";
 
 export {
   Input,
@@ -37,5 +38,6 @@ export {
   Step4Booking,
   Step5Booking,
   Step2BookingPickup,
-  LineChartComponent
+  LineChartComponent,
+  PhoneNumber
 }

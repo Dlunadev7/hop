@@ -164,37 +164,22 @@ export const Step1Booking = (props: Step1BookingProps) => {
       },
     }));
 
-    console.log({
-      from: {
-        lat:
-          addressName.length > 1
-            ? addressLocation.latitude
-            : data?.userInfo.hotel_location?.lat,
-        lng:
-          addressName.length > 1
-            ? addressLocation.longitude
-            : data?.userInfo.hotel_location?.lng,
-        address: addressName ? addressName : data?.userInfo.hotel_name,
-      },
-      to: {
-        lat:
-          destinityAddress.length > 1
-            ? destinityLocation.latitude
-            : dataFormulary?.destination.latitude,
-        lng:
-          destinityAddress.length > 1
-            ? destinityLocation.longitude
-            : dataFormulary?.destination.longitude,
-        address: destinityLocation
-          ? destinityAddress
-          : dataFormulary?.destination.address,
-      },
-    });
-
     setStepper(2);
   };
 
-  console.log(dataFormulary);
+  const isDestinationValid = Boolean(
+    dataFormulary.destination?.address?.length || destinityAddress.length > 1
+  );
+
+  const dates = Boolean(
+    date ||
+      (formattedDate && params.type !== "PICKUP" && params.type !== "DROPOFF")
+  );
+
+  const times = Boolean(
+    time ||
+      (formattedTime && params.type !== "PICKUP" && params.type !== "DROPOFF")
+  );
 
   return (
     <>
@@ -340,16 +325,11 @@ export const Step1Booking = (props: Step1BookingProps) => {
             {t("home.map_home.first_sheet.mark_map", { ns: "home" })}
           </Text>
         </Pressable>
-        {Boolean(
-          dataFormulary.destination?.address?.length ||
-            destinityAddress.length > 1
-        ) &&
-          time &&
-          date && (
-            <Button onPress={() => handleNextStep()} stretch>
-              {t("home.next", { ns: "home" })}
-            </Button>
-          )}
+        {isDestinationValid && times && dates && (
+          <Button onPress={() => handleNextStep()} stretch>
+            {t("home.next", { ns: "home" })}
+          </Button>
+        )}
       </Pressable>
       {showCalendar && (
         <Calendar
