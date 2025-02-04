@@ -1,5 +1,6 @@
 import { i18NextType } from "@/utils/types/i18n.type";
 import * as Yup from "yup";
+import rutlib from 'rutlib';
 
 export const validationSchema = (t: i18NextType) => Yup.object().shape({
   // firstName: Yup.string()
@@ -65,8 +66,6 @@ export const validationSchemaS1 = (t: i18NextType) => Yup.object().shape({
   bank_account_type: Yup.string()
     .required(t("validations.step_2.bank_account_type.required", { ns: 'auth' })),
   bank_account_rut: Yup.string()
-    .min(12, t("validations.step_2.bank_account_rut.length", { ns: 'auth' }))
-    .max(12, t("validations.step_2.bank_account_rut.format", { ns: 'auth' }))
     .required(t("validations.step_2.bank_account_rut.required", { ns: 'auth' }))
 
 })
