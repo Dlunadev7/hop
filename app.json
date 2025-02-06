@@ -15,6 +15,11 @@
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
         },
+        "UIBackgroundModes": [
+          "fetch",
+          "remote-notification"
+        ],
+        "expoPushNotifications": true,
         "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       },
@@ -28,7 +33,8 @@
           "apiKey": "AIzaSyA-ZmtD-z4aZum_q86kpI2qJCJt-bNe5ts"
         }
       },
-      "bundleIdentifier": "com.novexisconsulting.hop"
+      "bundleIdentifier": "com.novexisconsulting.hop",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
@@ -52,7 +58,8 @@
           "apiKey": "AIzaSyA-ZmtD-z4aZum_q86kpI2qJCJt-bNe5ts"
         }
       },
-      "package": "com.novexisconsulting.hop"
+      "package": "com.novexisconsulting.hop",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
