@@ -3,7 +3,7 @@ import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 
 export default function usePushNotifications() {
-  const [expoPushToken, setExpoPushToken] = useState(null);
+  const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
 
   useEffect(() => {
     async function registerForPushNotifications() {
@@ -25,7 +25,7 @@ export default function usePushNotifications() {
         return;
       }
 
-      const tokenData: { data: any } = await Notifications.getExpoPushTokenAsync();
+      const tokenData: { data: string } = await Notifications.getExpoPushTokenAsync();
       setExpoPushToken(tokenData.data);
     }
 

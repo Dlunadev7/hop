@@ -12,7 +12,9 @@ import { KeyboardContainer } from "@/components/keyboard/keyboard.component";
 import { VStack } from "@/components/ui/vstack";
 import { useAuth } from "@/context/auth.context";
 import capitalizeWords from "@/helpers/capitalize-words";
+import usePushNotifications from "@/hooks/use-push-notifications.hook";
 import { getUserLogged } from "@/services/auth.service";
+import { updateUserData } from "@/services/user.service";
 import { router, useNavigation } from "expo-router";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -25,6 +27,18 @@ export default function HomeScreen() {
   const { data, error } = useSWR("/user/logged", getUserLogged, {
     revalidateOnFocus: true,
   });
+
+  const pushNotifications = usePushNotifications();
+
+  useEffect(() => {
+    if (pushNotifications) {
+      (async () =>
+        await updateUserData(data?.id!, {
+          email: data?.email,
+          userNotificationToken: pushNotifications,
+        }))();
+    }
+  }, [pushNotifications]);
 
   useEffect(() => {
     navigator.setOptions({
