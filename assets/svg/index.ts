@@ -59,6 +59,13 @@ import MockupChart1 from '@/assets/svg/mockup-chart-1.svg';
 import MockupChart2 from '@/assets/svg/mockup-chart-2.svg';
 import TrendUp from '@/assets/svg/trend-up.svg';
 import TrendDown from '@/assets/svg/trend-down.svg';
+import Warning from '@/assets/svg/warning.svg';
+import Danger from '@/assets/svg/danger.svg';
+import MessageActive from '@/assets/svg/message-active.svg';
+import People from '@/assets/svg/people.svg';
+import ShoppingBag from '@/assets/svg/shopping-bag.svg';
+import InfoCircle from '@/assets/svg/info-circle.svg';
+import ArrowDegRight from '@/assets/svg/arrow-deg-right.svg';
 
 export {
   CircleArrowRight,
@@ -121,5 +128,12 @@ export {
   MockupChart1,
   MockupChart2,
   TrendUp,
-  TrendDown
+  TrendDown,
+  Warning,
+  Danger,
+  MessageActive,
+  People,
+  ShoppingBag,
+  InfoCircle,
+  ArrowDegRight
 }

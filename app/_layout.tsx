@@ -22,7 +22,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DrawerProvider } from "@/context/drawer.context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import * as Notifications from "expo-notifications";
-import { useSocket } from "@/hooks/use-socket.hook";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -167,7 +167,11 @@ export default function RootLayout() {
         <GestureHandlerRootView>
           <GluestackUIProvider mode="light">
             <DrawerProvider>
-              <Stack screenOptions={{ headerShown: false }}>
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                }}
+              >
                 {Boolean(token?.token) ? (
                   <Stack.Screen
                     name="(tabs)"

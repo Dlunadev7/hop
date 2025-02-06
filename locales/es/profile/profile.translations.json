@@ -55,7 +55,8 @@
   },
   "account": {
     "title": "Cuenta Bancaria",
-    "switch": "Soy el titular de la cuenta"
+    "switch": "Soy el titular de la cuenta",
+    "empty": "Debes completar los campos requeridos"
   },
   "hotel": {
     "title": "Datos del hotel"

@@ -18,6 +18,9 @@ import { Step5Booking } from "./map_home/step-5.component";
 import { Step2BookingPickup } from "./map_home/step-2.pickup.component";
 import { LineChartComponent } from "./chart/chart.component";
 import { PhoneNumber } from "./phone-number/phone-number.component";
+import { Void } from "./hopper/void.component";
+import { BookingsHopper } from "./hopper/bookings.component";
+import { ModalBooking } from "./modal/modal_booking/modal-booking.component";
 
 export {
   Input,
@@ -39,5 +42,8 @@ export {
   Step5Booking,
   Step2BookingPickup,
   LineChartComponent,
-  PhoneNumber
+  PhoneNumber,
+  Void,
+  BookingsHopper,
+  ModalBooking
 }

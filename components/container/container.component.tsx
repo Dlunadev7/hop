@@ -5,15 +5,22 @@ import { Colors } from "@/constants/Colors";
 export const Container = ({
   children,
   className,
+  style,
+  extraHeight = true,
 }: {
   children: ReactElement | ReactElement[];
   className?: string;
+  style?: any;
+  extraHeight?: boolean;
 }) => {
   return (
     <ScrollView
       className={`px-4 ${className}`}
-      style={styles.container}
-      contentContainerStyle={styles.content}
+      style={[styles.container, style]}
+      contentContainerStyle={[
+        styles.content,
+        extraHeight ? styles.extraHeight : { paddingBottom: 12 },
+      ]}
       showsVerticalScrollIndicator={false}
     >
       {children}
@@ -27,7 +34,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
   },
   content: {
-    paddingBottom: 150,
     flexGrow: 1,
+  },
+  extraHeight: {
+    paddingBottom: 150,
   },
 });

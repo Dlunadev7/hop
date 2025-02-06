@@ -19,6 +19,8 @@ import { userRoles } from "@/utils/enum/role.enum";
 import dayjs from "dayjs";
 import { router } from "expo-router";
 import { travelTypeValues } from "@/utils/enum/travel.enum";
+import { formattedDate } from "@/helpers/parse-date";
+import { status } from "@/helpers/parser-names";
 
 export const Booking = () => {
   const { t } = useTranslation();
@@ -83,11 +85,6 @@ export const Booking = () => {
     }
   };
 
-  const formattedDate = (date: Date) => ({
-    date: dayjs(date).utc(false).format("DD MMM. YYYY"),
-    time: dayjs(date).utc(false).format("HH:mm A"),
-  });
-
   useEffect(() => {
     if (isLoading === false && isDataTrue === true) {
       setIsDataTrue(false);
@@ -95,12 +92,6 @@ export const Booking = () => {
       setIsDataTrue(true);
     }
   }, [data]);
-
-  const status: Record<travelTypeValues, string> = {
-    PICKUP: "Pick Up",
-    DROPOFF: "Drop Off",
-    PROGRAMED: "Programmed",
-  };
 
   return (
     <View style={styles.bookings}>

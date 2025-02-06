@@ -164,6 +164,8 @@ export const Step5Booking = (props: {
             pathname: HomeRoutesLink.CONFIRMATION,
             params: {
               commission: data.hoppyCommission,
+              title: t("home.confirmation.title", { ns: "home" }),
+              subtitle: t("home.confirmation.subtitle", { ns: "home" }),
             },
           })
         }

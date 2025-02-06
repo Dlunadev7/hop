@@ -55,7 +55,8 @@
   },
   "account": {
     "title": "Bank Account",
-    "switch": "I am the account holder"
+    "switch": "I am the account holder",
+    "empty": "You must complete the required fields"
   },
   "hotel": {
     "title": "Hotel Data"

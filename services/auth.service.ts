@@ -76,7 +76,6 @@ export const getUserLogged = async (): Promise<User> => {
 }
 
 export const updateUser = async (id: string, data: Partial<UserInfo>): Promise<User> => {
-  console.log(data)
   try {
     const response: AxiosResponse = await axiosInstance.put(`/user-info/${id}`, data);
     return response.data;

@@ -39,6 +39,7 @@ import BookingEditForm from "@/components/forms/booking/booking-edit.form";
 import { useTranslation } from "react-i18next";
 import { getUserLogged } from "@/services/auth.service";
 import { userRoles } from "@/utils/enum/role.enum";
+import { formattedDate } from "@/helpers/parse-date";
 
 export default function Booking() {
   const navigator = useNavigation();
@@ -78,11 +79,6 @@ export default function Booking() {
       ),
     });
   }, [navigator, data, isEditable]);
-
-  const formattedDate = (date: Date) => ({
-    date: dayjs(date).utc(false).format("DD MMM. YYYY"),
-    time: dayjs(date).utc(false).format("HH:mm A"),
-  });
 
   const { date, time } = formattedDate(data?.programedTo!);
 
@@ -126,12 +122,6 @@ export default function Booking() {
     return true;
   });
 
-  const vehicle: { [key: string]: ReactElement } = {
-    VANS: <Van />,
-    ELECTRIC: <ElectricCar />,
-    SEDAN: <Sedan />,
-  };
-
   const vehicleName: { [key: string]: string } = {
     SEDAN: "Sedan",
     VANS: "Van",
@@ -171,7 +161,7 @@ export default function Booking() {
             </Badge>
           </Box>
           <HStack space="md" className="mt-8 items-start">
-            {vehicle[data?.vehicleType!]}
+            {vehicleName[data?.vehicleType!]}
             <Box className="gap-2 justify-between">
               <Text fontSize={20} fontWeight={600}>
                 {vehicleName[data?.vehicleType!]}

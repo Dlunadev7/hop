@@ -85,8 +85,16 @@
   "confirmation": {
     "title": "Reservación confirmada con éxito",
     "subtitle": "Ganaste comisión por este viaje",
-    "go_payments": "Mis pagos",
+    "go_payments": "Mi billetera",
     "go_home": "Ir al inicio"
+  },
+  "hopper": {
+    "void": "Complete los datos del vehículo para comenzar a viajar",
+    "vehicle": "vehículo",
+    "bookings": {
+      "title": "Reservas",
+      "description": "Aún no tienes ningún viaje reservado"
+    }
   },
   "next": "Siguiente"
 }
