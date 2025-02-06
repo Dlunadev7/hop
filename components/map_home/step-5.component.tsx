@@ -77,6 +77,12 @@ export const Step5Booking = (props: {
     data.programedTo ? data.programedTo : dateProgrammed
   );
 
+  const vehicleName: { [key: string]: string } = {
+    SEDAN: "Sedan",
+    VANS: "Van",
+    ELECTRIC: "Electric Car",
+  };
+
   return (
     <VStack space="md" className="items-center gap-8">
       <Text fontSize={24} fontWeight={400} textAlign="center">
@@ -109,7 +115,7 @@ export const Step5Booking = (props: {
         >
           {Icon}
           <Text fontSize={16} fontWeight={400}>
-            {capitalizeWords(data.carType.toLocaleLowerCase())}
+            {vehicleName[data?.carType!]}
           </Text>
           <Text textColor={Colors.GRAY} fontWeight={400}>
             {data.numberOfPassengers} -{" "}

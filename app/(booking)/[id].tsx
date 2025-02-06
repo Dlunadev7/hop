@@ -37,12 +37,14 @@ import { Divider } from "@/components/ui/divider";
 import { Button } from "@/components/button/button.component";
 import BookingEditForm from "@/components/forms/booking/booking-edit.form";
 import { useTranslation } from "react-i18next";
+import { getUserLogged } from "@/services/auth.service";
+import { userRoles } from "@/utils/enum/role.enum";
 
 export default function Booking() {
   const navigator = useNavigation();
   const { t } = useTranslation();
   const { id } = useRoute().params as { id: string };
-
+  const { data: user } = useSWR("/user/logged", getUserLogged);
   const { data } = useSWR("/travel/one", () => getTravelById(id), {
     revalidateOnMount: true,
   });
@@ -66,7 +68,11 @@ export default function Booking() {
           title={status[data?.type as travelTypeValues]}
           arrow
           onPressArrow={() => router.back()}
-          edit={!isEditable && data?.type !== travelTypeValues.PROGRAMED}
+          edit={
+            user?.role === userRoles.USER_HOPPY &&
+            !isEditable &&
+            data?.type !== travelTypeValues.PROGRAMED
+          }
           onPressEdit={() => setIsEditable(true)}
         />
       ),
