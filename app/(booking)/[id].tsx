@@ -97,7 +97,7 @@ export default function Booking() {
     },
     {
       icon: Messages,
-      name: data?.passengerContact,
+      name: `${data?.passengerContactCountryCode} ${data?.passengerContact}`,
     },
     {
       icon: AirplaneArrival,
@@ -282,6 +282,7 @@ export default function Booking() {
           formattedTime={time}
           data={data!}
           id={id}
+          user={user!}
         />
       )}
     </Container>

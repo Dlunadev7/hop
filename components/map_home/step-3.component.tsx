@@ -47,6 +47,8 @@ export const Step3Booking = (props: {
   };
   const formattedDate = convertToDate(dataPayload.programedTo);
 
+  console.log(dataPayload);
+
   const handleBookHopper = async (carType: string) => {
     try {
       const response = await createTravel({
@@ -70,6 +72,7 @@ export const Step3Booking = (props: {
         passengerName: dataPayload.fullName,
         passengerContact: dataPayload.contact,
         passengerRoom: dataPayload.roomNumber,
+        passengerContactCountryCode: dataPayload.countryCode,
         totalPassengers: dataPayload.numberOfPassengers.toString(),
         totalSuitCases: dataPayload.numberOfLuggages.toString(),
         passengerAirline: dataPayload.airline,

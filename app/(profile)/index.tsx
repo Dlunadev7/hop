@@ -88,6 +88,7 @@ export default function Profile() {
     {
       icon: CalendarActive,
       name: t("profile.home.shortcuts.reservations", { ns: "profile" }),
+      to: TabsRoutesLink.BOOKING,
     },
     {
       icon: ClockActive,

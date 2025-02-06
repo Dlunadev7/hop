@@ -96,6 +96,7 @@ export default function MapHome() {
     distance: routeTime?.distance,
     price: 0,
     hoppyCommission: 0,
+    countryCode: "",
   });
 
   useEffect(() => {

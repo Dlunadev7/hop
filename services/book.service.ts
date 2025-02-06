@@ -65,7 +65,6 @@ export const getTravelById = async (id: string): Promise<BookingResponse> => {
     const response: AxiosResponse<BookingResponse> = await axiosInstance.get(`/travels/one/${id}`);
     return response.data;
   } catch (error: unknown) {
-    console.log(error)
     if (axios.isAxiosError(error)) {
       throw error.response || error;
     }

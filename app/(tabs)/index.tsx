@@ -13,6 +13,7 @@ import { VStack } from "@/components/ui/vstack";
 import { useAuth } from "@/context/auth.context";
 import capitalizeWords from "@/helpers/capitalize-words";
 import usePushNotifications from "@/hooks/use-push-notifications.hook";
+import { useSocket } from "@/hooks/use-socket.hook";
 import { getUserLogged } from "@/services/auth.service";
 import { updateUserData } from "@/services/user.service";
 import { router, useNavigation } from "expo-router";
@@ -38,7 +39,33 @@ export default function HomeScreen() {
           userNotificationToken: pushNotifications,
         }))();
     }
-  }, [pushNotifications]);
+  }, []);
+
+  const socket = useSocket("https://hop.api.novexisconsulting.xyz");
+
+  useEffect(() => {
+    if (!socket || !data?.id) return;
+
+    const eventName = `user-${data.id}`;
+
+    const handleMessage = (message: any) => {
+      console.log("Mensaje recibido:", message);
+    };
+
+    const handleConnect = () => {
+      console.log("Conectado al servidor de Socket.IO");
+    };
+
+    socket.on(eventName, handleMessage);
+    socket.on("connect", handleConnect);
+
+    return () => {
+      socket.off(eventName, handleMessage);
+      socket.off("connect", handleConnect);
+    };
+  }, [socket, data?.id]);
+
+  console.log(data?.id);
 
   useEffect(() => {
     navigator.setOptions({

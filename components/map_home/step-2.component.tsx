@@ -13,6 +13,7 @@ import { Formik } from "formik";
 import { ScrollView } from "react-native-gesture-handler";
 import { BookingData } from "@/utils/interfaces/booking.interface";
 import { validationSchema } from "@/schemas/booking.schema";
+import { PhoneNumber } from "../phone-number/phone-number.component";
 
 export const Step2Booking = (props: {
   setStepper: React.Dispatch<React.SetStateAction<number>>;
@@ -45,6 +46,7 @@ export const Step2Booking = (props: {
           roomNumber: data?.roomNumber || "",
           numberOfPassengers: data?.numberOfPassengers || 1,
           numberOfLuggages: data?.numberOfLuggages || 0,
+          countryCode: data.countryCode || "",
         }}
         validationSchema={schema}
         onSubmit={(values) => {
@@ -78,7 +80,7 @@ export const Step2Booking = (props: {
                   error={touched.fullName && errors.fullName}
                   touched={touched.fullName}
                 />
-                <Input
+                <PhoneNumber
                   label={t("home.map_home.second_sheet.fields.contact.label", {
                     ns: "home",
                   })}
@@ -89,6 +91,7 @@ export const Step2Booking = (props: {
                   error={touched.contact && errors.contact}
                   touched={touched.contact}
                   keyboardType="number-pad"
+                  handleChangeCode={handleChange("countryCode")}
                 />
                 <Input
                   label={t("home.map_home.second_sheet.fields.room.label", {

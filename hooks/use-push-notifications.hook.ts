@@ -25,6 +25,7 @@ export default function usePushNotifications() {
         return;
       }
 
+
       const tokenData: { data: string } = await Notifications.getExpoPushTokenAsync();
       setExpoPushToken(tokenData.data);
     }

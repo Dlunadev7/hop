@@ -28,14 +28,18 @@ import { updateTravel } from "@/services/book.service";
 import { router } from "expo-router";
 import { travelTypeValues } from "@/utils/enum/travel.enum";
 import { PhoneNumber } from "@/components";
+import { User } from "@/utils/interfaces/auth.interface";
 
 export default function BookingEditForm(props: {
   formattedDate: string;
   formattedTime: string;
   data: BookingResponse;
   id: string;
+  user: User;
 }) {
-  const { formattedDate, formattedTime, data, id } = props;
+  const { formattedDate, formattedTime, data, id, user } = props;
+
+  console.log(data);
 
   const [date, setDate] = useState<Date | null>(null);
   const [time, setTime] = useState<Date | null>(null);
@@ -100,10 +104,14 @@ export default function BookingEditForm(props: {
   });
 
   const handleSubmit = async (values: any) => {
+    console.log(values);
     const payload = {
       ...values,
       programedTo: date ? date : data.programedTo,
+      passengerContactCountryCode: values.countryCode,
     };
+
+    console.log(payload);
 
     setLoading(true);
     await updateTravel(id, payload);
@@ -220,6 +228,7 @@ export default function BookingEditForm(props: {
           passengerContact: data.passengerContact || "",
           passengerAirline: data.passengerAirline || "",
           passengerFligth: data.passengerFligth || "",
+          countryCode: data.passengerContactCountryCode || "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -257,6 +266,8 @@ export default function BookingEditForm(props: {
                   stretch
                   error={touched.passengerContact && errors.passengerContact}
                   keyboardType="number-pad"
+                  phoneNumber={values.countryCode}
+                  handleChangeCode={handleChange("countryCode")}
                 />
                 {data.type === travelTypeValues.PICKUP && (
                   <>
