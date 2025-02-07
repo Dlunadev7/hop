@@ -18,6 +18,7 @@ interface GradientButtonProps {
   type?: string;
   loading?: boolean;
   stretch?: boolean;
+  disabled?: boolean;
 }
 
 export const Button: React.FC<GradientButtonProps> = ({
@@ -29,6 +30,7 @@ export const Button: React.FC<GradientButtonProps> = ({
   type,
   loading,
   stretch,
+  disabled,
 }) => {
   const width = stretch ? "100%" : "auto";
 
@@ -37,12 +39,25 @@ export const Button: React.FC<GradientButtonProps> = ({
       {type === "ghost" ? (
         <Pressable
           onPress={onPress}
-          style={[styles.ghost, style, { width: width }]}
+          style={[
+            styles.ghost,
+            style,
+            { width: width },
+            disabled ? styles.disabled : {},
+          ]}
+          disabled={disabled}
         >
           {loading ? (
             <ActivityIndicator color={Colors.WHITE} />
           ) : (
-            <Text fontWeight={600} style={[styles.text_ghost, textClassName]}>
+            <Text
+              fontWeight={600}
+              style={[
+                styles.text_ghost,
+                textClassName,
+                disabled ? styles.text_disabled : {},
+              ]}
+            >
               {children}
             </Text>
           )}
@@ -51,6 +66,7 @@ export const Button: React.FC<GradientButtonProps> = ({
         <Pressable
           onPress={onPress}
           style={[styles.button, style, { width: width }]}
+          disabled={disabled}
         >
           <LinearGradient colors={colors} style={styles.gradient}>
             {loading ? (
@@ -94,6 +110,21 @@ const styles = StyleSheet.create({
   },
   text_ghost: {
     color: Colors.DARK_GREEN,
+    fontSize: 16,
+    fontWeight: 600,
+    textAlign: "center",
+    flexWrap: "wrap",
+  },
+  disabled: {
+    backgroundColor: Colors.GRAY,
+    minHeight: 40,
+    paddingHorizontal: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  text_disabled: {
+    color: Colors.WHITE,
     fontSize: 16,
     fontWeight: 600,
     textAlign: "center",

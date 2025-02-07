@@ -5,7 +5,14 @@ import { router, useNavigation } from "expo-router";
 import { DrawerActions } from "@react-navigation/native";
 import { useDrawerStatus } from "@react-navigation/drawer";
 import { Box } from "@/components/ui/box";
-import { Avatar, AvatarHopper, Booking, Car, CourtHouse } from "@/assets/svg";
+import {
+  Avatar,
+  AvatarHopper,
+  Booking,
+  Car,
+  CourtHouse,
+  Danger,
+} from "@/assets/svg";
 import { Text } from "@/components/text/text.component";
 import useSWR from "swr";
 import { getUserLogged } from "@/services/auth.service";
@@ -27,6 +34,8 @@ import { useTranslation } from "react-i18next";
 import { ProfileRoutesLink } from "@/utils/enum/profile.routes";
 import { Skeleton, SkeletonText } from "@/components/ui/skeleton";
 import { TabsRoutesLink } from "@/utils/enum/tabs.routes";
+import { checkEmptyFields } from "@/helpers/check-empty-fields";
+import { keysToCheck } from "@/constants/check-validations";
 
 export default function Profile() {
   const { data, isLoading } = useSWR("/user/logged", getUserLogged, {
@@ -69,6 +78,8 @@ export default function Profile() {
     }
   }, [drawerState, setIsDrawerOpen]);
 
+  const emptyFields = checkEmptyFields(data?.userInfo!, keysToCheck);
+
   const shortcuts = [
     {
       icon: ProfileActive,
@@ -88,6 +99,7 @@ export default function Profile() {
     {
       icon: CalendarActive,
       name: t("profile.home.shortcuts.reservations", { ns: "profile" }),
+      to: TabsRoutesLink.BOOKING,
     },
     {
       icon: ClockActive,
@@ -95,7 +107,7 @@ export default function Profile() {
       to: TabsRoutesLink.HISTORY,
     },
     {
-      icon: WalletActive,
+      icon: emptyFields.length > 0 ? Danger : WalletActive,
       name: t("profile.home.shortcuts.bank_account", { ns: "profile" }),
       to: ProfileRoutesLink.BANK_ACCOUNT,
     },

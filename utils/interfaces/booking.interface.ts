@@ -7,6 +7,7 @@ interface Location {
 }
 
 export interface BookingData {
+  countryCode: string;
   carType: any;
   vehicleType: string;
   programedTo: any;
@@ -47,6 +48,7 @@ export interface BookingResponse {
   vehicleType: string;
   id: string;
   hoppyCommission: number,
+  passengerContactCountryCode: string;
   hopperCommission: number,
 }
 

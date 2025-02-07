@@ -28,7 +28,6 @@ export const uploadPicture = async (id: string, file: File): Promise<User> => {
       }
     );
 
-    console.log('data', id);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -38,11 +37,12 @@ export const uploadPicture = async (id: string, file: File): Promise<User> => {
   }
 };
 
-export const updateUserData = async (id: string, data: { email: string, userInfo: { address: { latitude: string, longitude: string, address: string } } }): Promise<User> => {
+export const updateUserData = async (id: string, data: Partial<User>): Promise<User> => {
   try {
     const response: AxiosResponse = await axiosInstance.put(`/user/one/${id}`, data);
     return response.data;
   } catch (error: unknown) {
+    console.log(error)
     if (axios.isAxiosError(error)) {
       throw error.response || error;
     }

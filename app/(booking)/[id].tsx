@@ -37,12 +37,15 @@ import { Divider } from "@/components/ui/divider";
 import { Button } from "@/components/button/button.component";
 import BookingEditForm from "@/components/forms/booking/booking-edit.form";
 import { useTranslation } from "react-i18next";
+import { getUserLogged } from "@/services/auth.service";
+import { userRoles } from "@/utils/enum/role.enum";
+import { formattedDate } from "@/helpers/parse-date";
 
 export default function Booking() {
   const navigator = useNavigation();
   const { t } = useTranslation();
   const { id } = useRoute().params as { id: string };
-
+  const { data: user } = useSWR("/user/logged", getUserLogged);
   const { data } = useSWR("/travel/one", () => getTravelById(id), {
     revalidateOnMount: true,
   });
@@ -66,17 +69,16 @@ export default function Booking() {
           title={status[data?.type as travelTypeValues]}
           arrow
           onPressArrow={() => router.back()}
-          edit={!isEditable && data?.type !== travelTypeValues.PROGRAMED}
+          edit={
+            user?.role === userRoles.USER_HOPPY &&
+            !isEditable &&
+            data?.type !== travelTypeValues.PROGRAMED
+          }
           onPressEdit={() => setIsEditable(true)}
         />
       ),
     });
   }, [navigator, data, isEditable]);
-
-  const formattedDate = (date: Date) => ({
-    date: dayjs(date).utc(false).format("DD MMM. YYYY"),
-    time: dayjs(date).utc(false).format("HH:mm A"),
-  });
 
   const { date, time } = formattedDate(data?.programedTo!);
 
@@ -91,7 +93,7 @@ export default function Booking() {
     },
     {
       icon: Messages,
-      name: data?.passengerContact,
+      name: `${data?.passengerContactCountryCode} ${data?.passengerContact}`,
     },
     {
       icon: AirplaneArrival,
@@ -119,12 +121,6 @@ export default function Booking() {
     }
     return true;
   });
-
-  const vehicle: { [key: string]: ReactElement } = {
-    VANS: <Van />,
-    ELECTRIC: <ElectricCar />,
-    SEDAN: <Sedan />,
-  };
 
   const vehicleName: { [key: string]: string } = {
     SEDAN: "Sedan",
@@ -165,7 +161,7 @@ export default function Booking() {
             </Badge>
           </Box>
           <HStack space="md" className="mt-8 items-start">
-            {vehicle[data?.vehicleType!]}
+            {vehicleName[data?.vehicleType!]}
             <Box className="gap-2 justify-between">
               <Text fontSize={20} fontWeight={600}>
                 {vehicleName[data?.vehicleType!]}
@@ -276,6 +272,7 @@ export default function Booking() {
           formattedTime={time}
           data={data!}
           id={id}
+          user={user!}
         />
       )}
     </Container>

@@ -37,6 +37,13 @@ import { UserInfo } from "@/utils/interfaces/auth.interface";
 import { useToast } from "@/hooks/use-toast";
 import { Box } from "@/components/ui/box";
 import { HStack } from "@/components/ui/hstack";
+import { keysToCheck } from "@/constants/check-validations";
+import {
+  checkEmptyFields,
+  removeEmptyField,
+} from "@/helpers/check-empty-fields";
+import { Badge } from "@/components/ui/badge";
+import { Danger } from "@/assets/svg";
 
 export default function BankAccount() {
   const navigation = useNavigation();
@@ -115,7 +122,16 @@ export default function BankAccount() {
   const handleSubmit = async (values: Partial<UserInfo>) => {
     setLoading(true);
     try {
-      await updateUser(user?.id!, values);
+      await updateUser(user?.id!, {
+        bank_account: values.bank_account,
+        bank_account_holder: values.bank_account_holder,
+        bank_account_rut: values.bank_account_rut,
+        bank_account_type: values.bank_account_type,
+        bank_name: {
+          id: values.bank_name?.id! || user?.userInfo.bank_name?.id!,
+          name: values.bank_name?.name! || user?.userInfo.bank_name?.name!,
+        },
+      });
       router.back();
     } catch (error) {
       showToast({
@@ -129,6 +145,9 @@ export default function BankAccount() {
     }
   };
 
+  const [emptyFields, setEmptyFields] = useState<string[]>(() =>
+    checkEmptyFields(user?.userInfo || {}, keysToCheck)
+  );
   return (
     <Container>
       <View style={styles.formulary} className="pb-4">
@@ -160,9 +179,18 @@ export default function BankAccount() {
             errors,
             touched,
           }) => {
+            console.log(errors);
             return (
               <VStack className="flex-1 justify-between mt-[32px]">
                 <Box className="gap-4">
+                  {emptyFields.length > 0 && (
+                    <Badge className="rounded-full p-2 gap-2 bg-[#E1F5F3] items-center justify-center">
+                      <Danger />
+                      <Text fontSize={14} fontWeight={600}>
+                        {t("profile.account.empty", { ns: "profile" })}
+                      </Text>
+                    </Badge>
+                  )}
                   {isEditable && (
                     <HStack className="items-center gap-2">
                       <Switch
@@ -179,42 +207,59 @@ export default function BankAccount() {
                       ns: "auth",
                     })}
                     onBlur={handleBlur("bank_account_holder")}
-                    onChangeText={handleChange("bank_account_holder")}
+                    onChangeText={(text) => {
+                      handleChange("bank_account_holder")(text);
+                      removeEmptyField("bank_account_holder", setEmptyFields);
+                    }}
                     placeholder=""
                     value={values.bank_account_holder}
                     error={
-                      touched.bank_account_holder && errors.bank_account_holder
+                      (touched.bank_account_holder &&
+                        errors.bank_account_holder) ||
+                      emptyFields.find((item) => item === "bank_account_holder")
                     }
                     touched={touched.bank_account_holder}
-                    isDisabled={!ToggleSwitch || !isEditable}
-                    editable={isEditable}
+                    isDisabled={!ToggleSwitch}
+                    editable={ToggleSwitch}
                   />
                   <Input
                     label={t("signup.step_2.fields.bankName.label", {
                       ns: "auth",
                     })}
                     onBlur={handleBlur("bank_name")}
-                    onChangeText={handleChange("bank_name")}
+                    onChangeText={(text) => {
+                      handleChange("bank_name")(text);
+                      removeEmptyField("bank_name", setEmptyFields);
+                    }}
                     placeholder=""
                     value={bankSelected.name || values.bank_name}
-                    error={touched.bank_name && errors.bank_name}
+                    error={
+                      (touched.bank_name && errors.bank_name) ||
+                      emptyFields.find((item) => item === "bank_name")
+                    }
                     touched={touched.bank_name}
                     editable={false}
-                    pressable
+                    pressable={ToggleSwitch}
                     onPress={() => setShowActionsheet(true)}
                     icon={ChevronDownIcon}
                     rightIcon
-                    isDisabled={!ToggleSwitch || !isEditable}
+                    isDisabled={!ToggleSwitch}
                   />
                   <Input
                     label={t("signup.step_2.fields.accountNumber.label", {
                       ns: "auth",
                     })}
                     onBlur={handleBlur("bank_account")}
-                    onChangeText={handleChange("bank_account")}
+                    onChangeText={(text) => {
+                      handleChange("bank_account")(text);
+                      removeEmptyField("bank_account", setEmptyFields);
+                    }}
                     placeholder=""
                     value={values.bank_account}
-                    error={touched.bank_account && errors.bank_account}
+                    error={
+                      (touched.bank_account && errors.bank_account) ||
+                      emptyFields.find((item) => item === "bank_account")
+                    }
                     touched={touched.bank_account}
                     keyboardType="number-pad"
                     isDisabled={!isEditable}
@@ -230,7 +275,10 @@ export default function BankAccount() {
                         ns: "auth",
                       }
                     )}
-                    onSelect={handleChange("bank_account_type")}
+                    onSelect={(val) => {
+                      handleChange("bank_account_type")(val);
+                      removeEmptyField("bank_account_type", setEmptyFields);
+                    }}
                     options={accountTypes.map((type) => ({
                       label: t(
                         `validations.step_2.bank_account_type.${type.value}`
@@ -246,7 +294,8 @@ export default function BankAccount() {
                     }
                     touched={touched.bank_account_type}
                     error={
-                      touched.bank_account_type && errors.bank_account_type
+                      (touched.bank_account_type && errors.bank_account_type) ||
+                      emptyFields.find((item) => item === "bank_account_type")
                     }
                     disabled={!isEditable}
                   />
@@ -255,10 +304,16 @@ export default function BankAccount() {
                       ns: "auth",
                     })}
                     onBlur={handleBlur("bank_account_rut")}
-                    onChangeText={handleChange("bank_account_rut")}
+                    onChangeText={(text) => {
+                      handleChange("bank_account_rut")(text);
+                      removeEmptyField("bank_account_rut", setEmptyFields);
+                    }}
                     placeholder=""
                     value={values.bank_account_rut}
-                    error={touched.bank_account_rut && errors.bank_account_rut}
+                    error={
+                      (touched.bank_account_rut && errors.bank_account_rut) ||
+                      emptyFields.find((item) => item === "bank_account_rut")
+                    }
                     touched={touched.bank_account_rut}
                     keyboardType="number-pad"
                     isDisabled={!isEditable}

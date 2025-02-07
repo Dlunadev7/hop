@@ -55,6 +55,7 @@ export const Step2BookingPickup = (props: {
           flightNumber: data?.flightNumber || "",
           numberOfPassengers: data?.numberOfPassengers || 1,
           numberOfLuggages: data?.numberOfLuggages || 0,
+          countryCode: "",
         }}
         validationSchema={schema}
         onSubmit={(values) => {
@@ -103,6 +104,7 @@ export const Step2BookingPickup = (props: {
                     error={touched.contact && errors.contact}
                     touched={touched.contact}
                     keyboardType="number-pad"
+                    handleChangeCode={handleChange("countryCode")}
                   />
                   {/* <Input
                     label={t(

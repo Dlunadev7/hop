@@ -152,6 +152,7 @@ export interface UserInfo {
   hotel_name?: string;
   hotel_location?: HotelLocation;
   profilePic?: string;
+  countryCode?: string;
 }
 
 export interface User {
@@ -160,6 +161,7 @@ export interface User {
   password: string;
   role: "USER_HOPPER" | string;
   userInfo: UserInfo;
+  userNotificationToken?: string;
 }
 
 export interface VehicleUser {

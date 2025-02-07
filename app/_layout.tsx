@@ -21,7 +21,7 @@ import { AuthProvider } from "@/context/auth.context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DrawerProvider } from "@/context/drawer.context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { refreshToken } from "@/services/auth.service";
+import * as Notifications from "expo-notifications";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -33,6 +33,7 @@ export default function RootLayout() {
     token: "",
     refreshToken: "",
   });
+
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     "Outfit-Black": require("../assets/fonts/Outfit-Black.ttf"),
@@ -71,6 +72,50 @@ export default function RootLayout() {
     loadToken();
     setupI18n();
   }, []);
+
+  useEffect(() => {
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+      }),
+    });
+
+    const response = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log("🔔 Notificación recibida:", notification);
+      }
+    );
+
+    const responseSubscription =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        try {
+          console.log("🔔 Notificación tocada:", response);
+        } catch (error) {
+          console.error(
+            "❌ Error al manejar la respuesta de la notificación:",
+            error
+          );
+        }
+      });
+
+    const subscription = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log("Notificación recibida:", notification);
+      }
+    );
+
+    return () => {
+      subscription.remove();
+      responseSubscription.remove();
+      response.remove();
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   sendTestNotification();
+  // }, []);
 
   if (!loaded) {
     return null;
@@ -122,7 +167,11 @@ export default function RootLayout() {
         <GestureHandlerRootView>
           <GluestackUIProvider mode="light">
             <DrawerProvider>
-              <Stack screenOptions={{ headerShown: false }}>
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                }}
+              >
                 {Boolean(token?.token) ? (
                   <Stack.Screen
                     name="(tabs)"

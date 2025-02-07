@@ -28,6 +28,7 @@ import { useTranslation } from "react-i18next";
 import { FlatList } from "react-native-gesture-handler";
 import utc from "dayjs/plugin/utc";
 import { useAuth } from "@/context/auth.context";
+import { status, vehicleName } from "@/helpers/parser-names";
 dayjs.extend(utc);
 
 export default function Booking() {
@@ -203,18 +204,6 @@ export default function Booking() {
     date: dayjs(date).utc(false).format("DD MMM. YYYY"),
     time: dayjs(date).utc(false).format("HH:mm A"),
   });
-
-  const status: Record<travelTypeValues, string> = {
-    PICKUP: "Pick Up",
-    DROPOFF: "Drop Off",
-    PROGRAMED: "Programmed",
-  };
-
-  const vehicleName: { [key: string]: string } = {
-    SEDAN: "Sedan",
-    VANS: "Van",
-    ELECTRIC: "Electric Car",
-  };
 
   return (
     <View style={styles.container}>

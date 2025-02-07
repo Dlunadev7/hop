@@ -19,11 +19,19 @@ import { Colors } from "@/constants/Colors";
 import { Image } from "react-native";
 
 export const PhoneNumber = (props: any) => {
-  const { value, error, onBlur, onChangeText, placeholder } = props;
+  const {
+    value,
+    error,
+    onBlur,
+    onChangeText,
+    placeholder,
+    phoneNumber,
+    handleChangeCode,
+  } = props;
   const { countries } = useAllCountries();
   const [showActionsheet, setShowActionsheet] = useState(false);
   const [searchText, setSearchText] = useState<string>("");
-  const [countryCodeSelected, setCountryCodeSelected] = useState("");
+  const [countryCodeSelected, setCountryCodeSelected] = useState(phoneNumber);
   const parsedCountries = countries.map((country) => ({
     label: country.name,
     value: country.codeNumber,
@@ -44,6 +52,7 @@ export const PhoneNumber = (props: any) => {
   const handleClose = (number: string) => {
     setShowActionsheet(false);
     setCountryCodeSelected(number);
+    handleChangeCode(number);
     setSearchText("");
   };
 
@@ -82,7 +91,7 @@ export const PhoneNumber = (props: any) => {
             className="items-center justify-center pr-3"
             onPress={() => setShowActionsheet(true)}
           >
-            <Text>{countryCodeSelected}</Text>
+            <Text fontWeight={400}>{countryCodeSelected}</Text>
           </Pressable>
         }
         leftIcon
@@ -101,7 +110,7 @@ export const PhoneNumber = (props: any) => {
           </ActionsheetDragIndicatorWrapper>
           <View style={styles.search_bar_container}>
             <Input
-              placeholder="Buscar banco"
+              placeholder="Search..."
               label=""
               onBlur={() => {}}
               onChangeText={handleInputChange}

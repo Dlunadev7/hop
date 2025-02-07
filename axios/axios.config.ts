@@ -33,7 +33,6 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -42,45 +41,57 @@ axiosInstance.interceptors.response.use(
     if (error.response && error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      if (!isRefreshing) {
-        isRefreshing = true;
-
-        try {
-          const refreshTokenValue = await AsyncStorage.getItem('auth_token') as string;
-          const refreshTokenParsed = JSON.parse(refreshTokenValue);
-          const refreshResponse = await axios.get(`${API_URL}/auth/refresh`, {
-            headers: {
-              Authorization: `Bearer ${refreshTokenParsed.refreshToken}`,
-            },
-          });
-
-          const { token, refreshToken } = refreshResponse.data;
-
-          await AsyncStorage.setItem('auth_token', JSON.stringify({ token, refreshToken }));
-          await AsyncStorage.setItem('refresh_token', refreshToken);
-
-          failedRequestsQueue.forEach((callback) => callback());
-          failedRequestsQueue = [];
-        } catch (refreshError) {
-          console.error('Error al refrescar el token:', refreshError);
-          failedRequestsQueue = [];
-          isRefreshing = false;
-          return Promise.reject(refreshError);
+      try {
+        const refreshTokenValue = await AsyncStorage.getItem('auth_token');
+        if (!refreshTokenValue) {
+          console.warn('No hay refresh token, cerrando sesión.');
+          return Promise.reject(error);
         }
 
-        isRefreshing = false;
-      }
+        const refreshTokenParsed = JSON.parse(refreshTokenValue);
+        if (!refreshTokenParsed?.refreshToken) {
+          console.warn('No se encontró refreshToken en el almacenamiento.');
+          return Promise.reject(error);
+        }
 
-      // Agregar la solicitud fallida a la cola
-      return new Promise((resolve, reject) => {
-        failedRequestsQueue.push(() => {
-          axiosInstance(originalRequest).then(resolve).catch(reject);
+        if (!isRefreshing) {
+          isRefreshing = true;
+
+          try {
+            const refreshResponse = await axios.get(`${API_URL}/auth/refresh`, {
+              headers: {
+                Authorization: `Bearer ${refreshTokenParsed.refreshToken}`,
+              },
+            });
+
+            const { token, refreshToken } = refreshResponse.data;
+            await AsyncStorage.setItem('auth_token', JSON.stringify({ token, refreshToken }));
+
+            failedRequestsQueue.forEach((callback) => callback());
+            failedRequestsQueue = [];
+
+            isRefreshing = false;
+          } catch (refreshError) {
+            console.error('Error al refrescar el token:', refreshError);
+            failedRequestsQueue = [];
+            isRefreshing = false;
+            return Promise.reject(refreshError);
+          }
+        }
+
+        return new Promise((resolve, reject) => {
+          failedRequestsQueue.push(() => {
+            axiosInstance(originalRequest).then(resolve).catch(reject);
+          });
         });
-      });
+
+      } catch (refreshCatchError) {
+        console.error('Error en el proceso de refresh:', refreshCatchError);
+        return Promise.reject(refreshCatchError);
+      }
     }
 
     return Promise.reject(error);
   }
 );
-
 export default axiosInstance;

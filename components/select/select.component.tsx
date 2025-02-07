@@ -82,7 +82,7 @@ export const Select = (props: CustomFormControlProps) => {
       >
         <FormControlLabelText
           className={`font-semibold text-lg ${
-            touched && error ? "text-[#9A0000]" : "text-[#10524B]"
+            error ? "text-[#9A0000]" : "text-[#10524B]"
           } ${customClassNames.labelText}`}
         >
           {label}

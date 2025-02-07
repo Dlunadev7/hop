@@ -11,6 +11,8 @@ import {
 } from "@/assets/svg";
 import { Colors } from "@/constants/Colors";
 import { Pressable, View } from "react-native";
+import useSWR from "swr";
+import { getUserLogged } from "@/services/auth.service";
 
 type HeaderProps = {
   title: string;

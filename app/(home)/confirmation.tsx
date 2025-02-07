@@ -12,9 +12,15 @@ import { scaleSize } from "@/helpers/scale-size";
 import { useRoute } from "@react-navigation/native";
 
 export default function Confirmation() {
-  const params = useRoute().params as { commission: number };
+  const params = useRoute().params as {
+    commission: number;
+    title: string;
+    subtitle: string;
+  };
   const { t } = useTranslation();
   const rotation = useRef(new Animated.Value(0)).current;
+
+  console.log(params);
 
   useEffect(() => {
     const startAnimation = () => {
@@ -51,10 +57,10 @@ export default function Confirmation() {
             textColor={Colors.DARK_GREEN}
             textAlign="center"
           >
-            {t("home.confirmation.title", { ns: "home" })}
+            {params.title}
           </Text>
           <Text fontSize={20} fontWeight={400} textAlign="center">
-            {t("home.confirmation.subtitle", { ns: "home" })}
+            {params.subtitle}
           </Text>
         </VStack>
 
@@ -75,10 +81,9 @@ export default function Confirmation() {
           <Button
             onPress={() => {
               router.replace({
-                pathname: "/(tabs)",
+                pathname: "/(tabs)/wallet",
                 params: { step: 4 },
               });
-              router.dismissAll();
             }}
             stretch
           >

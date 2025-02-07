@@ -85,8 +85,20 @@
   "confirmation": {
     "title": "Reservation confirmed successfully",
     "subtitle": "You earned commission for this trip",
-    "go_payments": "My payments",
+    "go_payments": "My wallet",
     "go_home": "Go to the beginning"
+  },
+  "hopper": {
+    "void": "Fill in the vehicle details to start traveling",
+    "vehicle": "vehicle",
+    "bookings": {
+      "title": "Bookings",
+      "description": "You don't have any trips booked yet"
+    },
+    "advice": {
+      "title": "Tips for a Hopper",
+      "description": "Be friendly and professional, keep your car clean. ¡Small details make a difference!"
+    }
   },
   "next": "Next"
 }
