@@ -10,7 +10,7 @@ import { Container, Header, Input } from "@/components";
 import { useTranslation } from "react-i18next";
 import useSWR from "swr";
 import { getUserLogged, updateUser } from "@/services/auth.service";
-import { Location } from "@/assets/svg";
+import { Danger, Location } from "@/assets/svg";
 import { Box } from "@/components/ui/box";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
@@ -24,6 +24,13 @@ import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 import { KeyboardContainer } from "@/components/keyboard/keyboard.component";
 import { useToast } from "@/hooks/use-toast";
 import { validationSchemaS3 } from "@/schemas/register.schema";
+import {
+  checkEmptyFields,
+  removeEmptyField,
+} from "@/helpers/check-empty-fields";
+import { keysToCheck } from "@/constants/check-validations";
+import { useRoute } from "@react-navigation/native";
+import { Badge } from "@/components/ui/badge";
 
 export default function PersonalData() {
   const { t } = useTranslation();
@@ -32,6 +39,7 @@ export default function PersonalData() {
     revalidateOnFocus: true,
     refreshInterval: 5,
   });
+  const route = useRoute();
   const { state, updatePayload } = useAuth();
   const { requestLocationPermission } = useRequestLocationPermission({
     url: AuthRoutesLink.MAP,
@@ -95,8 +103,41 @@ export default function PersonalData() {
     }
   };
 
+  //   onChangeText={(text) => {
+  //     handleChange("bank_account_holder")(text);
+  //     removeEmptyField("bank_account_holder", setEmptyFields);
+  //   }}
+  // error={
+  //     (touched.bank_account_holder &&
+  //       errors.bank_account_holder) ||
+  //     emptyFields.find((item) => item === "bank_account_holder")
+  //   }
+
+  const [emptyFields, setEmptyFields] = useState<string[]>(() =>
+    checkEmptyFields(
+      data?.userInfo || {},
+      route.name === "hotel"
+        ? keysToCheck.filter((item) =>
+            ["hotel_name", "hotel_location"].includes(item)
+          )
+        : keysToCheck
+    )
+  );
+
+  console.log(emptyFields);
+
   return (
     <Container>
+      {emptyFields.length > 0 ? (
+        <Badge className="rounded-full p-2 gap-2 bg-[#E1F5F3] items-center justify-center">
+          <Danger />
+          <Text fontSize={14} fontWeight={600}>
+            {t("profile.account.empty", { ns: "profile" })}
+          </Text>
+        </Badge>
+      ) : (
+        <></>
+      )}
       <Formik
         initialValues={{
           hotel_name: data?.userInfo.hotel_name || "",
@@ -127,10 +168,16 @@ export default function PersonalData() {
                 <Input
                   label={t("signup.step_3.hotel_name.label")}
                   onBlur={handleBlur("hotel_name")}
-                  onChangeText={handleChange("hotel_name")}
+                  onChangeText={(text) => {
+                    handleChange("hotel_name")(text);
+                    removeEmptyField("hotel_name", setEmptyFields);
+                  }}
                   placeholder=""
                   value={values.hotel_name}
-                  error={touched.hotel_name && errors.hotel_name}
+                  error={
+                    (touched.hotel_name && errors.hotel_name) ||
+                    emptyFields.find((item) => item === "hotel_name")
+                  }
                   touched={touched.hotel_name}
                   isDisabled={!isEditable}
                 />
@@ -138,10 +185,16 @@ export default function PersonalData() {
                 <Input
                   label={t("signup.step_3.address.label")}
                   onBlur={handleBlur("home_address")}
-                  onChangeText={handleChange("home_address")}
+                  onChangeText={(text) => {
+                    handleChange("home_address")(text);
+                    removeEmptyField("hotel_location", setEmptyFields);
+                  }}
                   placeholder=""
                   value={values.home_address || state.hotel_info.address}
-                  error={touched.home_address && errors.home_address}
+                  error={
+                    (touched.home_address && errors.home_address) ||
+                    emptyFields.find((item) => item === "hotel_location")
+                  }
                   touched={touched.home_address}
                   isDisabled={!isEditable}
                 />

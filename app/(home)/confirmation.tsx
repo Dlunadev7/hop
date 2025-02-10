@@ -20,8 +20,6 @@ export default function Confirmation() {
   const { t } = useTranslation();
   const rotation = useRef(new Animated.Value(0)).current;
 
-  console.log(params);
-
   useEffect(() => {
     const startAnimation = () => {
       rotation.setValue(0);

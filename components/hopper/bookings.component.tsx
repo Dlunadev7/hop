@@ -26,7 +26,7 @@ import { VStack } from "../ui/vstack";
 import { Badge } from "../ui/badge";
 import { HomeRoutesLink } from "@/utils/enum/home.routes";
 
-export const BookingsHopper = ({ bookings }: { bookings: number[] }) => {
+export const BookingsHopper = ({ bookings }: { bookings: number[] | [] }) => {
   const { t } = useTranslation();
   return (
     <View className="mt-6">

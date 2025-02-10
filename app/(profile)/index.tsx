@@ -2,17 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDrawer } from "@/context/drawer.context";
 import { Container, Header } from "@/components";
 import { router, useNavigation } from "expo-router";
-import { DrawerActions } from "@react-navigation/native";
+import { DrawerActions, useRoute } from "@react-navigation/native";
 import { useDrawerStatus } from "@react-navigation/drawer";
 import { Box } from "@/components/ui/box";
-import {
-  Avatar,
-  AvatarHopper,
-  Booking,
-  Car,
-  CourtHouse,
-  Danger,
-} from "@/assets/svg";
+import { Avatar, AvatarHopper, Car, CourtHouse, Danger } from "@/assets/svg";
 import { Text } from "@/components/text/text.component";
 import useSWR from "swr";
 import { getUserLogged } from "@/services/auth.service";
@@ -32,7 +25,6 @@ import { HStack } from "@/components/ui/hstack";
 import { Divider } from "@/components/ui/divider";
 import { useTranslation } from "react-i18next";
 import { ProfileRoutesLink } from "@/utils/enum/profile.routes";
-import { Skeleton, SkeletonText } from "@/components/ui/skeleton";
 import { TabsRoutesLink } from "@/utils/enum/tabs.routes";
 import { checkEmptyFields } from "@/helpers/check-empty-fields";
 import { keysToCheck } from "@/constants/check-validations";
@@ -42,6 +34,9 @@ export default function Profile() {
     revalidateOnFocus: true,
     refreshInterval: 5,
   });
+
+  const route = useRoute();
+
   const { isDrawerOpen, setIsDrawerOpen } = useDrawer();
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -78,7 +73,21 @@ export default function Profile() {
     }
   }, [drawerState, setIsDrawerOpen]);
 
-  const emptyFields = checkEmptyFields(data?.userInfo!, keysToCheck);
+  const emptyFields = checkEmptyFields(
+    data?.userInfo!,
+    keysToCheck.filter((item) =>
+      data?.role === userRoles.USER_HOPPER
+        ? item !== "hotel_name" && item !== "hotel_location"
+        : true
+    )
+  );
+
+  const hotelFields = ["hotel_name", "hotel_location"];
+
+  console.log(emptyFields);
+  const isHotelDataMissing = hotelFields.every((field) =>
+    emptyFields.includes(field)
+  );
 
   const shortcuts = [
     {
@@ -92,7 +101,7 @@ export default function Profile() {
       to: ProfileRoutesLink.VEHICLE_DATA,
     },
     {
-      icon: CourtHouse,
+      icon: isHotelDataMissing ? Danger : CourtHouse,
       name: t("profile.home.shortcuts.hotel", { ns: "profile" }),
       to: ProfileRoutesLink.HOTEL,
     },
@@ -107,7 +116,8 @@ export default function Profile() {
       to: TabsRoutesLink.HISTORY,
     },
     {
-      icon: emptyFields.length > 0 ? Danger : WalletActive,
+      icon:
+        !isHotelDataMissing && emptyFields.length > 0 ? Danger : WalletActive,
       name: t("profile.home.shortcuts.bank_account", { ns: "profile" }),
       to: ProfileRoutesLink.BANK_ACCOUNT,
     },
@@ -131,37 +141,28 @@ export default function Profile() {
     <Container>
       <Box className="justify-center items-center">
         {data?.userInfo.profilePic ? (
-          <Skeleton
-            variant="rounded"
+          <Image
+            source={{
+              uri: data?.userInfo.profilePic,
+            }}
+            width={185}
+            height={185}
             className="rounded-full"
-            style={styles.skeleton_image}
-            isLoaded={!isLoading}
-          >
-            <Image
-              source={{
-                uri: data?.userInfo.profilePic,
-              }}
-              width={185}
-              height={185}
-              className="rounded-full"
-            />
-          </Skeleton>
+          />
         ) : data?.role === userRoles.USER_HOPPER ? (
           <AvatarHopper width={185} height={185} />
         ) : (
           <Avatar width={185} height={185} />
         )}
-        <SkeletonText isLoaded={!isLoading}>
-          <Text
-            fontSize={24}
-            fontWeight={400}
-            textColor={Colors.DARK_GREEN}
-            className="mt-2"
-          >
-            {capitalizeWords(data?.userInfo.firstName || "")}{" "}
-            {capitalizeWords(data?.userInfo.lastName || "")}
-          </Text>
-        </SkeletonText>
+        <Text
+          fontSize={24}
+          fontWeight={400}
+          textColor={Colors.DARK_GREEN}
+          className="mt-2"
+        >
+          {capitalizeWords(data?.userInfo.firstName || "")}{" "}
+          {capitalizeWords(data?.userInfo.lastName || "")}
+        </Text>
         <Text textColor={Colors.SECONDARY} fontWeight={600} fontSize={20}>
           {data?.role === userRoles.USER_HOPPER ? "Hopper" : "Hoppy"}
         </Text>

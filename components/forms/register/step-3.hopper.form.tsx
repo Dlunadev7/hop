@@ -49,6 +49,7 @@ const { width } = Dimensions.get("window");
 export default function Step3Hopper(props: formProps) {
   const { setStep, extraData } = props;
   const { t } = useTranslation();
+
   const {
     selectedDocuments,
     selectedImages,
@@ -81,23 +82,24 @@ export default function Step3Hopper(props: formProps) {
   const handleRegisterStep3 = async () => {
     setLoading(true);
     try {
-      if (!imagesByItem[4]) {
-        console.log("No se encontraron imágenes en imagesByItem[4]");
-        return;
-      }
+      const requiredFields = {
+        "imagesByItem[4]": imagesByItem[4],
+        "Documento para seremi": documentsByItem["seremi"],
+        "Documento para curriculum vitae": documentsByItem["curriculum_vitae"],
+        "Documento para permissions": documentsByItem["permission"],
+      };
 
-      if (!documentsByItem["seremi"]) {
-        console.log("No se encontraron documentos para seremi");
-        return;
-      }
+      const missingFields = Object.entries(requiredFields)
+        .filter(([, value]) => !value)
+        .map(([key]) => key);
 
-      if (!documentsByItem["curriculum_vitae"]) {
-        console.log("No se encontraron documentos para curriculum_vitae");
-        return;
-      }
-
-      if (!documentsByItem["permission"]) {
-        console.log("No se encontraron documentos para permissions");
+      if (missingFields.length > 0) {
+        showToast({
+          message: t("empty", { ns: "utils" }),
+          action: "error",
+          duration: 3000,
+          placement: "bottom",
+        });
         return;
       }
 
