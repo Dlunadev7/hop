@@ -82,6 +82,7 @@ export default function VehicleData() {
 
   const handleSubmit = async (values: VehicleUser) => {
     setLoading(true);
+    console.log(values);
     try {
       await updateVehicleUser(user?.id!, values);
 
@@ -142,7 +143,7 @@ export default function VehicleData() {
             value={
               selectedVehicle ? formValues.passengers : String(data?.passengers)
             }
-            disabled
+            disabled={!isEditable}
           />
           <Select
             label={t("signup.step_4_hopper.fields.accessibility.label")}
@@ -183,7 +184,7 @@ export default function VehicleData() {
                 ? "Si"
                 : "No"
             }
-            disabled
+            disabled={!isEditable}
           />
           <Select
             label={t("signup.step_4_hopper.fields.luggage_special.label")}
@@ -202,7 +203,7 @@ export default function VehicleData() {
                 ? "Si"
                 : "No"
             }
-            disabled
+            disabled={!isEditable}
           />
           <Pressable
             style={{ backgroundColor: Colors.PRIMARY }}
