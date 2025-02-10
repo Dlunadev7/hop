@@ -8,7 +8,6 @@ export const useGetAddressFromCoordinates = () => {
   const [loadingAddress, setLoadingAddress] = useState(false);
 
   const getAddress = async (latitude: number, longitude: number) => {
-    console.log('click')
     setSelectedLocation({ latitude, longitude });
     setLoadingAddress(true);
     try {
@@ -21,7 +20,6 @@ export const useGetAddressFromCoordinates = () => {
         setAddress('Dirección no encontrada');
       }
     } catch (error) {
-      console.log(error)
       setAddress('Error al obtener dirección');
     } finally {
       setLoadingAddress(false);

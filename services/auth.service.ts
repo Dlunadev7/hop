@@ -6,8 +6,10 @@ import axios, { AxiosResponse } from 'axios';
 export const createUser = async (userData: Partial<User & UserInfo>): Promise<User> => {
   try {
     const response: AxiosResponse = await axiosInstance.post('/user', userData);
+    console.log(response)
     return response.data;
   } catch (error: unknown) {
+    console.log(error)
     if (axios.isAxiosError(error)) {
       throw error.response || error;
     }
@@ -66,8 +68,10 @@ export const recoveryPassword = async (email: string): Promise<AxiosResponse> =>
 export const getUserLogged = async (): Promise<User> => {
   try {
     const response: AxiosResponse = await axiosInstance.get('/user/logged');
+
     return response.data;
   } catch (error: unknown) {
+
     if (axios.isAxiosError(error)) {
       throw error.response || error;
     }

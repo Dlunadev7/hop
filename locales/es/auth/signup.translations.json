@@ -124,6 +124,6 @@
   "finishOnboarding": {
     "header": "¡Gracias por registrarte!",
     "description": "Enviamos tu formulario, nuestro equipo revisará tus datos y recibirás un email pronto.",
-    "button": "Finalizar"
+    "button": "Ir al inicio"
   }
 }

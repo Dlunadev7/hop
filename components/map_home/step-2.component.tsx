@@ -25,8 +25,6 @@ export const Step2Booking = (props: {
 
   const schema = validationSchema(t);
 
-  console.log(data);
-
   return (
     <Pressable
       style={{

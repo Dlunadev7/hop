@@ -52,7 +52,6 @@
     "expo-constants": "~17.0.3",
     "expo-device": "~7.0.2",
     "expo-document-picker": "~13.0.2",
-    "expo-firebase-core": "^6.0.0",
     "expo-font": "~13.0.3",
     "expo-haptics": "~14.0.0",
     "expo-image-picker": "~16.0.4",

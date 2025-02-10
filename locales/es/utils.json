@@ -13,5 +13,6 @@
     "booking": "Reservas"
   },
   "map_sheet": "Buscar dirección...",
+  "empty": "Todos los campos son requeridos!",
   "accept": "Acceptar"
 }

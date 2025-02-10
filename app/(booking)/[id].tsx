@@ -96,10 +96,6 @@ export default function Booking() {
       name: `${data?.passengerContactCountryCode} ${data?.passengerContact}`,
     },
     {
-      icon: AirplaneArrival,
-      name: data?.passengerAirline,
-    },
-    {
       icon: AirplaneOutlined,
       name: data?.passengerFligth,
     },
@@ -127,6 +123,8 @@ export default function Booking() {
     VANS: "Van",
     ELECTRIC: "Electric Car",
   };
+
+  console.log(JSON.stringify(data, null, 2));
 
   return (
     <Container>
@@ -161,7 +159,6 @@ export default function Booking() {
             </Badge>
           </Box>
           <HStack space="md" className="mt-8 items-start">
-            {vehicleName[data?.vehicleType!]}
             <Box className="gap-2 justify-between">
               <Text fontSize={20} fontWeight={600}>
                 {vehicleName[data?.vehicleType!]}

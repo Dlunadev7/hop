@@ -124,6 +124,6 @@
   "finishOnboarding": {
     "header": "Thank you for signing up!",
     "description": "We sent your form, our team will review your information, and you will receive an email soon.",
-    "button": "Finish"
+    "button": "Go to the beginning"
   }
 }

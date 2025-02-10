@@ -44,6 +44,8 @@ import {
 } from "@/helpers/check-empty-fields";
 import { Badge } from "@/components/ui/badge";
 import { Danger } from "@/assets/svg";
+import { userRoles } from "@/utils/enum/role.enum";
+import { useRoute } from "@react-navigation/native";
 
 export default function BankAccount() {
   const navigation = useNavigation();
@@ -54,6 +56,7 @@ export default function BankAccount() {
 
   const { data } = useSWR("/banks", getBanks);
   const { data: user } = useSWR("/user/logged", getUserLogged);
+  const route = useRoute();
 
   const [loading, setLoading] = useState(false);
   const [ToggleSwitch, setToggleSwitch] = useState(false);
@@ -146,8 +149,16 @@ export default function BankAccount() {
   };
 
   const [emptyFields, setEmptyFields] = useState<string[]>(() =>
-    checkEmptyFields(user?.userInfo || {}, keysToCheck)
+    checkEmptyFields(
+      user?.userInfo || {},
+      keysToCheck.filter((item) =>
+        route.name === "bank_account"
+          ? item !== "hotel_name" && item !== "hotel_location"
+          : true
+      )
+    )
   );
+
   return (
     <Container>
       <View style={styles.formulary} className="pb-4">
@@ -179,7 +190,6 @@ export default function BankAccount() {
             errors,
             touched,
           }) => {
-            console.log(errors);
             return (
               <VStack className="flex-1 justify-between mt-[32px]">
                 <Box className="gap-4">

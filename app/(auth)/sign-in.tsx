@@ -45,7 +45,6 @@ export default function SignIn() {
 
       router.replace("/(tabs)");
     } catch (err: unknown) {
-      console.log(err);
       if (err && typeof err === "object" && "status" in err) {
         const errorWithStatus = err as ErrorWithStatus;
         if (errorWithStatus.status === 500) {

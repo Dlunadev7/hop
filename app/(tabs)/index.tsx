@@ -61,22 +61,20 @@ export default function HomeScreen() {
 
     const eventName = `user-${data.id}`;
 
-    console.log("Esperando conexión al socket...");
-
     if (!socket.connected) {
       socket.connect();
     }
 
-    socket.on("connect", () => console.log("conectado"));
-
-    socket.on("message", (message: any) => {
-      console.log("Mensaje recibido:", message);
+    socket.on("user-2b9c0265-04c7-4b81-bab5-314ebffc4086", (message: any) => {
+      console.log("Mensaje recibido:", message.metada.travel.from);
+      console.log("Mensaje recibido:", message.metada);
+      // Ir colocandolo en un estado.
+      /**
+       * Si se acepta una, hacer un filtro con los datos que vengan y borrar.
+       * Revisar por el TYPE, si es ACCEPTED eliminar de la lista.
+       */
     });
-
-    return () => {
-      socket.off(eventName);
-    };
-  }, [socket, data?.id]);
+  }, [socket, data]);
 
   useEffect(() => {
     navigator.setOptions({
@@ -94,7 +92,14 @@ export default function HomeScreen() {
 
   const userInfo = data?.userInfo;
 
-  const emptyFields = checkEmptyFields(userInfo!, keysToCheck);
+  const emptyFields = checkEmptyFields(
+    data?.userInfo!,
+    keysToCheck.filter((item) =>
+      data?.role === userRoles.USER_HOPPER
+        ? item !== "hotel_name" && item !== "hotel_location"
+        : true
+    )
+  );
   const [isOpen, setIsOpen] = useState(true);
   const height = useState(new Animated.Value(350))[0];
   const toggleContainer = () => {
@@ -107,54 +112,58 @@ export default function HomeScreen() {
     }).start();
   };
 
-  const bookings = [1, 2, 3, 4];
+  const bookings = [0];
 
   const renderContent =
     data?.role === userRoles.USER_HOPPY ? (
-      <>
+      <Container extraHeight={true} style={{ borderBottomStartRadius: 20 }}>
         <TakeABooking />
         <Services />
         <Booking />
-      </>
+      </Container>
     ) : (
-      <View style={{}}>
-        {emptyFields.length > 0 && <Void />}
-        <BookingsHopper bookings={bookings} />
-        {bookings.length === 0 && <Advice />}
-      </View>
-    );
-
-  return (
-    <>
       <Animated.View style={[styles.animated_container, { height: height }]}>
         <Container extraHeight={false} style={{ borderBottomStartRadius: 20 }}>
           <VStack className="mt-4">
             <Balance />
-            {renderContent}
+            <View style={{}}>
+              {emptyFields.length > 0 && <Void />}
+              {emptyFields.length === 0 && (
+                <BookingsHopper bookings={bookings} />
+              )}
+              {bookings.length === 0 && <Advice />}
+            </View>
           </VStack>
         </Container>
         <Pressable onPress={toggleContainer} style={styles.arrow}>
           {isOpen ? <Icon as={ChevronUpIcon} /> : <Icon as={ChevronDownIcon} />}
         </Pressable>
       </Animated.View>
-      <MapView
-        style={styles.map}
-        showsUserLocation={true}
-        initialRegion={{
-          latitude: location?.latitude || 0,
-          longitude: location?.longitude || 0,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      >
-        <Marker
-          coordinate={{
+    );
+
+  return (
+    <View className="flex-1">
+      {renderContent}
+      {data?.role === userRoles.USER_HOPPER && (
+        <MapView
+          style={styles.map}
+          showsUserLocation={true}
+          initialRegion={{
             latitude: location?.latitude || 0,
             longitude: location?.longitude || 0,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
           }}
-        />
-      </MapView>
-    </>
+        >
+          <Marker
+            coordinate={{
+              latitude: location?.latitude || 0,
+              longitude: location?.longitude || 0,
+            }}
+          />
+        </MapView>
+      )}
+    </View>
   );
 }
 

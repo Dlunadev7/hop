@@ -39,8 +39,6 @@ export default function BookingEditForm(props: {
 }) {
   const { formattedDate, formattedTime, data, id, user } = props;
 
-  console.log(data);
-
   const [date, setDate] = useState<Date | null>(null);
   const [time, setTime] = useState<Date | null>(null);
   const [type, setType] = useState<"date" | "time">("date");
@@ -95,9 +93,6 @@ export default function BookingEditForm(props: {
       .matches(/^[0-9]+$/, "Solo se permiten números")
       .min(7, "Debe tener al menos 7 dígitos")
       .optional(),
-    passengerAirline: Yup.string()
-      .min(2, "Debe tener al menos 2 caracteres")
-      .optional(),
     passengerFligth: Yup.string()
       .matches(/^[a-zA-Z0-9]+$/, "Debe ser alfanumérico")
       .optional(),
@@ -110,8 +105,6 @@ export default function BookingEditForm(props: {
       programedTo: date ? date : data.programedTo,
       passengerContactCountryCode: values.countryCode,
     };
-
-    console.log(payload);
 
     setLoading(true);
     await updateTravel(id, payload);
@@ -226,7 +219,6 @@ export default function BookingEditForm(props: {
         initialValues={{
           passengerName: data.passengerName || "",
           passengerContact: data.passengerContact || "",
-          passengerAirline: data.passengerAirline || "",
           passengerFligth: data.passengerFligth || "",
           countryCode: data.passengerContactCountryCode || "",
         }}
@@ -271,17 +263,6 @@ export default function BookingEditForm(props: {
                 />
                 {data.type === travelTypeValues.PICKUP && (
                   <>
-                    <Input
-                      label="Aerolínea"
-                      onBlur={handleBlur("passengerAirline")}
-                      onChangeText={handleChange("passengerAirline")}
-                      placeholder={data.passengerAirline}
-                      value={values.passengerAirline}
-                      stretch
-                      error={
-                        touched.passengerAirline && errors.passengerAirline
-                      }
-                    />
                     <Input
                       label="Número de vuelo"
                       onBlur={handleBlur("passengerFligth")}

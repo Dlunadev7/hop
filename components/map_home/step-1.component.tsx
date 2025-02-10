@@ -139,15 +139,15 @@ export const Step1Booking = (props: Step1BookingProps) => {
     updateBookingData((prev: BookingData) => ({
       ...prev,
       currentLocation: {
-        latitude:
-          addressName.length > 1
-            ? addressLocation.latitude
-            : data?.userInfo.hotel_location?.lat,
-        longitude:
-          addressName.length > 1
-            ? addressLocation.longitude
-            : data?.userInfo.hotel_location?.lng,
-        address: addressName ? addressName : data?.userInfo.hotel_name,
+        latitude: addressName
+          ? dataFormulary.currentLocation.latitude
+          : data?.userInfo.hotel_location?.lat,
+        longitude: addressName
+          ? dataFormulary.currentLocation.longitude
+          : data?.userInfo.hotel_location?.lng,
+        address: addressName
+          ? addressName
+          : dataFormulary.currentLocation.address,
       },
       destination: {
         latitude:
@@ -158,9 +158,10 @@ export const Step1Booking = (props: Step1BookingProps) => {
           destinityAddress.length > 1
             ? destinityLocation.longitude
             : dataFormulary?.destination.longitude,
-        address: destinityLocation
-          ? destinityAddress
-          : dataFormulary?.destination.address,
+        address:
+          destinityAddress.length > 1
+            ? destinityAddress
+            : dataFormulary?.destination.address,
       },
     }));
 

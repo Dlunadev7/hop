@@ -42,7 +42,6 @@ export const updateUserData = async (id: string, data: Partial<User>): Promise<U
     const response: AxiosResponse = await axiosInstance.put(`/user/one/${id}`, data);
     return response.data;
   } catch (error: unknown) {
-    console.log(error)
     if (axios.isAxiosError(error)) {
       throw error.response || error;
     }

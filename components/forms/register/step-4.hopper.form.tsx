@@ -78,7 +78,6 @@ export default function Step4Hopper(props: formProps) {
             placeholder={t("signup.step_4_hopper.fields.type.placeholder")}
             onSelect={(val) => {
               setSelectedVehicle(val);
-              handleVehicleSelect(val);
             }}
             options={vehicles.map((item) => ({
               value: item.value,
@@ -102,7 +101,6 @@ export default function Step4Hopper(props: formProps) {
               { label: "7", value: "7" },
             ]}
             value={formValues.passengers}
-            disabled
           />
           <Select
             label={t("signup.step_4_hopper.fields.accessibility.label")}
@@ -130,7 +128,6 @@ export default function Step4Hopper(props: formProps) {
               { label: "4+ bultos", value: "4+" },
             ]}
             value={capitalizeWords(formValues.luggageSpace)}
-            disabled
           />
           <Select
             label={t("signup.step_4_hopper.fields.luggage_special.label")}
@@ -143,7 +140,7 @@ export default function Step4Hopper(props: formProps) {
               { label: "No", value: "no" },
             ]}
             value={capitalizeWords(formValues.specialLuggage)}
-            disabled
+
             // info={t("accessibility", { ns: "utils" })}
             // setShowTooltip={setShowTooltip}
             // showTooltip={showTooltip}

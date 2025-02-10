@@ -2,16 +2,14 @@ import { StyleSheet, View } from "react-native";
 import React from "react";
 import { Hop } from "@/assets/svg";
 import { AssetsImages } from "@/assets/images";
-import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { Image } from "react-native";
 import { LinearGradient } from "@/components";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/button/button.component";
 import { router } from "expo-router";
-import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 import { Colors } from "@/constants/Colors";
-import { TabsRoutesLink } from "@/utils/enum/tabs.routes";
+import { Text } from "@/components/text/text.component";
 
 export default function FinishOnboarding() {
   const { t } = useTranslation();
@@ -20,13 +18,18 @@ export default function FinishOnboarding() {
       <View style={styles.container}>
         <VStack space="lg" className="items-center mb-9">
           <Hop color={Colors.PRIMARY} />
-          <Text className="text-2xl font-semibold">
+          <Text
+            fontSize={28}
+            textColor={Colors.DARK_GREEN}
+            fontWeight={600}
+            textAlign="center"
+          >
             {t("signup.finishOnboarding.header")}
           </Text>
         </VStack>
         <Image source={AssetsImages.onboardingSuccess} />
-        <VStack space="lg" className="mt-28">
-          <Text className="text-center text-sm">
+        <VStack space="lg" className="mt-28 gap-5">
+          <Text fontSize={14} textAlign="center">
             {t("signup.finishOnboarding.description")}
           </Text>
           <Button
@@ -36,6 +39,7 @@ export default function FinishOnboarding() {
                 params: { step: 4 },
               })
             }
+            stretch
           >
             {t("signup.finishOnboarding.button")}
           </Button>
