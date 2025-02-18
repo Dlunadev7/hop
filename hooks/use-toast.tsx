@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import {
   Toast,
   ToastDescription,
@@ -22,11 +22,15 @@ export const useToast = () => {
     action = "error",
     duration = 3000,
     placement = "bottom",
+    background,
+    textCustom,
   }: {
-    message: string;
+    message?: string;
     action?: "error" | "muted" | "warning" | "success" | "info" | undefined;
     duration?: number;
+    background?: string;
     placement?: ToastPlacement;
+    textCustom?: ReactNode;
   }) => {
     const newId = Math.random();
     setToastId(newId);
@@ -34,7 +38,7 @@ export const useToast = () => {
     toast.show({
       id: String(newId),
       placement,
-      duration: 3000,
+      duration: duration,
       render: ({ id }) => {
         const uniqueToastId = "toast-" + id;
         return (
@@ -43,17 +47,24 @@ export const useToast = () => {
             variant="solid"
             nativeID={uniqueToastId}
             className="p-4 gap-6 flex-auto border-error-500 w-[98%] rounded-xl shadow-hard-5 flex-row justify-between"
+            style={{
+              width: "98%",
+            }}
           >
             <HStack space="md" className="items-center flex-wrap">
               <Icon as={WarningToast} className="h-8 w-8" />
               <VStack space="xs" style={styles.toast_container}>
-                <Text
-                  textColor={Colors.WHITE_SECONDARY}
-                  fontSize={16}
-                  fontWeight={400}
-                >
-                  {message}
-                </Text>
+                {textCustom ? (
+                  textCustom
+                ) : (
+                  <Text
+                    textColor={Colors.WHITE_SECONDARY}
+                    fontSize={16}
+                    fontWeight={400}
+                  >
+                    {message}
+                  </Text>
+                )}
               </VStack>
             </HStack>
             <HStack className="gap-1">

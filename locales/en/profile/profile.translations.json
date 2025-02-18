@@ -2,7 +2,7 @@
   "drawer": {
     "link": {
       "privacy": "Privacy and Passwords",
-      "permissions": "Device Permissions",
+      "permissions": "Settings",
       "report_issue": "Report an Issue",
       "logout": "Close Session"
     }

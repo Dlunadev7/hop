@@ -1,3 +1,10 @@
 {
-  "title": "History"
+  "title": "History",
+  "service_detail": "Service Details",
+  "trip_value": "Trip Value",
+  "service_fees": "Service Fees",
+  "tolls": "Tolls",
+  "net_earnings": "Net Earnings",
+  "passenger": "Passenger",
+  "driver": "Driver"
 }

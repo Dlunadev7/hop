@@ -280,7 +280,9 @@ export default function PersonalData() {
                     error={touched?.address && errors?.address}
                     touched={touched?.address}
                     stretch
-                    onPress={() => setShowActionsheet(true)}
+                    onPress={() => {
+                      isEditable ? setShowActionsheet(true) : {};
+                    }}
                     editable={
                       (isEditable && Boolean(values.address)) ||
                       (isEditable && Boolean(state.user_info.address))

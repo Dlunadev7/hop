@@ -29,6 +29,7 @@ export const Step3Booking = (props: {
   const { data } = useSWR("/user/logged", getUserLogged, {
     revalidateOnFocus: true,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const { showToast } = useToast();
 
@@ -47,9 +48,8 @@ export const Step3Booking = (props: {
   };
   const formattedDate = convertToDate(dataPayload.programedTo);
 
-  console.log(dataPayload);
-
   const handleBookHopper = async (carType: string) => {
+    setIsLoading(true);
     try {
       const response = await createTravel({
         from: {
@@ -83,11 +83,14 @@ export const Step3Booking = (props: {
         type: dataPayload.type as travelTypeValues,
       });
 
+      console.log(JSON.stringify(response, null, 2));
+
       updateBookingData((prevState: BookingData) => ({
         ...prevState,
         carType: carType,
         price: response.price,
         hoppyCommission: response.hoppyCommission,
+        id: response.id,
       }));
 
       setStepper(4);
@@ -99,6 +102,8 @@ export const Step3Booking = (props: {
         duration: 3000,
         placement: "bottom",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -138,6 +143,7 @@ export const Step3Booking = (props: {
             onPress={() => {
               handleBookHopper(value);
             }}
+            disabled={isLoading}
             key={name}
           >
             <HStack space="md" className="items-center">

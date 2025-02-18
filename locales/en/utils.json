@@ -12,6 +12,13 @@
     "history": "History",
     "booking": "Booking"
   },
+  "settings": {
+    "title": "Settings",
+    "account_state": "Account state",
+    "activate_notification": "Activate Notification",
+    "account_active": "Account active",
+    "deactivate_account": "If you deactivate your account, you will not be able to access the app's features. However, your account and data will not be deleted.\nYou can reactivate it whenever you need to."
+  },
   "map_sheet": "Search address...",
   "empty": "All fields are required!",
   "accept": "Accept"

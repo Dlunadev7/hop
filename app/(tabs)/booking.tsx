@@ -159,7 +159,7 @@ export default function Booking() {
             <Box className="flex-row gap-2">
               <Ticket width={18} height={18} />
               <Text fontSize={14} fontWeight={400} textColor={Colors.SECONDARY}>
-                {item.passengerName}
+                {item.hopper?.userInfo?.firstName}
               </Text>
             </Box>
           </Box>

@@ -10,4 +10,5 @@ export enum travelTypeValues {
   PROGRAMED = 'PROGRAMED',
   PICKUP = 'PICKUP',
   DROPOFF = 'DROPOFF',
+  INSTANT = 'INSTANT'
 }

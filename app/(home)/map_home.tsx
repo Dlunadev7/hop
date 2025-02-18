@@ -97,6 +97,8 @@ export default function MapHome() {
     price: 0,
     hoppyCommission: 0,
     countryCode: "",
+    hopperId: "",
+    id: "",
   });
 
   useEffect(() => {
@@ -217,6 +219,7 @@ export default function MapHome() {
         formattedDate={formattedDate}
         formattedTime={formattedTime}
         setStepper={setStepper}
+        updateBookingData={setBookingData}
         data={bookingData}
         date={route.time}
       />
