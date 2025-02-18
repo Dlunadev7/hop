@@ -14,12 +14,25 @@ import { HStack } from "../ui/hstack";
 import { Colors } from "@/constants/Colors";
 import { Button } from "../button/button.component";
 import { useTranslation } from "react-i18next";
-import { BookingData } from "@/utils/interfaces/booking.interface";
+import {
+  BookingData,
+  BookingResponse,
+} from "@/utils/interfaces/booking.interface";
 import dayjs from "dayjs";
-import capitalizeWords from "@/helpers/capitalize-words";
+import { useSocket } from "@/hooks/use-socket.hook";
+import useSWR from "swr";
+import { getUserLogged } from "@/services/auth.service";
+import { travelStatus } from "@/utils/enum/travel.enum";
+import { TravelNotification } from "@/utils/interfaces/booking.notification.interface";
+import { getTravelById, updateTravel } from "@/services/book.service";
+import { router } from "expo-router";
 
 type VehicleIconMap = {
   [key: string]: JSX.Element;
+};
+
+type CombinedType = Pick<TravelNotification, "metadata"> & {
+  hopper: { id: string };
 };
 
 export const Step4Booking = (props: {
@@ -27,6 +40,7 @@ export const Step4Booking = (props: {
   formattedDate: string;
   setStepper: React.Dispatch<React.SetStateAction<number>>;
   data: BookingData;
+  updateBookingData: React.Dispatch<React.SetStateAction<any>>;
   date: string;
 }) => {
   const {
@@ -34,18 +48,10 @@ export const Step4Booking = (props: {
     formattedDate,
     setStepper,
     data,
+    updateBookingData,
     date: dateProgrammed,
   } = props;
   const { t } = useTranslation();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setStepper(5);
-    }, 2500);
-
-    return () => clearInterval(interval);
-  }, []);
-
   const vehicleTypeIcon = [
     {
       type: "vans",
@@ -83,6 +89,47 @@ export const Step4Booking = (props: {
     VANS: "Van",
     ELECTRIC: "Electric Car",
   };
+
+  const travelId = data.id;
+
+  const socket = useSocket("https://hop.api.novexisconsulting.xyz");
+
+  useEffect(() => {
+    if (!socket || !travelId) return;
+
+    const eventName = `travel-${travelId}`;
+
+    if (!socket.connected) {
+      socket.connect();
+    }
+
+    socket.on(eventName, (message: CombinedType) => {
+      if (message.metadata.travel.status !== travelStatus.REQUEST) {
+        updateBookingData((prevState: BookingData) => ({
+          ...prevState,
+          hopperId: message.hopper.id,
+        }));
+      }
+    });
+  }, [socket, travelId]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getTravelById(travelId);
+
+      if (response.status !== travelStatus.REQUEST) {
+        setStepper(5);
+        updateBookingData((prevState: BookingData) => ({
+          ...prevState,
+          hopperId: response.hopper.id,
+        }));
+      }
+    };
+
+    const interval = setInterval(fetchData, 5000);
+
+    return () => clearInterval(interval);
+  }, [travelId]);
 
   return (
     <VStack space="md" className="items-center gap-8">
@@ -130,7 +177,15 @@ export const Step4Booking = (props: {
           </Text>
         </HStack>
       </Box>
-      <Button onPress={() => setStepper(5)} stretch>
+      <Button
+        onPress={() => {
+          updateTravel(travelId, {
+            status: travelStatus.CANCELLED,
+          });
+          router.back();
+        }}
+        stretch
+      >
         {t("home.map_home.third_sheet.cancel", { ns: "home" })}
       </Button>
     </VStack>

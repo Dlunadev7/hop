@@ -66,6 +66,11 @@ import People from '@/assets/svg/people.svg';
 import ShoppingBag from '@/assets/svg/shopping-bag.svg';
 import InfoCircle from '@/assets/svg/info-circle.svg';
 import ArrowDegRight from '@/assets/svg/arrow-deg-right.svg';
+import WarningHexa from '@/assets/svg/warning-hexa.svg';
+import PeopleColored from '@/assets/svg/people-colored.svg';
+import ShippingBagColored from '@/assets/svg/shopping-bag-colored.svg';
+import Reserve from '@/assets/svg/reserve.svg';
+import ReserveFilled from '@/assets/svg/reserve-filled.svg';
 
 export {
   CircleArrowRight,
@@ -135,5 +140,10 @@ export {
   People,
   ShoppingBag,
   InfoCircle,
-  ArrowDegRight
+  ArrowDegRight,
+  WarningHexa,
+  PeopleColored,
+  ShippingBagColored,
+  Reserve,
+  ReserveFilled
 }

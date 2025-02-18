@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Tabs, useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { TabBar } from "@/components/tabbar/tabbar.component";
 import { TabsRoutes } from "@/utils/enum/tabs.routes";
@@ -18,6 +18,17 @@ import { useTranslation } from "react-i18next";
 import { StyleSheet, View, Animated } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { useDrawer } from "@/context/drawer.context";
+import usePushNotifications from "@/hooks/use-push-notifications.hook";
+import { updateUserData } from "@/services/user.service";
+import { useSocket } from "@/hooks/use-socket.hook";
+import { TravelNotification } from "@/utils/interfaces/booking.notification.interface";
+import { travelStatus } from "@/utils/enum/travel.enum";
+import useSWR from "swr";
+import { getUserLogged } from "@/services/auth.service";
+import * as Notifications from "expo-notifications";
+import { useToast } from "@/hooks/use-toast";
+import { Text } from "@/components/text/text.component";
+import { useRoute } from "@react-navigation/native";
 
 export default function TabLayout() {
   const { t } = useTranslation();
@@ -25,6 +36,10 @@ export default function TabLayout() {
   const [fadeAnim] = useState(new Animated.Value(1));
   const [translateYAnim] = useState(new Animated.Value(0));
   const [paddingBottomAnim] = useState(new Animated.Value(100));
+  const { showToast } = useToast();
+  const { data, error } = useSWR("/user/logged", getUserLogged, {
+    revalidateOnFocus: true,
+  });
 
   useEffect(() => {
     if (isDrawerOpen) {
@@ -65,6 +80,54 @@ export default function TabLayout() {
       }).start();
     }
   }, [isDrawerOpen]);
+
+  const pushNotifications = usePushNotifications();
+
+  useEffect(() => {
+    if (pushNotifications) {
+      (async () =>
+        await updateUserData(data?.id!, {
+          email: data?.email,
+          userNotificationToken: pushNotifications,
+        }))();
+    }
+  }, []);
+
+  const socket = useSocket("https://hop.api.novexisconsulting.xyz");
+
+  useEffect(() => {
+    if (!socket || !data?.id) return;
+
+    const eventName = `user-${data.id}`;
+
+    if (!socket.connected) {
+      socket.connect();
+    }
+
+    socket.on("connect", () => {
+      console.log("Conectado al socket");
+    });
+
+    socket.on(eventName, (message: TravelNotification) => {
+      // showToast({
+      //   textCustom: (
+      //     <Text>
+      //       Tienes una nueva solicitud de viaje de{" "}
+      //       <Text fontWeight={600}>
+      //         {message.user.userInfo.firstName} {message.user.userInfo.lastName}
+      //       </Text>
+      //     </Text>
+      //   ),
+      //   background: Colors.PRIMARY,
+      //   placement: "top",
+      //   duration: 3500,
+      // });
+    });
+
+    return () => {
+      socket.off(eventName);
+    };
+  }, [socket, data?.id]);
 
   return (
     <View style={styles.tabbar_container}>

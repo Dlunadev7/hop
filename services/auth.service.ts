@@ -68,10 +68,8 @@ export const recoveryPassword = async (email: string): Promise<AxiosResponse> =>
 export const getUserLogged = async (): Promise<User> => {
   try {
     const response: AxiosResponse = await axiosInstance.get('/user/logged');
-
     return response.data;
   } catch (error: unknown) {
-
     if (axios.isAxiosError(error)) {
       throw error.response || error;
     }
@@ -91,6 +89,31 @@ export const updateUser = async (id: string, data: Partial<UserInfo>): Promise<U
     throw error;
   }
 }
+
+export const updateUserOne = async (id: string, data: Partial<User>): Promise<User> => {
+  try {
+    const response: AxiosResponse = await axiosInstance.put(`/user/one/${id}`, data);
+    return response.data;
+
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw error.response || error;
+    }
+    throw error;
+  }
+}
+
+export const getUserById = async (id: string): Promise<Omit<User, 'userDocument'>> => {
+  try {
+    const response: AxiosResponse = await axiosInstance.get(`/user/one/${id}`);
+    return response.data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw error.response || error;
+    }
+    throw error;
+  }
+};
 
 export const updateVehicleUser = async (id: string, data: VehicleUser): Promise<User> => {
   try {

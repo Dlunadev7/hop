@@ -21,7 +21,7 @@ export const Balance = () => {
       >
         {t("home.balance", { ns: "home" })}:{" "}
         <Text fontSize={20} fontWeight={600}>
-          {showBalance ? `$${balance.toFixed(2)}` : "••••••••••••"}
+          {showBalance ? `$${balance?.toFixed(2)}` : "••••••••••••"}
         </Text>
       </Text>
       <Pressable onPress={() => setShowBalance(!showBalance)}>

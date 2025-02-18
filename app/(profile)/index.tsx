@@ -84,7 +84,6 @@ export default function Profile() {
 
   const hotelFields = ["hotel_name", "hotel_location"];
 
-  console.log(emptyFields);
   const isHotelDataMissing = hotelFields.every((field) =>
     emptyFields.includes(field)
   );

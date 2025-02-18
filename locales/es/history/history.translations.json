@@ -1,3 +1,10 @@
 {
-  "title": "Historial"
+  "title": "Historial",
+  "service_detail": "Detalle del servicio",
+  "trip_value": "Valor del viaje",
+  "service_fees": "Tarifas del servicio",
+  "tolls": "Peajes",
+  "net_earnings": "Ganancia líquida",
+  "passenger": "Pasajero",
+  "driver": "Conductor"
 }

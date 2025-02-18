@@ -96,5 +96,10 @@
       "description": "Aún no tienes ningún viaje reservado"
     }
   },
+  "waiting_validation": {
+    "account_review": "Tu cuenta se encuentra en revisión",
+    "review_info": "Estamos revisando tu información, esto puede tardar unos días. Podrás iniciar sesión una vez que tu cuenta sea validada por nuestro equipo.",
+    "accept": "Aceptar"
+  },
   "next": "Siguiente"
 }

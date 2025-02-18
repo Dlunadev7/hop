@@ -1,10 +1,16 @@
+import { paymentStatus } from "../enum/payment.enum";
 import { userRoles } from "../enum/role.enum";
+import { travelStatus } from "../enum/travel.enum";
 
 interface Travel {
   created_at: string;
   deleted_at: string | null;
   distance: number;
-  from: object; // Reemplazar con una interfaz adecuada si se conoce la estructura
+  from: {
+    latitude: string;
+    longitude: string;
+    address: string;
+  }; // Reemplazar con una interfaz adecuada si se conoce la estructura
   hopperCommission: number;
   hopperCommissionsPaid: boolean;
   hoppy: object; // Reemplazar con una interfaz adecuada si se conoce la estructura
@@ -17,12 +23,16 @@ interface Travel {
   passengerFligth: string;
   passengerName: string;
   passengerRoom: string;
-  paymentStatus: "PENDING" | "PAID" | "FAILED"; // Ajustar según estados posibles
+  paymentStatus: paymentStatus; // Ajustar según estados posibles
   price: number;
-  programedTo: string;
-  status: "REQUEST" | "CONFIRMED" | "CANCELLED"; // Ajustar según estados posibles
+  programedTo: Date;
+  status: travelStatus; // Ajustar según estados posibles
   time: number;
-  to: object; // Reemplazar con una interfaz adecuada si se conoce la estructura
+  to: {
+    latitude: string;
+    longitude: string;
+    address: string;
+  }; // Reemplazar con una interfaz adecuada si se conoce la estructura
   tolls: string | null;
   totalPassengers: string;
   totalSuitCases: string;
@@ -89,4 +99,14 @@ export interface TravelNotification {
   type: notificationTypeValues;
   updated_at: string;
   user: User;
+}
+export interface TravelData {
+  pagination: {
+    itemsPerPage: number;
+    order: string;
+    page: number;
+    total: number;
+    totalPages: number;
+  },
+  result: TravelNotification[]
 }
