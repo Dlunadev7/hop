@@ -1,5 +1,5 @@
-import { View } from "react-native";
-import React from "react";
+import { Image, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import { VStack } from "../ui/vstack";
 import { Text } from "../text/text.component";
 import {
@@ -23,6 +23,10 @@ import { BookingData } from "@/utils/interfaces/booking.interface";
 import dayjs from "dayjs";
 import capitalizeWords from "@/helpers/capitalize-words";
 import utc from "dayjs/plugin/utc";
+import { useSocket } from "@/hooks/use-socket.hook";
+import useSWR from "swr";
+import { getUserById, getUserLogged } from "@/services/auth.service";
+import { TravelNotification } from "@/utils/interfaces/booking.notification.interface";
 
 dayjs.extend(utc);
 
@@ -37,7 +41,20 @@ export const Step5Booking = (props: {
   date: string;
 }) => {
   const { t } = useTranslation();
-  const { formattedDate, formattedTime, data, date: dateProgrammed } = props;
+  const [userTravel, setUserTravel] = useState<any>();
+
+  const { data: userHopper } = useSWR(
+    "/user/one",
+    () => getUserById(props.data.hopperId),
+    {
+      revalidateOnFocus: true,
+    }
+  );
+
+  const { data: user, error } = useSWR("/user/logged", getUserLogged, {
+    revalidateOnFocus: true,
+  });
+  const { data, date: dateProgrammed } = props;
 
   const date = dayjs(data.programedTo);
 
@@ -83,15 +100,28 @@ export const Step5Booking = (props: {
     ELECTRIC: "Electric Car",
   };
 
+  console.log("hopper", props.data.hopperId);
+
   return (
     <VStack space="md" className="items-center gap-8">
       <Text fontSize={24} fontWeight={400} textAlign="center">
-        Maria Victoria{" "}
+        {`${userHopper?.userInfo.firstName} ${userHopper?.userInfo.lastName}`}{" "}
         {t("home.map_home.fifty_sheet.accept_reservation", { ns: "home" })}
       </Text>
 
       <VStack className="items-center gap-2">
-        <AvatarHopper width={120} height={120} />
+        {userHopper?.userInfo.profilePic ? (
+          <Image
+            source={{
+              uri: userHopper?.userInfo.profilePic,
+            }}
+            width={120}
+            height={120}
+            className="rounded-full"
+          />
+        ) : (
+          <AvatarHopper width={120} height={120} />
+        )}
         <View className="flex-row gap-2">
           {[0, 1, 2, 3].map((_, index) => (
             <Star key={index} />

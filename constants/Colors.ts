@@ -12,5 +12,6 @@ export const Colors = {
   LIGHT_GRAY: "#D1D1D1",
   YELLOW: "#E9BB22",
   LIGHT_YELLOW: "#DFE992",
-  VIOLET: "#5A6EBD"
+  VIOLET: "#5A6EBD",
+  LIGHT_RED: "#E9BEC0",
 }

@@ -48,7 +48,7 @@ type formProps = {
 };
 
 export default function Step2(props: formProps) {
-  const { setStep, payloadValues, extraData } = props;
+  const { setStep, payloadValues, extraData, payload } = props;
   const formikRef = useRef<any>(null);
   const { t } = useTranslation();
   const schema = validationSchemaS1(t);
@@ -105,6 +105,7 @@ export default function Step2(props: formProps) {
   const handleRegisterStep2 = async (values: Partial<UserInfo>) => {
     setLoading(true);
     try {
+      payload(values);
       await updateUser(extraData, values);
       setStep(3);
     } catch (error) {
@@ -118,6 +119,15 @@ export default function Step2(props: formProps) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (formikRef.current) {
+      formikRef.current?.setFieldValue(
+        "bank_name",
+        payloadValues.userInfo.bank_name.name
+      );
+    }
+  }, []);
 
   return (
     <View style={styles.formulary} className="pb-4">
@@ -135,13 +145,16 @@ export default function Step2(props: formProps) {
         }}
         validationSchema={schema}
         onSubmit={(values) => {
-          handleRegisterStep2({
-            ...values,
-            bank_name: {
-              id: bankSelected.id,
-              name: bankSelected.name,
-            },
-          });
+          if (!Boolean(rutError.length > 0)) {
+            handleRegisterStep2({
+              ...values,
+              bank_name: {
+                id: bankSelected.id || payloadValues.userInfo.bank_name.id,
+                name:
+                  bankSelected.name || payloadValues.userInfo.bank_name.name,
+              },
+            });
+          }
         }}
       >
         {({
@@ -154,7 +167,6 @@ export default function Step2(props: formProps) {
           touched,
         }) => {
           useEffect(() => {
-            console.log(validateRut(values.bank_account_rut));
             const formattedRUT = formatRut(values.bank_account_rut);
 
             setFieldValue("bank_account_rut", formattedRUT);
@@ -195,9 +207,12 @@ export default function Step2(props: formProps) {
                 onBlur={handleBlur("bank_name")}
                 onChangeText={handleChange("bank_name")}
                 placeholder=""
-                value={bankSelected.name}
-                error={touched.bank_name && errors.bank_name}
-                touched={touched.bank_name}
+                value={
+                  bankSelected.name ||
+                  (payloadValues.userInfo.bank_name.name as any)
+                }
+                error={(touched.bank_name as any) && errors.bank_name}
+                touched={touched.bank_name as any}
                 editable={false}
                 pressable
                 onPress={() => setShowActionsheet(true)}
@@ -222,9 +237,7 @@ export default function Step2(props: formProps) {
                 label={t("signup.step_2.fields.accountType.label", {
                   ns: "auth",
                 })}
-                placeholder={t("signup.step_2.fields.accountType.placeholder", {
-                  ns: "auth",
-                })}
+                placeholder=""
                 onSelect={handleChange("bank_account_type")}
                 options={accountTypes.map((type) => ({
                   label: t(
@@ -248,7 +261,11 @@ export default function Step2(props: formProps) {
                   ns: "auth",
                 })}
                 onBlur={handleBlur("bank_account_rut")}
-                onChangeText={handleChange("bank_account_rut")}
+                onChangeText={(text) => {
+                  if (text.length <= 11) {
+                    handleChange("bank_account_rut")(text);
+                  }
+                }}
                 placeholder=""
                 value={values.bank_account_rut}
                 error={
@@ -256,8 +273,10 @@ export default function Step2(props: formProps) {
                   rutError
                 }
                 touched={touched.bank_account_rut}
+                maxLength={11}
                 keyboardType="numbers-and-punctuation"
               />
+
               <StepControl
                 handleBack={() => setStep(3)}
                 handleNext={handleSubmit}

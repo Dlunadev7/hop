@@ -12,7 +12,7 @@ export type RegisterType = {
       latitude: string;
       longitude: string;
     },
-    bank_name: string;
+    bank_name: any;
     bank_account_holder: string;
     bank_account_type: string;
     bank_account_rut: string;

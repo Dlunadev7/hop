@@ -35,6 +35,7 @@ import {
   ActionsheetDragIndicatorWrapper,
 } from "@/components/ui/actionsheet";
 import Tooltip from "@/components/tooltip/tooltip.component";
+import { useAuth } from "@/context/auth.context";
 
 type formProps = {
   payloadValues: RegisterType;
@@ -47,7 +48,7 @@ type formProps = {
 const { width } = Dimensions.get("window");
 
 export default function Step3Hopper(props: formProps) {
-  const { setStep, extraData } = props;
+  const { setStep, extraData, payloadValues } = props;
   const { t } = useTranslation();
 
   const {
@@ -71,6 +72,8 @@ export default function Step3Hopper(props: formProps) {
   >(null);
   const [imagesByItem, setImagesByItem] = useState<Record<number, any[]>>({});
 
+  const { token } = useAuth();
+
   const handleOpenActionSheet = (index: number) => {
     setOpenActionSheetIndex(index);
   };
@@ -81,6 +84,7 @@ export default function Step3Hopper(props: formProps) {
 
   const handleRegisterStep3 = async () => {
     setLoading(true);
+
     try {
       const requiredFields = {
         "imagesByItem[4]": imagesByItem[4],

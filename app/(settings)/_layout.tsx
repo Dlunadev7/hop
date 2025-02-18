@@ -5,7 +5,8 @@ import { Stack } from "expo-router";
 export default function _layout() {
   return (
     <Stack>
-      <Stack.Screen name="/(bookings)/[id]" />
+      <Stack.Screen name="/" />
+      <Stack.Screen name="account_state" />
     </Stack>
   );
 }

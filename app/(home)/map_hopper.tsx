@@ -28,39 +28,53 @@ import {
 import { VStack } from "@/components/ui/vstack";
 import { Colors } from "@/constants/Colors";
 import { formattedDate } from "@/helpers/parse-date";
-import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button as CustomButton } from "@/components/button/button.component";
 import { HomeRoutesLink } from "@/utils/enum/home.routes";
+import { useRoute } from "@react-navigation/native";
+import { TravelNotification } from "@/utils/interfaces/booking.notification.interface";
+import { getTravelById, updateTravel } from "@/services/book.service";
+import { BookingResponse } from "@/utils/interfaces/booking.interface";
+import { status } from "@/helpers/parser-names";
+import { paymentColor } from "@/helpers/payment-status";
+import { travelStatus } from "@/utils/enum/travel.enum";
+import { getFormattedTime } from "@/helpers/add-time";
 
 const { width } = Dimensions.get("window");
 
 export default function MapHopper() {
+  const { travel } = useRoute().params as { travel: string };
   const insets = useSafeAreaInsets();
-  const { date, time } = formattedDate(new Date());
-  const [isOpen, setIsOpen] = useState(true);
-  const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const [isInfoOpen, setIsInfoOpen] = useState(true);
   const [showRoute, setShowRoute] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const containerWidth = width - 32;
+  const travelParsed: BookingResponse = JSON.parse(travel);
+  const { date, time } = formattedDate(travelParsed.programedTo);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, [isInfoOpen]);
 
   const handleClose = () => {
     setIsInfoOpen(true);
-    setIsOpen(false);
   };
 
-  useEffect(() => {
-    if (!isOpen && !isInfoOpen) {
-      const timeout = setTimeout(() => {
-        setIsButtonDisabled(false);
-      }, 5000);
+  const estimatedTime = getFormattedTime(travelParsed.time);
 
-      return () => clearTimeout(timeout);
-    }
-  }, [isOpen, isInfoOpen]);
+  useFocusEffect(
+    useCallback(() => {
+      setIsInfoOpen(true);
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -85,7 +99,6 @@ export default function MapHopper() {
           <FabIcon as={ArrowLeftRounded} width={30} />
         </Fab>
       )}
-      <ModalBooking isOpen={isOpen} handleClose={handleClose} />
       <Modal
         isOpen={isInfoOpen}
         onClose={() => setIsInfoOpen(false)}
@@ -96,7 +109,7 @@ export default function MapHopper() {
             <Box className="flex-row items-center gap-2 justify-center w-full">
               <Booking width={28} height={28} />
               <Text fontSize={20} fontWeight={600}>
-                Pick up
+                {status[travelParsed.type!]}
               </Text>
             </Box>
             <Box className="flex-row gap-2">
@@ -140,7 +153,7 @@ export default function MapHopper() {
                 <Box className="flex-row gap-2 items-center">
                   <Send />
                   <Text fontSize={16} fontWeight={400}>
-                    Aeropuerto El Dorado
+                    {travelParsed.from.address}
                   </Text>
                 </Box>
               </VStack>
@@ -152,32 +165,49 @@ export default function MapHopper() {
                 <Box className="flex-row gap-2 items-center">
                   <LocationFilled />
                   <Text fontSize={16} fontWeight={400}>
-                    Aeropuerto El Dorado
+                    {travelParsed.to.address}
                   </Text>
                 </Box>
               </VStack>
             </Box>
             <HStack className="mt-4 items-center justify-between">
               <Text fontSize={14} fontWeight={400}>
-                Distancia{" "}
-                <Text fontSize={16} fontWeight={400}>
-                  12km
+                Distancia:{" "}
+                <Text fontSize={16} fontWeight={600}>
+                  {travelParsed.distance.toFixed(2)}km
                 </Text>
               </Text>
-              <Badge className="rounded-full bg-[#9FE4DD] gap-1">
+              <Badge
+                className="rounded-full gap-1"
+                style={{
+                  backgroundColor: paymentColor[travelParsed.paymentStatus],
+                }}
+              >
                 <DolarCircle />
                 <Text
                   fontSize={18}
                   fontWeight={600}
                   textColor={Colors.DARK_GREEN}
                 >
-                  $4.056
+                  ${travelParsed.price?.toFixed(2)}
                 </Text>
               </Badge>
             </HStack>
           </ModalBody>
           <ModalFooter className="flex-col">
-            <Button variant="outline" style={styles.more_info}>
+            <Button
+              variant="outline"
+              style={styles.more_info}
+              onPress={() => {
+                router.navigate({
+                  pathname: "/(booking)/[id]",
+                  params: {
+                    id: travelParsed.id,
+                  },
+                });
+                setIsInfoOpen(false);
+              }}
+            >
               <Text textColor={Colors.SECONDARY} fontWeight={600} fontSize={16}>
                 Mas info
               </Text>
@@ -194,6 +224,9 @@ export default function MapHopper() {
             onPress={() => {
               setShowRoute(true);
               setIsInfoOpen(false);
+              updateTravel(travelParsed.id!, {
+                status: travelStatus.START,
+              } as BookingResponse);
             }}
           >
             Iniciar Viaje
@@ -212,7 +245,7 @@ export default function MapHopper() {
               className="mb-6"
               textColor={Colors.DARK_GREEN}
             >
-              28 min
+              {travelParsed.time.toFixed(2)} min
             </Text>
             <Box className="gap-2 flex-row">
               <View
@@ -239,19 +272,23 @@ export default function MapHopper() {
           </HStack>
           <VStack className="gap-5">
             <Text fontSize={16} fontWeight={400} textColor={Colors.GRAY}>
-              12 km - 12:30 pm
+              {travelParsed.distance.toFixed(2)} km -{estimatedTime}
             </Text>
             <CustomButton
-              onPress={() =>
+              onPress={() => {
+                updateTravel(travelParsed.id, {
+                  status: travelStatus.END,
+                } as BookingResponse);
+
                 router.replace({
                   pathname: HomeRoutesLink.CONFIRMATION,
                   params: {
-                    commission: 30,
+                    commission: travelParsed.hopperCommission,
                     title: "Viaje finalizado con exito",
                     subtitle: "¡Ganaste comisión por este viaje!",
                   },
-                })
-              }
+                });
+              }}
               stretch
               disabled={isButtonDisabled}
               type={isButtonDisabled ? "ghost" : ""}
@@ -262,18 +299,7 @@ export default function MapHopper() {
         </View>
       )}
       {showRoute && (
-        <Box
-          style={{
-            position: "absolute",
-            top: 40,
-            backgroundColor: Colors.DARK_GREEN,
-            width: containerWidth,
-            height: 141,
-            borderRadius: 20,
-            padding: 16,
-            marginHorizontal: 16,
-          }}
-        >
+        <Box style={[styles.card_gps, { width: containerWidth }]}>
           <HStack className="gap-4 items-center">
             <ArrowDegRight />
             <Box className="flex-col gap-2">
@@ -330,5 +356,14 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     paddingHorizontal: 30,
+  },
+  card_gps: {
+    position: "absolute",
+    top: 40,
+    backgroundColor: Colors.DARK_GREEN,
+    height: 141,
+    borderRadius: 20,
+    padding: 16,
+    marginHorizontal: 16,
   },
 });

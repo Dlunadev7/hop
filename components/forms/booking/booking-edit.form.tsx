@@ -99,7 +99,6 @@ export default function BookingEditForm(props: {
   });
 
   const handleSubmit = async (values: any) => {
-    console.log(values);
     const payload = {
       ...values,
       programedTo: date ? date : data.programedTo,
@@ -170,7 +169,7 @@ export default function BookingEditForm(props: {
             label=""
             onBlur={() => {}}
             onChangeText={() => {}}
-            placeholder={data.from.address}
+            placeholder={String(data?.from?.address)}
             leftIcon
             icon={Send}
             stretch

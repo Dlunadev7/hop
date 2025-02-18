@@ -72,3 +72,17 @@ export const getUserDocumentation = async (id: string): Promise<UserDocument> =>
     throw error;
   }
 }
+
+
+// export const getUserRate = async (id: string): Promise<UserDocument> => {
+//   try {
+//     const response: AxiosResponse = await axiosInstance.get(`/user-documents/user/${id}`);
+//     return response.data;
+//   } catch (error: unknown) {
+//     if (axios.isAxiosError(error)) {
+//       throw error.response || error;
+//     }
+//     throw error;
+//   }
+// }
+

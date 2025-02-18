@@ -2,39 +2,35 @@ import { StyleSheet, View } from "react-native";
 import React from "react";
 import { Hop } from "@/assets/svg";
 import { AssetsImages } from "@/assets/images";
-import { Text } from "@/components/ui/text";
-import { Button, ButtonText } from "@/components/ui/button";
 import { VStack } from "@/components/ui/vstack";
 import { Image } from "react-native";
-import { router } from "expo-router";
-import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 import { LinearGradient } from "@/components";
 import { Colors } from "@/constants/Colors";
+import { Text } from "@/components/text/text.component";
+import { useTranslation } from "react-i18next";
 
 export default function FinishOnboarding() {
+  const { t } = useTranslation();
+
   return (
     <LinearGradient>
       <View style={styles.container}>
         <VStack space="lg" className="items-center mb-9">
-          <Hop color={Colors.PRIMARY} />
-          <Text className="text-2xl font-semibold">
-            Tu cuenta se encuentra en revisión
+          <Hop color={Colors.SECONDARY} />
+          <Text
+            fontSize={28}
+            fontWeight={600}
+            textColor={Colors.DARK_GREEN}
+            textAlign="center"
+          >
+            {t("home.waiting_validation.account_review", { ns: "home" })}
           </Text>
         </VStack>
         <Image source={AssetsImages.waitingValidation} />
         <VStack space="lg" className="mt-28">
-          <Text className="text-center text-sm">
-            Estamos revisando tu información, esto puede tardar unos días.
-            Podrás iniciar sesión una vez que tu cuenta sea validada por nuestro
-            equipo.
+          <Text fontSize={14} fontWeight={400} textAlign="center">
+            {t("home.waiting_validation.review_info", { ns: "home" })}
           </Text>
-          <Button
-            variant="solid"
-            className="rounded-xl bg-[#2EC4B6] self-center"
-            onPress={() => router.replace(AuthRoutesLink.ENTRY)}
-          >
-            <ButtonText className="font-semibold text-lg">Aceptar</ButtonText>
-          </Button>
         </VStack>
       </View>
     </LinearGradient>

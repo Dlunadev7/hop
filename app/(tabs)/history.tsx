@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Container, Header } from "@/components";
 import { Text } from "@/components/text/text.component";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
 import { HStack } from "@/components/ui/hstack";
@@ -17,6 +17,7 @@ import {
 } from "@/assets/svg";
 import {
   ActivityIndicator,
+  Pressable,
   StyleSheet,
   View,
   VirtualizedList,
@@ -80,6 +81,7 @@ export default function History() {
   useEffect(() => {
     navigator.setOptions({
       header: () => <Header title={t("title", { ns: "history" })} />,
+      gestureEnabled: false,
     });
   }, [navigator]);
 
@@ -101,22 +103,28 @@ export default function History() {
     PICKUP: "Pick Up",
     DROPOFF: "Drop Off",
     PROGRAMED: "Programmed",
+    INSTANT: "",
   };
 
   const status: { [key: string]: string } = {
     COMPLETED: "Completed",
     CANCELLED: "Cancelled",
     START: "In Progress",
+    END: "Completed",
   };
 
   const statusColor: { [key: string]: string } = {
     COMPLETED: Colors.VIOLET,
     CANCELLED: Colors.ERROR,
     START: Colors.YELLOW,
+    END: Colors.VIOLET,
   };
 
   const iconStatus: { [key: string]: ReactElement } = {
     COMPLETED: (
+      <Icon as={CheckCircleIcon} color={Colors.VIOLET} width={16} height={16} />
+    ),
+    END: (
       <Icon as={CheckCircleIcon} color={Colors.VIOLET} width={16} height={16} />
     ),
     CANCELLED: (
@@ -165,82 +173,93 @@ export default function History() {
             const currentStatus = status[item.status as any] || item.status;
 
             return (
-              <Card variant="outline" style={styles.card}>
-                <HStack className="gap-1 items-center justify-between">
-                  <Box>
+              <Pressable
+                onPress={() =>
+                  router.push({
+                    pathname: "/(history)/[id]",
+                    params: {
+                      id: item.id,
+                    },
+                  })
+                }
+              >
+                <Card variant="outline" style={styles.card}>
+                  <HStack className="gap-1 items-center justify-between">
+                    <Box>
+                      <Text
+                        className="items-center gap-2"
+                        textColor={Colors.DARK_GREEN}
+                        fontWeight={600}
+                        fontSize={20}
+                      >
+                        {translatedStatus}
+                      </Text>
+                      <Text
+                        fontSize={12}
+                        fontWeight={400}
+                        textColor={Colors.GRAY}
+                      >
+                        {date}
+                      </Text>
+                    </Box>
+                    <Box className="flex-row gap-2 items-center">
+                      <Text
+                        fontSize={14}
+                        fontWeight={600}
+                        textColor={statusColor[item.status]}
+                      >
+                        {currentStatus}
+                      </Text>
+                      {iconStatus[item.status]}
+                    </Box>
+                  </HStack>
+                  <HStack style={styles.card_description}>
+                    <Box className="gap-1">
+                      <Box className="flex-row gap-2 flex-wrap">
+                        <Routing />
+                        <Text
+                          fontSize={16}
+                          fontWeight={400}
+                          textColor={Colors.SECONDARY}
+                          className="w-[80%]"
+                        >
+                          {item.from.address} - {item.to.address}
+                        </Text>
+                      </Box>
+                      <Box className="flex-row gap-2">
+                        <UserSquare />
+                        <Text
+                          fontSize={16}
+                          fontWeight={400}
+                          textColor={Colors.SECONDARY}
+                        >
+                          {item.passengerName}
+                        </Text>
+                      </Box>
+                      <Box className="flex-row gap-2">
+                        <Ticket width={24} height={24} />
+                        <Text
+                          fontSize={16}
+                          fontWeight={400}
+                          textColor={Colors.SECONDARY}
+                        >
+                          Valor ${item.price ? item.price.toFixed(2) : "0"}
+                        </Text>
+                      </Box>
+                    </Box>
+                  </HStack>
+                  <Badge style={styles.badge}>
+                    <DolarCircle />
                     <Text
-                      className="items-center gap-2"
+                      fontSize={18}
+                      fontWeight={600}
                       textColor={Colors.DARK_GREEN}
-                      fontWeight={600}
-                      fontSize={20}
                     >
-                      {translatedStatus}
+                      ${item.price ? item.price.toFixed(2) : "0"}
                     </Text>
-                    <Text
-                      fontSize={12}
-                      fontWeight={400}
-                      textColor={Colors.GRAY}
-                    >
-                      {date}
-                    </Text>
-                  </Box>
-                  <Box className="flex-row gap-2 items-center">
-                    <Text
-                      fontSize={14}
-                      fontWeight={600}
-                      textColor={statusColor[item.status]}
-                    >
-                      {currentStatus}
-                    </Text>
-                    {iconStatus[item.status]}
-                  </Box>
-                </HStack>
-                <HStack style={styles.card_description}>
-                  <Box className="gap-1">
-                    <Box className="flex-row gap-2 flex-wrap">
-                      <Routing />
-                      <Text
-                        fontSize={16}
-                        fontWeight={400}
-                        textColor={Colors.SECONDARY}
-                        className="w-[80%]"
-                      >
-                        {item.from.address} - {item.to.address}
-                      </Text>
-                    </Box>
-                    <Box className="flex-row gap-2">
-                      <UserSquare />
-                      <Text
-                        fontSize={16}
-                        fontWeight={400}
-                        textColor={Colors.SECONDARY}
-                      >
-                        {item.passengerName}
-                      </Text>
-                    </Box>
-                    <Box className="flex-row gap-2">
-                      <Ticket width={24} height={24} />
-                      <Text
-                        fontSize={16}
-                        fontWeight={400}
-                        textColor={Colors.SECONDARY}
-                      >
-                        Valor ${item.price ? item.price.toFixed(2) : "0"}
-                      </Text>
-                    </Box>
-                  </Box>
-                </HStack>
-                <Badge style={styles.badge}>
-                  <DolarCircle />
-                  <Text
-                    fontSize={18}
-                    fontWeight={600}
-                    textColor={Colors.DARK_GREEN}
-                  >
-                    ${item.price ? item.price.toFixed(2) : "0"}
-                  </Text>
-                </Badge>
-              </Card>
+                  </Badge>
+                </Card>
+              </Pressable>
             );
           }}
           onEndReached={handleEndReached}

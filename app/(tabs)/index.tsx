@@ -1,4 +1,4 @@
-import { AvatarHopper, Calendar, Notification, Warning } from "@/assets/svg";
+import { Notification } from "@/assets/svg";
 import {
   Balance,
   TakeABooking,
@@ -8,22 +8,15 @@ import {
   Booking,
   Void,
   BookingsHopper,
-  LinearGradient,
+  ModalBooking,
 } from "@/components";
-import Advice from "@/components/hopper/advice.component";
-import { KeyboardContainer } from "@/components/keyboard/keyboard.component";
-import { Text } from "@/components/text/text.component";
-import { Box } from "@/components/ui/box";
-import { HStack } from "@/components/ui/hstack";
 import { ChevronDownIcon, ChevronUpIcon, Icon } from "@/components/ui/icon";
 import { VStack } from "@/components/ui/vstack";
 import { keysToCheck } from "@/constants/check-validations";
 import { Colors } from "@/constants/Colors";
 import { useAuth } from "@/context/auth.context";
 import capitalizeWords from "@/helpers/capitalize-words";
-import usePushNotifications from "@/hooks/use-push-notifications.hook";
 import { useSocket } from "@/hooks/use-socket.hook";
-import { updateUserData } from "@/services/user.service";
 import { checkEmptyFields } from "@/helpers/check-empty-fields";
 import { getUserLogged } from "@/services/auth.service";
 import { userRoles } from "@/utils/enum/role.enum";
@@ -33,48 +26,19 @@ import { useTranslation } from "react-i18next";
 import { Animated, Pressable, StyleSheet, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import useSWR from "swr";
+import { TravelNotification } from "@/utils/interfaces/booking.notification.interface";
+import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 
 export default function HomeScreen() {
   const navigator = useNavigation();
   const { t } = useTranslation();
   const { token, location } = useAuth();
+  const [isOpen, setIsOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [travelData, setTravelData] = useState<TravelNotification>();
   const { data, error } = useSWR("/user/logged", getUserLogged, {
     revalidateOnFocus: true,
   });
-
-  const pushNotifications = usePushNotifications();
-
-  useEffect(() => {
-    if (pushNotifications) {
-      (async () =>
-        await updateUserData(data?.id!, {
-          email: data?.email,
-          userNotificationToken: pushNotifications,
-        }))();
-    }
-  }, []);
-
-  const socket = useSocket("https://hop.api.novexisconsulting.xyz");
-
-  useEffect(() => {
-    if (!socket || !data?.id) return;
-
-    const eventName = `user-${data.id}`;
-
-    if (!socket.connected) {
-      socket.connect();
-    }
-
-    socket.on("user-2b9c0265-04c7-4b81-bab5-314ebffc4086", (message: any) => {
-      console.log("Mensaje recibido:", message.metada.travel.from);
-      console.log("Mensaje recibido:", message.metada);
-      // Ir colocandolo en un estado.
-      /**
-       * Si se acepta una, hacer un filtro con los datos que vengan y borrar.
-       * Revisar por el TYPE, si es ACCEPTED eliminar de la lista.
-       */
-    });
-  }, [socket, data]);
 
   useEffect(() => {
     navigator.setOptions({
@@ -90,7 +54,7 @@ export default function HomeScreen() {
     });
   }, [navigator, data]);
 
-  const userInfo = data?.userInfo;
+  console.log(token, data?.id);
 
   const emptyFields = checkEmptyFields(
     data?.userInfo!,
@@ -100,8 +64,7 @@ export default function HomeScreen() {
         : true
     )
   );
-  const [isOpen, setIsOpen] = useState(true);
-  const height = useState(new Animated.Value(350))[0];
+  const height = useState(new Animated.Value(400))[0];
   const toggleContainer = () => {
     setIsOpen(!isOpen);
 
@@ -112,11 +75,35 @@ export default function HomeScreen() {
     }).start();
   };
 
-  const bookings = [0];
+  const socket = useSocket("https://hop.api.novexisconsulting.xyz");
+
+  useEffect(() => {
+    if (!socket || !data?.id) return;
+
+    const eventName = `user-${data.id}`;
+
+    if (!socket.connected) {
+      socket.connect();
+    }
+
+    socket.on("connect", () => {
+      console.log("Conectado al socket");
+    });
+
+    socket.on(eventName, (message: TravelNotification) => {
+      setIsModalOpen(true);
+      setTravelData(message);
+    });
+
+    return () => {
+      socket.off(eventName);
+    };
+  }, [socket, data?.id]);
 
   const renderContent =
     data?.role === userRoles.USER_HOPPY ? (
       <Container extraHeight={true} style={{ borderBottomStartRadius: 20 }}>
+        <Balance />
         <TakeABooking />
         <Services />
         <Booking />
@@ -128,10 +115,7 @@ export default function HomeScreen() {
             <Balance />
             <View style={{}}>
               {emptyFields.length > 0 && <Void />}
-              {emptyFields.length === 0 && (
-                <BookingsHopper bookings={bookings} />
-              )}
-              {bookings.length === 0 && <Advice />}
+              {emptyFields.length === 0 && <BookingsHopper />}
             </View>
           </VStack>
         </Container>
@@ -140,6 +124,18 @@ export default function HomeScreen() {
         </Pressable>
       </Animated.View>
     );
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    if (data && !data?.isActive) {
+      router.replace(AuthRoutesLink.WAITING_VALIDATION);
+    }
+  }, [data?.isActive]);
+
+  console.log(data);
 
   return (
     <View className="flex-1">
@@ -162,6 +158,14 @@ export default function HomeScreen() {
             }}
           />
         </MapView>
+      )}
+      {isModalOpen && data!.role === userRoles.USER_HOPPER && (
+        <ModalBooking
+          isOpen={isModalOpen}
+          handleClose={handleClose}
+          travel={travelData!}
+          user={data!}
+        />
       )}
     </View>
   );

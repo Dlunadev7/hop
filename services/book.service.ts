@@ -61,10 +61,12 @@ export const getTravelHistory = async (): Promise<any[]> => {
 };
 
 export const getTravelById = async (id: string): Promise<BookingResponse> => {
+  console.log(`/travels/one/${id}`)
   try {
     const response: AxiosResponse<BookingResponse> = await axiosInstance.get(`/travels/one/${id}`);
     return response.data;
   } catch (error: unknown) {
+    console.log('eror', error)
     if (axios.isAxiosError(error)) {
       throw error.response || error;
     }
@@ -73,12 +75,13 @@ export const getTravelById = async (id: string): Promise<BookingResponse> => {
 };
 
 export const updateTravel = async (id: string, travelData: any): Promise<any> => {
+  console.log(id, travelData)
   try {
     const response: AxiosResponse<any> = await axiosInstance.patch(`/travels/${id}`, travelData);
     console.log(response.data)
     return response.data;
   } catch (error: unknown) {
-    console.log(error)
+    console.log('erorr', error)
     if (axios.isAxiosError(error)) {
       throw error.response || error;
     }
@@ -88,7 +91,7 @@ export const updateTravel = async (id: string, travelData: any): Promise<any> =>
 
 export const deleteTravel = async (id: string): Promise<any> => {
   try {
-    const response: AxiosResponse<any> = await axiosInstance.delete(`/travels/${id}`);
+    const response: AxiosResponse<any> = await axiosInstance.delete(`/ travels / ${id}`);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {

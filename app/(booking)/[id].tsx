@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import React, { ReactElement, useEffect, useState } from "react";
 import { Text } from "@/components/text/text.component";
 import { router, useNavigation } from "expo-router";
-import { Container, Header } from "@/components";
+import { Container, Header, Input } from "@/components";
 import { useRoute } from "@react-navigation/native";
 import { getTravelById, updateTravel } from "@/services/book.service";
 import { travelStatus, travelTypeValues } from "@/utils/enum/travel.enum";
@@ -14,22 +14,33 @@ import {
   Calendar,
   Car,
   Clock,
+  ClockCustom,
   DolarCircle,
   DropOff,
   ElectricCar,
+  LocationFilled,
   Luggage,
   Messages,
+  People,
+  PeopleColored,
   Profile,
   ProfileActive,
+  Reserve,
   Routing,
   Sedan,
+  Send,
+  ShippingBagColored,
+  ShoppingBag,
   Ticket,
   UserSquare,
   UserSquareOutlined,
   Van,
+  Warning,
+  WarningHexa,
+  WarningToast,
 } from "@/assets/svg";
 import { Colors } from "@/constants/Colors";
-import { Pressable, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";
 import { Box } from "@/components/ui/box";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
@@ -37,9 +48,18 @@ import { Divider } from "@/components/ui/divider";
 import { Button } from "@/components/button/button.component";
 import BookingEditForm from "@/components/forms/booking/booking-edit.form";
 import { useTranslation } from "react-i18next";
-import { getUserLogged } from "@/services/auth.service";
+import { getUserById, getUserLogged } from "@/services/auth.service";
 import { userRoles } from "@/utils/enum/role.enum";
 import { formattedDate } from "@/helpers/parse-date";
+import {
+  payment,
+  paymentColor,
+  paymentIcon,
+  paymentTextColor,
+} from "@/helpers/payment-status";
+import { paymentStatus } from "@/utils/enum/payment.enum";
+import { HomeRoutesLink } from "@/utils/enum/home.routes";
+import { Center } from "@/components/ui/center";
 
 export default function Booking() {
   const navigator = useNavigation();
@@ -49,6 +69,11 @@ export default function Booking() {
   const { data } = useSWR("/travel/one", () => getTravelById(id), {
     revalidateOnMount: true,
   });
+  const { data: userHoppy } = useSWR(
+    data?.hoppy?.id ? `/user/${data.hoppy.id}` : null,
+    () => getUserById(data?.hoppy.id!),
+    { revalidateOnMount: true }
+  );
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isEditable, setIsEditable] = useState(false);
@@ -60,6 +85,7 @@ export default function Booking() {
     PICKUP: "Pick Up",
     DROPOFF: "Drop Off",
     PROGRAMED: "Programmed",
+    INSTANT: "",
   };
 
   useEffect(() => {
@@ -80,16 +106,16 @@ export default function Booking() {
     });
   }, [navigator, data, isEditable]);
 
-  const { date, time } = formattedDate(data?.programedTo!);
+  const { date, time } = formattedDate(new Date());
 
   const shortcuts = [
     {
       icon: Routing,
-      name: `${data?.from.address} - ${data?.to.address}`,
+      name: `${data?.from?.address} - ${data?.to?.address}`,
     },
     {
       icon: UserSquareOutlined,
-      name: data?.passengerName,
+      name: data?.hopper?.userInfo?.firstName || "",
     },
     {
       icon: Messages,
@@ -105,7 +131,50 @@ export default function Booking() {
     },
     {
       icon: Ticket,
-      name: `Valor del viaje: $${data?.price ? data.price.toFixed(2) : 0}`,
+      name: `Valor del viaje: $${"0"}`,
+    },
+  ];
+
+  const shortcutsHopper = [
+    {
+      icon: UserSquareOutlined,
+      name: data?.hopper?.userInfo?.firstName || "",
+    },
+    {
+      icon: Messages,
+      name:
+        `${data?.passengerContactCountryCode} ${data?.passengerContact}` || "",
+    },
+    {
+      icon: AirplaneOutlined,
+      name: data?.passengerFligth || "",
+    },
+    {
+      icon: ShippingBagColored,
+      name: `${data?.totalSuitCases} ${
+        Number(data?.totalSuitCases) > 1
+          ? t("booking.card.luggages", { ns: "booking" })
+          : t("booking.card.luggage", { ns: "booking" })
+      }`,
+    },
+    {
+      icon: PeopleColored,
+      name:
+        `${data?.totalPassengers} ${
+          Number(data?.totalPassengers) > 1
+            ? t("booking.card.passengers", { ns: "booking" })
+            : t("booking.card.passenger", { ns: "booking" })
+        }` || "",
+    },
+    {
+      icon: Reserve,
+      name:
+        `${userHoppy?.userInfo?.firstName} ${userHoppy?.userInfo?.lastName}` ||
+        "",
+    },
+    {
+      icon: Ticket,
+      name: `Valor del viaje: $${"0"}` || "",
     },
   ];
 
@@ -124,7 +193,15 @@ export default function Booking() {
     ELECTRIC: "Electric Car",
   };
 
-  console.log(JSON.stringify(data, null, 2));
+  const Icon = paymentIcon[data?.paymentStatus!];
+
+  if (!data) {
+    return (
+      <Center>
+        <ActivityIndicator color={Colors.PRIMARY} />
+      </Center>
+    );
+  }
 
   return (
     <Container>
@@ -158,35 +235,94 @@ export default function Booking() {
               </Text>
             </Badge>
           </Box>
-          <HStack space="md" className="mt-8 items-start">
-            <Box className="gap-2 justify-between">
-              <Text fontSize={20} fontWeight={600}>
-                {vehicleName[data?.vehicleType!]}
-              </Text>
-              <VStack className="mt-2 gap-2">
-                <Box className="flex-row">
-                  <ProfileActive width={16} height={16} />
-                  <Text fontSize={14} fontWeight={400} textColor={Colors.GRAY}>
-                    {data?.totalPassengers}{" "}
-                    {Number(data?.totalPassengers) > 1
-                      ? t("booking.card.passengers", { ns: "booking" })
-                      : t("booking.card.passenger", { ns: "booking" })}
+          {user?.role !== userRoles.USER_HOPPER && (
+            <HStack space="md" className="mt-8 items-start">
+              <Box className="gap-2 justify-between">
+                <Text fontSize={20} fontWeight={600}>
+                  {vehicleName[data?.vehicleType!]}
+                </Text>
+                <VStack className="mt-2 gap-2">
+                  <Box className="flex-row">
+                    <ProfileActive width={16} height={16} />
+                    <Text
+                      fontSize={14}
+                      fontWeight={400}
+                      textColor={Colors.GRAY}
+                    >
+                      {data?.totalPassengers}{" "}
+                      {Number(data?.totalPassengers) > 1
+                        ? t("booking.card.passengers", { ns: "booking" })
+                        : t("booking.card.passenger", { ns: "booking" })}
+                    </Text>
+                  </Box>
+                  <Box className="flex-row">
+                    <Luggage />
+                    <Text
+                      fontSize={14}
+                      fontWeight={400}
+                      textColor={Colors.GRAY}
+                    >
+                      {data?.totalSuitCases}{" "}
+                      {Number(data?.totalSuitCases) > 1
+                        ? t("booking.card.luggages", { ns: "booking" })
+                        : t("booking.card.luggage", { ns: "booking" })}
+                    </Text>
+                  </Box>
+                </VStack>
+              </Box>
+            </HStack>
+          )}
+          {user?.role === userRoles.USER_HOPPER && (
+            <View className="gap-5">
+              <VStack className="mt-6 gap-3 border border-[#E1F5F3] p-2 rounded-[20px]">
+                <Box>
+                  <Text fontSize={12} fontWeight={300} textColor={Colors.GRAY}>
+                    Punto de partida
                   </Text>
+                  <HStack className="items-center gap-2">
+                    <Send />
+                    <VStack>
+                      <Text fontSize={16} fontWeight={400}>
+                        {data?.from?.address}
+                      </Text>
+                    </VStack>
+                  </HStack>
                 </Box>
-                <Box className="flex-row">
-                  <Luggage />
-                  <Text fontSize={14} fontWeight={400} textColor={Colors.GRAY}>
-                    {data?.totalSuitCases}{" "}
-                    {Number(data?.totalSuitCases) > 1
-                      ? t("booking.card.luggages", { ns: "booking" })
-                      : t("booking.card.luggage", { ns: "booking" })}
+                <Divider style={styles.divider_light} />
+                <Box>
+                  <Text fontSize={12} fontWeight={300} textColor={Colors.GRAY}>
+                    Punto de partida
                   </Text>
+                  <HStack className="items-center gap-2">
+                    <Send />
+                    <VStack>
+                      <Text fontSize={16} fontWeight={400}>
+                        {data?.to?.address}
+                      </Text>
+                    </VStack>
+                  </HStack>
                 </Box>
               </VStack>
-            </Box>
-          </HStack>
+              {user.role === userRoles.USER_HOPPER && data?.reducedMobility && (
+                <HStack space="md">
+                  <View className="rounded-full bg-[#2EC4B6] w-6 h-6 items-center justify-center">
+                    <WarningHexa />
+                  </View>
+
+                  <Text>
+                    {t("home.map_home.third_sheet.accessibility", {
+                      ns: "home",
+                    })}
+                  </Text>
+                </HStack>
+              )}
+            </View>
+          )}
           <View style={styles.panel}>
-            {filteredShortcuts.map(({ name, icon: IconItem }, i) => {
+            {(user?.role !== userRoles.USER_HOPPER
+              ? filteredShortcuts
+              : shortcutsHopper
+            ).map(({ name, icon: IconItem }, i) => {
               return (
                 <React.Fragment key={i}>
                   <Pressable key={name}>
@@ -220,48 +356,115 @@ export default function Booking() {
                       </Box>
                     </HStack>
                   </Pressable>
-                  {i !== shortcuts.length - 1 && (
-                    <Divider style={styles.divider} />
-                  )}
+                  {i !==
+                    (user?.role !== userRoles.USER_HOPPER
+                      ? filteredShortcuts
+                      : shortcutsHopper
+                    ).length -
+                      1 && <Divider style={styles.divider} />}
                 </React.Fragment>
               );
             })}
           </View>
-          <HStack className="mt-8 justify-around items-center">
-            <Text fontSize={18} fontWeight={400}>
-              {t("booking.card.commission", { ns: "booking" })}{" "}
-            </Text>
-            <Badge className="rounded-full bg-[#9FE4DD] gap-1">
-              <DolarCircle />
+          {user?.role === userRoles.USER_HOPPER ? (
+            <>
               <Text
-                fontSize={18}
-                fontWeight={600}
-                textColor={Colors.DARK_GREEN}
+                fontSize={16}
+                fontWeight={400}
+                textColor={Colors.PRIMARY}
+                className="mt-2"
+                underline
               >
-                ${data?.price ? data.price.toFixed(2) : 0}
+                Enviar link de pago
               </Text>
-            </Badge>
-          </HStack>
-          <VStack className="mt-8 gap-4">
-            <Button onPress={() => {}} stretch>
-              {t("booking.card.button", { ns: "booking" })}
-            </Button>
-            <Button
-              onPress={async () => {
-                await updateTravel(id, {
-                  status: travelStatus.CANCELLED,
-                });
-                router.back();
-              }}
-              type="ghost"
-              stretch
-              textClassName={{
-                color: "#8e8e8e",
-              }}
-            >
-              {t("booking.card.cancel", { ns: "booking" })}
-            </Button>
-          </VStack>
+              <HStack className="mt-8 justify-between items-center">
+                <Text fontSize={18} fontWeight={400}>
+                  Estado del pago
+                </Text>
+                <Badge
+                  className="rounded-full gap-1"
+                  style={{
+                    backgroundColor: paymentColor[data?.paymentStatus!],
+                  }}
+                >
+                  {/* @ts-ignore */}
+                  <Icon color={paymentTextColor[data?.paymentStatus!]} />
+                  <Text
+                    fontSize={18}
+                    fontWeight={600}
+                    textColor={paymentTextColor[data?.paymentStatus!]}
+                  >
+                    {payment[data?.paymentStatus!]}
+                  </Text>
+                </Badge>
+              </HStack>
+              <Box className="mt-8 gap-2">
+                {user.role === userRoles.USER_HOPPER && (
+                  <Button
+                    onPress={() =>
+                      router.push({
+                        pathname: HomeRoutesLink.MAP_HOPPER,
+                        params: {
+                          travel: JSON.stringify(data),
+                        },
+                      })
+                    }
+                    stretch
+                  >
+                    Ver ruta en el mapa
+                  </Button>
+                )}
+                <Button
+                  onPress={() => {}}
+                  stretch
+                  type="ghost"
+                  textClassName={{
+                    color: Colors.GRAY,
+                  }}
+                >
+                  Cancelar viaje
+                </Button>
+              </Box>
+            </>
+          ) : (
+            <>
+              <HStack className="mt-8 justify-around items-center">
+                <Text fontSize={18} fontWeight={400}>
+                  {t("booking.card.commission", { ns: "booking" })}{" "}
+                </Text>
+                <Badge className="rounded-full bg-[#9FE4DD] gap-1">
+                  <DolarCircle />
+                  <Text
+                    fontSize={18}
+                    fontWeight={600}
+                    textColor={Colors.DARK_GREEN}
+                  >
+                    ${"0"}
+                  </Text>
+                </Badge>
+              </HStack>
+              <VStack className="mt-8 gap-4">
+                <Button onPress={() => {}} stretch>
+                  {t("booking.card.button", { ns: "booking" })}
+                </Button>
+                <Button
+                  onPress={async () => {
+                    await updateTravel(id, {
+                      status: travelStatus.CANCELLED,
+                    });
+                    router.back();
+                  }}
+                  type="ghost"
+                  stretch
+                  textClassName={{
+                    color: "#8e8e8e",
+                  }}
+                >
+                  {t("booking.card.cancel", { ns: "booking" })}
+                </Button>
+              </VStack>
+            </>
+          )}
         </>
       ) : (
         <BookingEditForm
@@ -304,5 +507,10 @@ const styles = StyleSheet.create({
     height: 1,
     width: "100%",
     backgroundColor: Colors.PRIMARY,
+  },
+  divider_light: {
+    height: 1,
+    width: "100%",
+    backgroundColor: Colors.LIGHT_GRADIENT_1,
   },
 });
