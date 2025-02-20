@@ -124,8 +124,6 @@ export default function PersonalData() {
     )
   );
 
-  console.log(emptyFields);
-
   return (
     <Container>
       {emptyFields.length > 0 ? (
@@ -180,6 +178,7 @@ export default function PersonalData() {
                   }
                   touched={touched.hotel_name}
                   isDisabled={!isEditable}
+                  editable={isEditable}
                 />
 
                 <Input
@@ -196,6 +195,7 @@ export default function PersonalData() {
                     emptyFields.find((item) => item === "hotel_location")
                   }
                   touched={touched.home_address}
+                  editable={isEditable}
                   isDisabled={!isEditable}
                 />
 

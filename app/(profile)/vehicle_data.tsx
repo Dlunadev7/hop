@@ -21,6 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Colors } from "@/constants/Colors";
 import { CircleArrowRight } from "@/assets/svg";
 import { ProfileRoutesLink } from "@/utils/enum/profile.routes";
+import { reversedVehicleName, vehicleName } from "@/helpers/parser-names";
 
 export default function VehicleData() {
   const { t } = useTranslation();
@@ -84,7 +85,10 @@ export default function VehicleData() {
     setLoading(true);
     console.log(values);
     try {
-      await updateVehicleUser(user?.id!, values);
+      await updateVehicleUser(user?.id!, {
+        ...values,
+        type: selectedVehicle,
+      });
 
       router.back();
     } catch (error) {
@@ -112,15 +116,14 @@ export default function VehicleData() {
             placeholder={t("signup.step_4_hopper.fields.type.placeholder")}
             onSelect={(val) => {
               setSelectedVehicle(val);
-              handleVehicleSelect(val);
             }}
             options={vehicles.map((item) => ({
-              value: item.value,
+              value: item.type,
               label: item.value,
             }))}
             value={
               selectedVehicle
-                ? capitalizeWords(selectedVehicle)
+                ? vehicleName[selectedVehicle]
                 : capitalizeWords(data?.type || "")
             }
             disabled={!isEditable}

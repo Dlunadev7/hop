@@ -37,19 +37,7 @@ const CustomDrawerContent = () => {
       className="flex-1"
     >
       <View className="p-5">
-        <Pressable
-          onPress={() => console.log("Link a algun lugar")}
-          className="p-2"
-        >
-          <Text textColor={Colors.DARK_GREEN} fontSize={20} fontWeight={400}>
-            {t("profile.drawer.link.privacy", { ns: "profile" })}
-          </Text>
-          <Divider className="my-1" style={styles.divider} />
-        </Pressable>
-        <Pressable
-          onPress={() => console.log("Link a algun lugar")}
-          className="p-2"
-        >
+        <Pressable onPress={() => router.push("/(settings)/")} className="p-2">
           <Text textColor={Colors.DARK_GREEN} fontSize={20} fontWeight={400}>
             {t("profile.drawer.link.permissions", { ns: "profile" })}
           </Text>
@@ -58,6 +46,15 @@ const CustomDrawerContent = () => {
             orientation="horizontal"
             style={styles.divider}
           />
+        </Pressable>
+        <Pressable
+          onPress={() => console.log("Link a algun lugar")}
+          className="p-2"
+        >
+          <Text textColor={Colors.DARK_GREEN} fontSize={20} fontWeight={400}>
+            {t("profile.drawer.link.privacy", { ns: "profile" })}
+          </Text>
+          <Divider className="my-1" style={styles.divider} />
         </Pressable>
         <Pressable
           onPress={() => console.log("Link a algun lugar")}

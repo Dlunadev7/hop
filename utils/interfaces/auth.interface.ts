@@ -22,6 +22,7 @@ export interface UserDocument {
   seremiDecree: string | null;
   updated_at: string;
   vehiclePictures: string[] | null;
+  passengerInsurance: string | null;
 }
 
 export interface UserDocumentsPayload {
@@ -162,6 +163,8 @@ export interface User {
   role: "USER_HOPPER" | string;
   userInfo: UserInfo;
   userNotificationToken?: string;
+  isActive: boolean;
+  isVerified: boolean;
 }
 
 export interface VehicleUser {

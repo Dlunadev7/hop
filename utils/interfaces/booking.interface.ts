@@ -1,9 +1,11 @@
+import { paymentStatus } from "../enum/payment.enum";
 import { travelTypeValues } from "../enum/travel.enum";
+import { User } from "./auth.interface";
 
 interface Location {
   latitude: number | null;
   longitude: number | null;
-  address?: string;
+  address?: string | undefined;
 }
 
 export interface BookingData {
@@ -26,9 +28,12 @@ export interface BookingData {
   distance: number | undefined;
   price: number,
   hoppyCommission: number,
+  id: string;
+  hopperId: string
 }
 
 export interface BookingResponse {
+  paymentStatus: paymentStatus;
   from: From;
   to: From;
   distance: number;
@@ -50,6 +55,9 @@ export interface BookingResponse {
   hoppyCommission: number,
   passengerContactCountryCode: string;
   hopperCommission: number,
+  hopper: User,
+  appCommission: number;
+  reducedMobility: boolean;
 }
 
 export interface From {
@@ -76,4 +84,36 @@ export interface BookingPagination {
 export type Order = {
   ASC: string;
   DESC: string;
+}
+
+export interface BookingResponseNotification {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  from: Location;
+  to: Location;
+  distance: number;
+  time: number;
+  type: string;
+  programedTo: Date;
+  status: string;
+  passengerName: string;
+  passengerContact: string;
+  passengerContactCountryCode: string;
+  passengerRoom: string;
+  totalPassengers: string;
+  totalSuitCases: string;
+  passengerAirline: string;
+  passengerFligth: string;
+  hoppy: User;
+  hoppyCommission: number;
+  hoppyCommissionsPaid: boolean;
+  hopper: User;
+  hopperCommission: number;
+  hopperCommissionsPaid: boolean;
+  price: number;
+  tolls: number | null;
+  paymentStatus: string;
+  vehicleType: string;
 }

@@ -59,6 +59,8 @@ export default function Documentation() {
     }
   );
 
+  console.log("data", data);
+
   const {
     selectedDocuments,
     selectedImages,
@@ -282,6 +284,20 @@ export default function Documentation() {
   }, [selectedImages, selectedDocuments]);
 
   useEffect(() => {
+    // setDocumentsByItem({
+    //   seremi: data?.seremiDecree as any,
+    //   curriculum_vitae: data?.driverResume as any,
+    //   permission: data?.circulationPermit as any,
+    //   secure: data?.passengerInsurance as any,
+    //   vehiclePictures: data?.vehiclePictures as any,
+    // });
+
+    if (data?.vehiclePictures) {
+      setImagesByItem(data?.vehiclePictures as any);
+    }
+  }, [selectedImages]);
+
+  useEffect(() => {
     navigation.setOptions({
       header: () => (
         <Header
@@ -294,6 +310,8 @@ export default function Documentation() {
   }, [navigator]);
 
   const imageWidth = (width - 2 * 28) / 3;
+
+  console.log(imagesByItem);
 
   return (
     <Container>

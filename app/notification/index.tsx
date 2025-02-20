@@ -84,8 +84,6 @@ export default function Notifications() {
     });
   }, [navigator]);
 
-  console.log(notificationDataPaginated, page);
-
   return (
     <Container>
       <VStack space="md" style={styles.content} className="gap-5">

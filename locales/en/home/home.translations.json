@@ -100,5 +100,10 @@
       "description": "Be friendly and professional, keep your car clean. ¡Small details make a difference!"
     }
   },
+  "waiting_validation": {
+    "account_review": "Your account is under review",
+    "review_info": "We are reviewing your information. This process may take a few days. You will be able to log in once your account has been validated by our team.",
+    "accept": "Accept"
+  },
   "next": "Next"
 }
