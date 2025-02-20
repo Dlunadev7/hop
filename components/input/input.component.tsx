@@ -30,6 +30,7 @@ interface CustomInputProps {
   icon?: ElementType | undefined;
   pressable?: boolean;
   custom?: any;
+  multiline?: boolean;
 }
 
 export const Input = (
@@ -54,6 +55,7 @@ export const Input = (
     isRequired,
     style = {},
     custom = false,
+    multiline = false,
   } = props;
 
   const [secureTextEntry, setSecureTextEntry] = useState(props.secureTextEntry);
@@ -101,6 +103,7 @@ export const Input = (
             ? Colors.LIGHT_GRADIENT_1
             : Colors.WHITE,
         }}
+        multiline={multiline}
       />
       {rightIcon && (
         <InputSlot

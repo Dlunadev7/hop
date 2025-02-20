@@ -15,11 +15,16 @@
   "settings": {
     "title": "Settings",
     "account_state": "Account state",
+    "report_issue": "Report Issue",
+    "issue_describe": "Please describe the problem so we can help you.",
+    "issue_info": "We will be attentive to your message and will do everything possible to help you as soon as possible.",
     "activate_notification": "Activate Notification",
     "account_active": "Account active",
-    "deactivate_account": "If you deactivate your account, you will not be able to access the app's features. However, your account and data will not be deleted.\nYou can reactivate it whenever you need to."
+    "deactivate_account": "If you deactivate your account, you will not be able to access the app's features. However, your account and data will not be deleted.\nYou can reactivate it whenever you need to.",
+    "field_required": "This field is required!"
   },
   "map_sheet": "Search address...",
   "empty": "All fields are required!",
-  "accept": "Accept"
+  "accept": "Accept",
+  "send": "Send"
 }

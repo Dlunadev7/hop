@@ -7,6 +7,7 @@ export default function _layout() {
     <Stack>
       <Stack.Screen name="/" />
       <Stack.Screen name="account_state" />
+      <Stack.Screen name="report_issue" />
     </Stack>
   );
 }

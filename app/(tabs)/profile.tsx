@@ -57,7 +57,7 @@ const CustomDrawerContent = () => {
           <Divider className="my-1" style={styles.divider} />
         </Pressable>
         <Pressable
-          onPress={() => console.log("Link a algun lugar")}
+          onPress={() => router.push("/(settings)/report_issue")}
           className="p-2"
         >
           <Text textColor={Colors.DARK_GREEN} fontSize={20} fontWeight={400}>

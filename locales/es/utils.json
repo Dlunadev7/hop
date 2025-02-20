@@ -15,11 +15,16 @@
   "settings": {
     "title": "Ajustes",
     "account_state": "Estado de la cuenta",
+    "report_issue": "Reportar un problema",
+    "issue_describe": "Describe el problema para que podamos ayudarte.",
+    "issue_info": "Estaremos atentos a tu mensaje y haremos todo lo posible para ayudarte lo antes posible.",
     "activate_notification": "Activar notificaciones",
     "account_active": "Cuenta activa",
-    "deactivate_account": "Si desactivas tu cuenta, no podrás acceder a las funciones de la aplicación. Sin embargo, tu cuenta y tus datos no serán eliminados.\nPodrás reactivarla cuando lo necesites."
+    "deactivate_account": "Si desactivas tu cuenta, no podrás acceder a las funciones de la aplicación. Sin embargo, tu cuenta y tus datos no serán eliminados.\nPodrás reactivarla cuando lo necesites.",
+    "field_required": "Este campo es requerido!"
   },
   "map_sheet": "Buscar dirección...",
   "empty": "Todos los campos son requeridos!",
-  "accept": "Acceptar"
+  "accept": "Acceptar",
+  "send": "Enviar"
 }
