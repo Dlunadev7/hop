@@ -148,6 +148,7 @@ export default function Wallet() {
     PICKUP: "Pick Up",
     DROPOFF: "Drop Off",
     PROGRAMED: "Programmed",
+    INSTANT: "",
   };
 
   const dataChart = [50, 10, 40, 95, 85, 91, 35, 53, 24, 0];
@@ -161,6 +162,7 @@ export default function Wallet() {
     PICKUP: Colors.PRIMARY,
     DROPOFF: Colors.PRIMARY,
     PROGRAMED: Colors.LIGHT_YELLOW,
+    INSTANT: "",
   };
 
   const renderItem = ({ item }: any) => {

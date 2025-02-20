@@ -2,38 +2,41 @@ import { StyleSheet, View } from "react-native";
 import React from "react";
 import { Hop } from "@/assets/svg";
 import { AssetsImages } from "@/assets/images";
-import { Text } from "@/components/ui/text";
-import { Button, ButtonText } from "@/components/ui/button";
 import { VStack } from "@/components/ui/vstack";
 import { Image } from "react-native";
 import { router } from "expo-router";
-import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 import { LinearGradient } from "@/components";
 import { Colors } from "@/constants/Colors";
+import { Text } from "@/components/text/text.component";
+import { Button } from "@/components/button/button.component";
+import { AuthRoutesLink } from "@/utils/enum/auth.routes";
+import { useTranslation } from "react-i18next";
 
 export default function FinishRecoverPassword() {
+  const { t } = useTranslation();
   return (
     <LinearGradient>
       <View style={styles.container}>
         <VStack space="4xl" className="items-center mb-9">
-          <Hop color={Colors.PRIMARY} />
-          <Text className="text-2xl font-semibold text-center">
-            Tu contraseña se cambió correctamente{" "}
+          <Hop color={Colors.SECONDARY} />
+          <Text
+            fontSize={28}
+            fontWeight={600}
+            textAlign="center"
+            textColor={Colors.DARK_GREEN}
+          >
+            {t("new_password.password_changed_successfully")}
           </Text>
         </VStack>
         <Image source={AssetsImages.success} />
-        <VStack space="lg" className="mt-28">
+        <VStack space="lg" className="mt-28 w-full">
           <Button
-            variant="solid"
-            className="rounded-xl bg-[#2EC4B6] self-center"
             onPress={() => {
-              router.dismissAll();
               router.replace(AuthRoutesLink.SIGN_IN);
             }}
+            stretch
           >
-            <ButtonText className="font-semibold text-lg">
-              Ir al inicio
-            </ButtonText>
+            {t("new_password.go_to_home")}
           </Button>
         </VStack>
       </View>

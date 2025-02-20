@@ -129,6 +129,8 @@ export default function TabLayout() {
     };
   }, [socket, data?.id]);
 
+  console.log(isDrawerOpen);
+
   return (
     <View style={styles.tabbar_container}>
       <Tabs

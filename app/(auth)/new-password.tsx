@@ -1,9 +1,5 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
-import { Hop } from "@/assets/svg";
-import { Text } from "@/components/ui/text";
-import { Button, ButtonText } from "@/components/ui/button";
-import { Colors } from "@/constants/Colors";
 import { VStack } from "@/components/ui/vstack";
 import { Formik } from "formik";
 import { Box } from "@/components/ui/box";
@@ -12,25 +8,56 @@ import validationSchema from "@/schemas/new-password";
 import { router } from "expo-router";
 import { AuthRoutesLink } from "@/utils/enum/auth.routes";
 import { Input, LinearGradient } from "@/components";
+import { Text } from "@/components/text/text.component";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/button/button.component";
+import { getUserLogged, updateUser } from "@/services/auth.service";
+import useSWR from "swr";
+import { updateUserData } from "@/services/user.service";
+import { Colors } from "@/constants/Colors";
+import { useAuth } from "@/context/auth.context";
+import { useDrawer } from "@/context/drawer.context";
 
 export default function NewPassword() {
+  const { t } = useTranslation();
+  const { clearToken } = useAuth();
+  const { data } = useSWR("/user/logged", getUserLogged);
+  const { isDrawerOpen, setIsDrawerOpen } = useDrawer();
+
+  const schema = validationSchema(t);
+
+  const handleResetPassword = async (values: { password: string }) => {
+    router.dismissAll();
+    await updateUserData(data?.id!, {
+      password: values.password!,
+      email: data?.email!,
+    });
+    clearToken();
+    setIsDrawerOpen(false);
+  };
+
   return (
     <LinearGradient>
       <KeyboardContainer>
         <View style={styles.container}>
           <VStack space="lg" className="items-center mb-9">
-            <Hop color={Colors.PRIMARY} />
-            <Text className="text-2xl font-semibold mt-12">
-              Crea una nueva contraseña
+            <Text
+              fontSize={28}
+              fontWeight={600}
+              textAlign="center"
+              textColor={Colors.DARK_GREEN}
+            >
+              {t("new_password.create_new_password", { ns: "auth" })}
             </Text>
-            <Text className="text-center">
-              Completa los siguientes campos para cambiar tu contraseña
+            <Text fontSize={16} fontWeight={400} textAlign="center">
+              {t("new_password.fill_fields_to_change_password", { ns: "auth" })}
             </Text>
           </VStack>
           <Formik
             initialValues={{ password: "", confirmPassword: "" }}
-            validationSchema={validationSchema}
+            validationSchema={schema}
             onSubmit={(values) => {
+              handleResetPassword(values);
               router.replace(AuthRoutesLink.FINISH_RECOVER_PASSWORD);
             }}
           >
@@ -46,7 +73,7 @@ export default function NewPassword() {
                 <VStack space="lg">
                   <Box>
                     <Input
-                      label="Crea una nueva contraseña"
+                      label={t("new_password.new_password_label")}
                       placeholder=""
                       onChangeText={handleChange("password")}
                       onBlur={handleBlur("password")}
@@ -56,15 +83,10 @@ export default function NewPassword() {
                       secureTextEntry
                       rightIcon
                     />
-                    <Text className={`text-xs font-light text-[#8E8E8E] mt-2`}>
-                      * Este campo debe contener entre 8 y 20 caracteres{"\n"}
-                      {"  "}
-                      alfanuméricos.
-                    </Text>
                   </Box>
 
                   <Input
-                    label="Confirmar contraseña"
+                    label={t("new_password.confirm_password_label")}
                     placeholder=""
                     secureTextEntry
                     onChangeText={handleChange("confirmPassword")}
@@ -76,16 +98,8 @@ export default function NewPassword() {
                   />
                 </VStack>
                 <VStack space="lg" className="mt-28">
-                  <Button
-                    variant="solid"
-                    className="rounded-xl bg-[#2EC4B6] self-center"
-                    onPress={() => {
-                      handleSubmit();
-                    }}
-                  >
-                    <ButtonText className="font-semibold text-lg">
-                      Cambiar contraseña
-                    </ButtonText>
+                  <Button onPress={() => handleSubmit()}>
+                    {t("new_password.change_password_button", { ns: "auth" })}
                   </Button>
                 </VStack>
               </>

@@ -48,7 +48,7 @@ const CustomDrawerContent = () => {
           />
         </Pressable>
         <Pressable
-          onPress={() => console.log("Link a algun lugar")}
+          onPress={() => router.push(AuthRoutesLink.NEW_PASSWORD)}
           className="p-2"
         >
           <Text textColor={Colors.DARK_GREEN} fontSize={20} fontWeight={400}>

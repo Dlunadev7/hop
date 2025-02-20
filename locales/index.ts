@@ -33,6 +33,9 @@ import BookingEs from './es/booking/booking.translations.json';
 import WalletEn from './en/wallet/wallet.translations.json';
 import WalletEs from './es/wallet/wallet.translations.json';
 
+import NewPasswordEn from './en/auth/new-password.json';
+import NewPasswordEs from './es/auth/new-password.json';
+
 
 export {
   EntryTranslationEn,
@@ -58,5 +61,7 @@ export {
   BookingEn,
   BookingEs,
   WalletEn,
-  WalletEs
+  WalletEs,
+  NewPasswordEn,
+  NewPasswordEs
 }
