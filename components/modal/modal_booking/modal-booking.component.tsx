@@ -49,8 +49,8 @@ export const ModalBooking = ({
   user: User;
 }) => {
   const translatedStatus =
-    status[travel.metadata.travel.type as travelTypeValues] ||
-    travel.metadata.travel.type;
+    status[travel.metadata.travel?.type as travelTypeValues] ||
+    travel.metadata.travel?.type;
 
   const { date, time } = formattedDate(travel.metadata.travel.programedTo);
 

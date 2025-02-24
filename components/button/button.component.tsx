@@ -68,7 +68,10 @@ export const Button: React.FC<GradientButtonProps> = ({
           style={[styles.button, style, { width: width }]}
           disabled={disabled}
         >
-          <LinearGradient colors={colors} style={styles.gradient}>
+          <LinearGradient
+            colors={disabled ? [Colors.GRAY, Colors.GRAY] : colors}
+            style={styles.gradient}
+          >
             {loading ? (
               <ActivityIndicator color={Colors.WHITE} />
             ) : (

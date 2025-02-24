@@ -225,7 +225,13 @@ export default function Step2(props: formProps) {
                   ns: "auth",
                 })}
                 onBlur={handleBlur("bank_account")}
-                onChangeText={handleChange("bank_account")}
+                onChangeText={(text) => {
+                  const numericText = text.replace(/[^0-9]/g, "");
+                  if (text.trim().length > 10) {
+                    return;
+                  }
+                  handleChange("bank_account")(numericText);
+                }}
                 placeholder=""
                 value={values.bank_account}
                 error={touched.bank_account && errors.bank_account}

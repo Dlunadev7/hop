@@ -83,7 +83,10 @@ export const Step2Booking = (props: {
                     ns: "home",
                   })}
                   onBlur={handleBlur("contact")}
-                  onChangeText={handleChange("contact")}
+                  onChangeText={(text: string) => {
+                    const numericText = text.replace(/[^0-9]/g, "");
+                    handleChange("contact")(numericText);
+                  }}
                   value={values.contact}
                   placeholder=""
                   error={touched.contact && errors.contact}

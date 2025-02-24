@@ -54,8 +54,6 @@ export default function HomeScreen() {
     });
   }, [navigator, data]);
 
-  console.log(token, data?.id);
-
   const emptyFields = checkEmptyFields(
     data?.userInfo!,
     keysToCheck.filter((item) =>
@@ -134,8 +132,6 @@ export default function HomeScreen() {
       router.replace(AuthRoutesLink.WAITING_VALIDATION);
     }
   }, [data?.isActive]);
-
-  console.log(data);
 
   return (
     <View className="flex-1">

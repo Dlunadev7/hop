@@ -87,9 +87,11 @@
     "fullName": "Fullname is required",
     "contact": "Contact is required",
     "roomNumber": "Room number is required",
-    "flightNumber": "Flight number is required",
     "airline": "Airline is required",
     "passengers": "Number of passengers is required",
-    "luggages": "Number of luggages is required"
+    "luggages": "Number of luggages is required",
+    "flightNumber": "The flight number is required.",
+    "flightNumberAlphanumeric": "The flight number must contain only alphanumeric characters.",
+    "flightNumberMaxLength": "The flight number cannot be longer than 6 characters."
   }
 }

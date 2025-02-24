@@ -98,7 +98,10 @@ export const Step2BookingPickup = (props: {
                       }
                     )}
                     onBlur={handleBlur("contact")}
-                    onChangeText={handleChange("contact")}
+                    onChangeText={(text: string) => {
+                      const numericText = text.replace(/[^0-9]/g, "");
+                      handleChange("contact")(numericText);
+                    }}
                     value={values.contact}
                     placeholder=""
                     error={touched.contact && errors.contact}
@@ -128,7 +131,9 @@ export const Step2BookingPickup = (props: {
                       }
                     )}
                     onBlur={handleBlur("flightNumber")}
-                    onChangeText={handleChange("flightNumber")}
+                    onChangeText={(text: string) => {
+                      handleChange("flightNumber")(text);
+                    }}
                     value={values.flightNumber}
                     placeholder=""
                     error={touched.flightNumber && errors.flightNumber}

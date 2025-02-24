@@ -21,7 +21,7 @@ export default function SignUp() {
   const queryParams = useRoute().params as any;
   const { t } = useTranslation();
   const [step, setStep] = useState(
-    queryParams.step ? Number(queryParams.step) : 2
+    queryParams.step ? Number(queryParams.step) : 1
   );
   const [id, setId] = useState("");
   const { state } = useAuth();

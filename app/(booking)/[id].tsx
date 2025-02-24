@@ -66,7 +66,7 @@ export default function Booking() {
   const { t } = useTranslation();
   const { id } = useRoute().params as { id: string };
   const { data: user } = useSWR("/user/logged", getUserLogged);
-  const { data } = useSWR("/travel/one", () => getTravelById(id), {
+  const { data, mutate } = useSWR("/travel/one", () => getTravelById(id), {
     revalidateOnMount: true,
   });
   const { data: userHoppy } = useSWR(
@@ -452,6 +452,7 @@ export default function Booking() {
                     await updateTravel(id, {
                       status: travelStatus.CANCELLED,
                     });
+                    mutate();
                     router.back();
                   }}
                   type="ghost"

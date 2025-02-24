@@ -326,11 +326,13 @@ export const Step1Booking = (props: Step1BookingProps) => {
             {t("home.map_home.first_sheet.mark_map", { ns: "home" })}
           </Text>
         </Pressable>
-        {isDestinationValid && times && dates && (
-          <Button onPress={() => handleNextStep()} stretch>
-            {t("home.next", { ns: "home" })}
-          </Button>
-        )}
+        <Button
+          onPress={() => handleNextStep()}
+          stretch
+          disabled={!(isDestinationValid && times && dates)}
+        >
+          {t("home.next", { ns: "home" })}
+        </Button>
       </Pressable>
       {showCalendar && (
         <Calendar

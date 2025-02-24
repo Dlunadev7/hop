@@ -38,6 +38,7 @@ import useSWR from "swr";
 import { getUserLogged, updateUserDocuments } from "@/services/auth.service";
 import { getUserDocumentation } from "@/services/user.service";
 import { Button } from "@/components/button/button.component";
+import WebView from "react-native-webview";
 
 const { width } = Dimensions.get("window");
 
@@ -59,8 +60,6 @@ export default function Documentation() {
     }
   );
 
-  console.log("data", data);
-
   const {
     selectedDocuments,
     selectedImages,
@@ -80,14 +79,26 @@ export default function Documentation() {
   const [openActionSheetIndex, setOpenActionSheetIndex] = useState<
     number | null
   >(null);
-  const [imagesByItem, setImagesByItem] = useState<Record<number, any[]>>({});
-
+  const [openActionSheetPdf, setOpenActionSheetPdf] = useState<number | null>(
+    null
+  );
+  const [imagesByItem, setImagesByItem] = useState<any>([]);
+  const [selectedPdf, setSelectedPdf] = useState<string>("");
   const handleOpenActionSheet = (index: number) => {
     setOpenActionSheetIndex(index);
   };
 
   const handleCloseActionSheet = () => {
     setOpenActionSheetIndex(null);
+  };
+
+  const handleOpenPdfActionSheet = (index: number) => {
+    setOpenActionSheetIndex(index);
+  };
+
+  const handleClosePdfActionSheet = () => {
+    setOpenActionSheetIndex(null);
+    setSelectedPdf("");
   };
 
   const handlePickDocument = (
@@ -148,25 +159,25 @@ export default function Documentation() {
     }
   };
 
-  const handleRemoveImage = (uri: string, index: number) => {
-    setImagesByItem((prev) => {
-      const updatedImages = prev[index].filter((image) => image.uri !== uri);
-      return {
-        ...prev,
-        [index]: updatedImages,
-      };
-    });
-    removeImage(index, {
-      uri: uri,
-      itemId: index,
-      name: "",
-    });
-  };
+  // const handleRemoveImage = (uri: string, index: number) => {
+  //   setImagesByItem((prev) => {
+  //     const updatedImages = prev[index].filter((image) => image.uri !== uri);
+  //     return {
+  //       ...prev,
+  //       [index]: updatedImages,
+  //     };
+  //   });
+  //   removeImage(index, {
+  //     uri: uri,
+  //     itemId: index,
+  //     name: "",
+  //   });
+  // };
 
   const handleSubmitDocuments = async () => {
     setLoading(true);
     try {
-      if (!imagesByItem[4]) {
+      if (!imagesByItem) {
         console.log("No se encontraron imágenes en imagesByItem[4]");
         return;
       }
@@ -186,35 +197,35 @@ export default function Documentation() {
         return;
       }
 
-      const images = imagesByItem[4].map(
+      const images = imagesByItem?.map(
         (doc: { uri: string; name: string; type: string }) => ({
           name: doc.name,
           uri: doc.uri,
           type: doc.type,
         })
       );
-      const seremiDoc = documentsByItem["seremi"].map(
+      const seremiDoc = documentsByItem["seremi"]?.map(
         (doc: { uri: string; name: string; type: string }) => ({
           name: doc.name,
           uri: doc.uri,
           type: doc.type,
         })
       );
-      const driverResume = documentsByItem["curriculum_vitae"].map(
+      const driverResume = documentsByItem["curriculum_vitae"]?.map(
         (doc: { uri: string; name: string; type: string }) => ({
           name: doc.name,
           uri: doc.uri,
           type: doc.type,
         })
       );
-      const circulationPermit = documentsByItem["permission"].map(
+      const circulationPermit = documentsByItem["permission"]?.map(
         (doc: { uri: string; name: string; type: string }) => ({
           name: doc.name,
           uri: doc.uri,
           type: doc.type,
         })
       );
-      const passengerInsurance = documentsByItem["secure"].map(
+      const passengerInsurance = documentsByItem["secure"]?.map(
         (doc: { uri: string; name: string; type: string }) => ({
           name: doc.name,
           uri: doc.uri,
@@ -231,6 +242,7 @@ export default function Documentation() {
       };
 
       await updateUserDocuments(user?.id!, payload);
+      router.back();
     } catch (error) {
       showToast({
         message: t("server_error", { ns: "utils" }),
@@ -268,12 +280,14 @@ export default function Documentation() {
       });
     }
     if (selectedImages.length > 0) {
-      setImagesByItem((prev) => {
+      setImagesByItem((prev: any) => {
         const itemId = selectedImages[0]?.itemId;
         const currentImages = prev[itemId] || [];
         const newImages = selectedImages.filter(
           (img) =>
-            !currentImages.some((existingImg) => existingImg.uri === img.uri)
+            !currentImages.some(
+              (existingImg: { uri: string }) => existingImg.uri === img.uri
+            )
         );
         return {
           ...prev,
@@ -284,18 +298,26 @@ export default function Documentation() {
   }, [selectedImages, selectedDocuments]);
 
   useEffect(() => {
-    // setDocumentsByItem({
-    //   seremi: data?.seremiDecree as any,
-    //   curriculum_vitae: data?.driverResume as any,
-    //   permission: data?.circulationPermit as any,
-    //   secure: data?.passengerInsurance as any,
-    //   vehiclePictures: data?.vehiclePictures as any,
-    // });
+    setDocumentsByItem({
+      seremi: data?.seremiDecree && ([{ name: data?.seremiDecree }] as any),
+      curriculum_vitae:
+        data?.driverResume && ([{ name: data?.driverResume }] as any),
+      permission:
+        data?.circulationPermit && ([{ name: data?.circulationPermit }] as any),
+      secure:
+        data?.passengerInsurance &&
+        ([{ name: data?.passengerInsurance }] as any),
+      vehiclePictures:
+        data?.vehiclePictures && ([{ name: data?.vehiclePictures }] as any),
+    });
 
     if (data?.vehiclePictures) {
-      setImagesByItem(data?.vehiclePictures as any);
+      setImagesByItem([
+        ...data?.vehiclePictures!,
+        ...selectedImages.map((item) => item.uri),
+      ] as any);
     }
-  }, [selectedImages]);
+  }, [selectedImages, data, selectedImages]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -314,176 +336,207 @@ export default function Documentation() {
   console.log(imagesByItem);
 
   return (
-    <Container>
-      <Box style={styles.content}>
-        <VStack space="md" className="mb-8">
-          {documentation.map((documentation, index) => (
-            <Box key={index} className="gap-3">
-              <HStack className="gap-2">
-                <Text
-                  fontWeight={600}
-                  fontSize={14}
-                  textColor={Colors.DARK_GREEN}
-                >
-                  {documentation.value}
-                </Text>
-                {documentation.info && (
-                  <Pressable
-                    className="w-full relative"
-                    onPress={() => setShowTooltip(true)}
+    <>
+      <Container>
+        <Box style={styles.content}>
+          <VStack space="md" className="mb-8">
+            {documentation.map((documentation, index) => (
+              <Box key={index} className="gap-3">
+                <HStack className="gap-2">
+                  <Text
+                    fontWeight={600}
+                    fontSize={14}
+                    textColor={Colors.DARK_GREEN}
                   >
-                    <Icon as={AlertCircleIcon} color={Colors.PRIMARY} />
-                    {showTooltip && (
-                      <Tooltip
-                        documentation={documentation}
-                        setShowTooltip={setShowTooltip}
-                      />
-                    )}
-                  </Pressable>
-                )}
-              </HStack>
-              <Pressable
-                style={{ backgroundColor: Colors.PRIMARY }}
-                className="py-3 px-7 h-11 w-full rounded-xl flex-row items-center gap-2 self-center justify-center"
-                onPress={() => {
-                  if (documentsByItem[documentation.name]?.length === 1) {
-                    showToast({
-                      message: t("max_documents_reached", { ns: "utils" }),
-                      action: "error",
-                      duration: 3000,
-                      placement: "bottom",
-                    });
-                    return;
-                  }
-                  if (documentation.type === "pdf") {
-                    handlePickDocument(
-                      index,
-                      "application/pdf",
-                      true,
-                      documentation.name
-                    );
-                  } else {
-                    handleOpenActionSheet(index);
-                  }
-                }}
-              >
-                <Text textColor={Colors.DARK_GREEN} fontWeight={600}>
-                  {t("signup.step_3.upload")}
-                </Text>
-                <DocumentUpload color={Colors.DARK_GREEN} />
-              </Pressable>
-              {index === 4 &&
-                data?.vehiclePictures &&
-                data?.vehiclePictures.length > 0 && (
-                  <ScrollView contentContainerStyle={styles.gridContainer}>
-                    <HStack style={styles.row}>
-                      {data.vehiclePictures.map((image) => (
-                        <View
-                          style={[styles.imageWrapper, { width: imageWidth }]}
-                          key={image}
-                        >
-                          <Image
-                            className="rounded-lg"
-                            source={{ uri: image }}
-                            style={[styles.image, { width: imageWidth }]}
-                          />
-                        </View>
-                      ))}
-                    </HStack>
-                  </ScrollView>
-                )}
-              {documentsByItem[documentation.name] &&
-                documentsByItem[documentation.name].length > 0 && (
-                  <View className="gap-4">
-                    {documentsByItem[documentation.name].map((doc) => (
-                      <View
-                        key={doc?.uri ?? ""}
-                        className="flex-row items-center justify-between gap-2"
-                      >
-                        <Box className="flex-row gap-2 items-center">
-                          <SuccessRounded />
-                          <Text className="w-[80%]">{doc?.name ?? ""}</Text>
-                        </Box>
+                    {documentation.value}
+                  </Text>
+                  {documentation.info && (
+                    <Pressable
+                      className="w-full relative"
+                      onPress={() => setShowTooltip(true)}
+                    >
+                      <Icon as={AlertCircleIcon} color={Colors.PRIMARY} />
+                      {showTooltip && (
+                        <Tooltip
+                          documentation={documentation}
+                          setShowTooltip={setShowTooltip}
+                        />
+                      )}
+                    </Pressable>
+                  )}
+                </HStack>
+                <Pressable
+                  style={{ backgroundColor: Colors.PRIMARY }}
+                  className="py-3 px-7 h-11 w-full rounded-xl flex-row items-center gap-2 self-center justify-center"
+                  onPress={() => {
+                    if (documentsByItem[documentation.name]?.length === 1) {
+                      showToast({
+                        message: t("max_documents_reached", { ns: "utils" }),
+                        action: "error",
+                        duration: 3000,
+                        placement: "bottom",
+                      });
+                      return;
+                    }
+                    if (documentation.type === "pdf") {
+                      handlePickDocument(
+                        index,
+                        "application/pdf",
+                        true,
+                        documentation.name
+                      );
+                    } else {
+                      handleOpenActionSheet(index);
+                    }
+                  }}
+                >
+                  <Text textColor={Colors.DARK_GREEN} fontWeight={600}>
+                    {t("signup.step_3.upload")}
+                  </Text>
+                  <DocumentUpload color={Colors.DARK_GREEN} />
+                </Pressable>
+                {index === 4 &&
+                  data?.vehiclePictures &&
+                  data?.vehiclePictures.length > 0 && (
+                    <ScrollView contentContainerStyle={styles.gridContainer}>
+                      <HStack style={styles.row}>
+                        {imagesByItem?.map((image: string) => {
+                          console.log(image);
+                          return (
+                            <View
+                              style={[
+                                styles.imageWrapper,
+                                { width: imageWidth },
+                              ]}
+                              key={image}
+                            >
+                              <Image
+                                className="rounded-lg"
+                                source={{ uri: image }}
+                                style={[styles.image, { width: imageWidth }]}
+                              />
+                            </View>
+                          );
+                        })}
+                      </HStack>
+                    </ScrollView>
+                  )}
+                {documentsByItem[documentation.name] &&
+                  documentsByItem[documentation.name]?.length > 0 && (
+                    <View className="gap-4">
+                      {documentsByItem[documentation.name]?.map((doc) => (
                         <Pressable
-                          onPress={() =>
-                            handleRemoveDocument(
-                              documentation.name,
-                              index,
-                              doc?.uri ?? ""
-                            )
-                          }
+                          key={doc?.uri ?? ""}
+                          className="flex-row items-center justify-between gap-2"
+                          onPress={() => setSelectedPdf(doc?.name ?? "")}
                         >
-                          <Icon
-                            as={CloseCircleIcon}
-                            className="text-typography-500"
-                            color={Colors.PRIMARY}
-                          />
+                          <Box className="flex-row gap-2 items-center">
+                            <SuccessRounded />
+                            <Text className="w-[80%]">
+                              {doc?.name?.split("/")?.pop() ?? ""}
+                            </Text>
+                          </Box>
+                          <Pressable
+                            onPress={() =>
+                              handleRemoveDocument(
+                                documentation.name,
+                                index,
+                                doc?.uri ?? ""
+                              )
+                            }
+                          >
+                            <Icon
+                              as={CloseCircleIcon}
+                              className="text-typography-500"
+                              color={Colors.PRIMARY}
+                            />
+                          </Pressable>
                         </Pressable>
-                      </View>
-                    ))}
-                  </View>
-                )}
-              <Actionsheet
-                isOpen={openActionSheetIndex === index}
-                onClose={handleCloseActionSheet}
-                snapPoints={[25]}
-                key={`actionsheet-${index}`}
-              >
-                <ActionsheetBackdrop />
-                <ActionsheetContent>
-                  <ActionsheetDragIndicatorWrapper>
-                    <ActionsheetDragIndicator />
-                  </ActionsheetDragIndicatorWrapper>
-                  <HStack className="flex-1 justify-center w-full m-auto px-6 py-4 gap-6">
-                    <Pressable
-                      className="flex-1 h-auto justify-center items-center gap-3"
-                      onPress={() =>
-                        handleActionSheetSelection(
-                          "image",
-                          index,
-                          documentation.name
-                        )
-                      }
-                    >
-                      <Text className="text-lg font-semibold text-center text-gray-700">
-                        {t("gallery", { ns: "utils" })}
-                      </Text>
-                      <Gallery color={Colors.PRIMARY} width={35} height={35} />
-                    </Pressable>
-                    <Pressable
-                      className="flex-1 h-auto justify-center items-center gap-3"
-                      onPress={() =>
-                        handleActionSheetSelection(
-                          "document",
-                          index,
-                          documentation.name
-                        )
-                      }
-                    >
-                      <Text className="text-lg font-semibold text-center text-gray-700">
-                        {t("document", { ns: "utils" })}
-                      </Text>
-                      <Documents
-                        color={Colors.PRIMARY}
-                        width={35}
-                        height={35}
-                      />
-                    </Pressable>
-                  </HStack>
-                </ActionsheetContent>
-              </Actionsheet>
-            </Box>
-          ))}
-        </VStack>
-        <Button onPress={() => handleSubmitDocuments()}>
-          {loading ? (
-            <ActivityIndicator color={Colors.WHITE} />
-          ) : (
-            t("profile.personal_data.button", { ns: "profile" })
-          )}
-        </Button>
-      </Box>
-    </Container>
+                      ))}
+                    </View>
+                  )}
+                <Actionsheet
+                  isOpen={openActionSheetIndex === index}
+                  onClose={handleCloseActionSheet}
+                  snapPoints={[25]}
+                  key={`actionsheet-${index}`}
+                >
+                  <ActionsheetBackdrop />
+                  <ActionsheetContent>
+                    <ActionsheetDragIndicatorWrapper>
+                      <ActionsheetDragIndicator />
+                    </ActionsheetDragIndicatorWrapper>
+                    <HStack className="flex-1 justify-center w-full m-auto px-6 py-4 gap-6">
+                      <Pressable
+                        className="flex-1 h-auto justify-center items-center gap-3"
+                        onPress={() =>
+                          handleActionSheetSelection(
+                            "image",
+                            index,
+                            documentation.name
+                          )
+                        }
+                      >
+                        <Text className="text-lg font-semibold text-center text-gray-700">
+                          {t("gallery", { ns: "utils" })}
+                        </Text>
+                        <Gallery
+                          color={Colors.PRIMARY}
+                          width={35}
+                          height={35}
+                        />
+                      </Pressable>
+                      <Pressable
+                        className="flex-1 h-auto justify-center items-center gap-3"
+                        onPress={() =>
+                          handleActionSheetSelection(
+                            "document",
+                            index,
+                            documentation.name
+                          )
+                        }
+                      >
+                        <Text className="text-lg font-semibold text-center text-gray-700">
+                          {t("document", { ns: "utils" })}
+                        </Text>
+                        <Documents
+                          color={Colors.PRIMARY}
+                          width={35}
+                          height={35}
+                        />
+                      </Pressable>
+                    </HStack>
+                  </ActionsheetContent>
+                </Actionsheet>
+              </Box>
+            ))}
+          </VStack>
+          <Button onPress={() => handleSubmitDocuments()}>
+            {loading ? (
+              <ActivityIndicator color={Colors.WHITE} />
+            ) : (
+              t("profile.personal_data.button", { ns: "profile" })
+            )}
+          </Button>
+        </Box>
+      </Container>
+      <Actionsheet
+        isOpen={selectedPdf !== "" && selectedPdf.startsWith("http")}
+        onClose={handleClosePdfActionSheet}
+        snapPoints={[75]}
+        key={`actionsheet`}
+      >
+        <ActionsheetBackdrop />
+        <ActionsheetContent>
+          <ActionsheetDragIndicatorWrapper>
+            <ActionsheetDragIndicator />
+          </ActionsheetDragIndicatorWrapper>
+          <HStack className="flex-1 justify-center w-full m-auto px-6 py-4 gap-6">
+            <WebView source={{ uri: selectedPdf }} className="flex-1" />
+          </HStack>
+        </ActionsheetContent>
+      </Actionsheet>
+    </>
   );
 }
 

@@ -58,7 +58,10 @@ export const Booking = () => {
   useEffect(() => {
     if (data?.result) {
       setBookingDataPaginated((prevData) => {
-        const newData = [...prevData];
+        const newData = prevData.filter((existingItem) =>
+          data.result.some((newItem) => newItem.id === existingItem.id)
+        );
+
         data.result.forEach((newItem) => {
           const existingItemIndex = newData.findIndex(
             (existingItem) => existingItem.id === newItem.id

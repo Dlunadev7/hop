@@ -108,7 +108,9 @@ export const Input = (
       {rightIcon && (
         <InputSlot
           className="pr-3"
-          onPress={() => setSecureTextEntry(!secureTextEntry)}
+          onPress={() =>
+            props.secureTextEntry ? setSecureTextEntry(!secureTextEntry) : {}
+          }
         >
           <InputIcon
             as={icon ? icon : secureTextEntry ? EyeIcon : EyeOffIcon}

@@ -87,9 +87,11 @@
     "fullName": "El nombre completo es obligatorio",
     "contact": "El contacto es obligatorio",
     "roomNumber": "El número de habitación es obligatorio",
-    "flightNumber": "El número de vuelo es obligatorio",
     "airline": "La aerolina es obligatoria",
     "passengers": "El número de pasajeros es obligatorio",
-    "luggages": "La cantidad de equipaje es obligatoria"
+    "luggages": "La cantidad de equipaje es obligatoria",
+    "flightNumber": "El número de vuelo es obligatorio.",
+    "flightNumberAlphanumeric": "El número de vuelo debe contener solo caracteres alfanuméricos.",
+    "flightNumberMaxLength": "El número de vuelo no puede tener más de 6 caracteres."
   }
 }

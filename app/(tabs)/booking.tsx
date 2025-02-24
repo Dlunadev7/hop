@@ -36,9 +36,8 @@ export default function Booking() {
   const { t } = useTranslation();
   const { data: dataUser } = useSWR("/user/logged", getUserLogged);
   const [page, setPage] = useState(0);
-  const [bookingDataPaginated, setBookingDataPaginated] = useState<any[]>([]);
   const { token } = useAuth();
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     ["/travels/bookings", page],
     () =>
       getTravels(
@@ -55,6 +54,9 @@ export default function Booking() {
       revalidateOnMount: true,
     }
   );
+  const [bookingDataPaginated, setBookingDataPaginated] = useState<any[]>(
+    data?.result || []
+  );
 
   useEffect(() => {
     if (data?.result) {
@@ -65,7 +67,10 @@ export default function Booking() {
   useEffect(() => {
     if (data?.result) {
       setBookingDataPaginated((prevData) => {
-        const newData = [...prevData];
+        const newData = prevData.filter((existingItem) =>
+          data.result.some((newItem) => newItem.id === existingItem.id)
+        );
+
         data.result.forEach((newItem) => {
           const existingItemIndex = newData.findIndex(
             (existingItem) => existingItem.id === newItem.id

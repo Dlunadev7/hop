@@ -6,7 +6,7 @@
   "step_message": "To request registration, you need to complete the following fields",
   "step_message_hopper": "To request registration you must upload the indicated documents",
   "step_message_final": "Follow the link to confirm your identity and complete the registration request",
-  "step_label": "Step {{step}} of 4",
+  "step_label": "Step {{step}} of 5",
   "step_1": {
     "title": "Personal information",
     "name": {
