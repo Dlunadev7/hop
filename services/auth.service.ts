@@ -6,10 +6,8 @@ import axios, { AxiosResponse } from 'axios';
 export const createUser = async (userData: Partial<User & UserInfo>): Promise<User> => {
   try {
     const response: AxiosResponse = await axiosInstance.post('/user', userData);
-    console.log(response)
     return response.data;
   } catch (error: unknown) {
-    console.log(error)
     if (axios.isAxiosError(error)) {
       throw error.response || error;
     }
@@ -146,8 +144,6 @@ export const updateUserDocuments = async (
 
     formData.append("document", documentType);
 
-
-    console.log(`/user-documents/${id}`)
 
     try {
       await axiosInstance.patch(`/user-documents/${id}`, formData, {

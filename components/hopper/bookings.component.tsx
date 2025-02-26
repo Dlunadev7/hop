@@ -63,6 +63,7 @@ export const BookingsHopper = () => {
       revalidateOnMount: true,
     }
   );
+
   useEffect(() => {
     if (travel?.result) {
       setPage(0);
@@ -70,10 +71,10 @@ export const BookingsHopper = () => {
   }, [travel?.result]);
 
   useEffect(() => {
-    if (travel?.result) {
+    if (Boolean(travel?.result.length)) {
       setBookingDataPaginated((prevData) => {
         const newData = [...prevData];
-        travel.result.forEach((newItem) => {
+        travel?.result.forEach((newItem) => {
           const existingItemIndex = newData.findIndex(
             (existingItem) => existingItem.id === newItem.id
           );
@@ -87,6 +88,8 @@ export const BookingsHopper = () => {
 
         return newData;
       });
+    } else {
+      setBookingDataPaginated([]);
     }
   }, [travel?.result]);
 

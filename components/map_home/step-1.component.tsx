@@ -67,6 +67,8 @@ export const Step1Booking = (props: Step1BookingProps) => {
     refreshInterval: 5,
   });
 
+  const { location } = useAuth();
+
   const { locations, setSelectedLocation, geocodeAddress } =
     useGetCoordinatesFromAddress();
 
@@ -140,14 +142,12 @@ export const Step1Booking = (props: Step1BookingProps) => {
       ...prev,
       currentLocation: {
         latitude: addressName
-          ? dataFormulary.currentLocation.latitude
+          ? location?.latitude
           : data?.userInfo.hotel_location?.lat,
         longitude: addressName
-          ? dataFormulary.currentLocation.longitude
+          ? location?.longitude
           : data?.userInfo.hotel_location?.lng,
-        address: addressName
-          ? addressName
-          : dataFormulary.currentLocation.address,
+        address: addressName ? addressName : data?.userInfo.hotel_name,
       },
       destination: {
         latitude:

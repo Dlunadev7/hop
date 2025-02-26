@@ -23,11 +23,14 @@ import { userRoles } from "@/utils/enum/role.enum";
 import { router, useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Animated, Pressable, StyleSheet, View } from "react-native";
+import { Alert, Animated, Pressable, StyleSheet, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import useSWR from "swr";
 import { TravelNotification } from "@/utils/interfaces/booking.notification.interface";
 import { AuthRoutesLink } from "@/utils/enum/auth.routes";
+import { SumUpProvider, useSumUp } from "sumup-react-native-alpha";
+import { Button } from "@/components/button/button.component";
+import { EXPO_PUBLIC_SUMUP_KEY } from "@/config";
 
 export default function HomeScreen() {
   const navigator = useNavigation();
@@ -133,37 +136,72 @@ export default function HomeScreen() {
     }
   }, [data?.isActive]);
 
+  // const { initPaymentSheet, presentPaymentSheet } = useSumUp();
+
+  // const initSumUpPaymentSheet = async () => {
+  //   const { error } = await initPaymentSheet({
+  //     checkoutId: "TU_CHECKOUT_ID",
+  //     customerId: "TU_CUSTOMER_ID",
+  //     language: "en", // en o sv (según documentación)
+  //   });
+
+  //   if (error) {
+  //     Alert.alert(
+  //       error.status,
+  //       error.status === "failure" ? error.message : undefined
+  //     );
+  //   } else {
+  //     Alert.alert("Payment Sheet was configured");
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   initSumUpPaymentSheet();
+  // }, []);
+
+  // const handlePayment = async () => {
+  //   const { error } = await presentPaymentSheet();
+
+  //   if (error) {
+  //     Alert.alert("Pago fallido", error.message);
+  //   } else {
+  //     Alert.alert("Pago exitoso", "La transacción ha sido completada.");
+  //   }
+  // };
+
   return (
-    <View className="flex-1">
-      {renderContent}
-      {data?.role === userRoles.USER_HOPPER && (
-        <MapView
-          style={styles.map}
-          showsUserLocation={true}
-          initialRegion={{
-            latitude: location?.latitude || 0,
-            longitude: location?.longitude || 0,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        >
-          <Marker
-            coordinate={{
+    <SumUpProvider publicKey={EXPO_PUBLIC_SUMUP_KEY}>
+      <View className="flex-1">
+        {renderContent}
+        {data?.role === userRoles.USER_HOPPER && (
+          <MapView
+            style={styles.map}
+            showsUserLocation={true}
+            initialRegion={{
               latitude: location?.latitude || 0,
               longitude: location?.longitude || 0,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
             }}
+          >
+            <Marker
+              coordinate={{
+                latitude: location?.latitude || 0,
+                longitude: location?.longitude || 0,
+              }}
+            />
+          </MapView>
+        )}
+        {isModalOpen && data!.role === userRoles.USER_HOPPER && (
+          <ModalBooking
+            isOpen={isModalOpen}
+            handleClose={handleClose}
+            travel={travelData!}
+            user={data!}
           />
-        </MapView>
-      )}
-      {isModalOpen && data!.role === userRoles.USER_HOPPER && (
-        <ModalBooking
-          isOpen={isModalOpen}
-          handleClose={handleClose}
-          travel={travelData!}
-          user={data!}
-        />
-      )}
-    </View>
+        )}
+      </View>
+    </SumUpProvider>
   );
 }
 

@@ -31,7 +31,7 @@ import { formattedDate } from "@/helpers/parse-date";
 import { router, useFocusEffect } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Polyline } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button as CustomButton } from "@/components/button/button.component";
 import { HomeRoutesLink } from "@/utils/enum/home.routes";
@@ -43,6 +43,8 @@ import { status } from "@/helpers/parser-names";
 import { paymentColor } from "@/helpers/payment-status";
 import { travelStatus } from "@/utils/enum/travel.enum";
 import { getFormattedTime } from "@/helpers/add-time";
+import { getGPSDirections } from "@/hooks/get-direction.hook";
+import { useAuth } from "@/context/auth.context";
 
 const { width } = Dimensions.get("window");
 
@@ -55,7 +57,8 @@ export default function MapHopper() {
   const containerWidth = width - 32;
   const travelParsed: BookingResponse = JSON.parse(travel);
   const { date, time } = formattedDate(travelParsed.programedTo);
-
+  const { handleGetDirections, instructions, route } = getGPSDirections();
+  const { location } = useAuth();
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsButtonDisabled(false);
@@ -76,9 +79,22 @@ export default function MapHopper() {
     }, [])
   );
 
+  useEffect(() => {
+    handleGetDirections(
+      {
+        latitude: travelParsed?.from?.lat,
+        longitude: travelParsed?.from?.lng,
+      },
+      {
+        latitude: travelParsed?.to?.lat,
+        longitude: travelParsed?.to?.lng,
+      }
+    );
+  }, []);
+
   return (
     <View style={styles.container}>
-      <MapView
+      {/* <MapView
         style={styles.map}
         initialRegion={{
           latitude: 37.78825,
@@ -88,7 +104,70 @@ export default function MapHopper() {
         }}
       >
         <Marker coordinate={{ latitude: 37.78825, longitude: -122.4324 }} />
-      </MapView>
+      </MapView> */}
+      <>
+        <MapView
+          style={{ flex: 1 }}
+          initialRegion={{
+            latitude: location?.latitude || 19.432608,
+            longitude: location?.longitude || -99.133209,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
+          {/* Marcador de Origen */}
+          {location && (
+            <Marker
+              coordinate={{
+                latitude: location.latitude,
+                longitude: location.longitude,
+              }}
+            >
+              <View>
+                <Text fontSize={20} fontWeight={600}>
+                  Origen
+                </Text>
+              </View>
+            </Marker>
+          )}
+
+          {/* Marcador de Destino */}
+          <Marker
+            coordinate={{
+              latitude: travelParsed.to.lat,
+              longitude: travelParsed.to.lng,
+            }}
+          >
+            <View>
+              <Text fontSize={20} fontWeight={600}>
+                Destino
+              </Text>
+            </View>
+          </Marker>
+
+          {/* Ruta */}
+          {/* {route.length > 0 && (
+            <Polyline
+              coordinates={route.map(([longitude, latitude]) => ({
+                latitude,
+                longitude,
+              }))}
+              strokeColor="blue"
+              strokeWidth={5}
+            />
+          )} */}
+          {/* {route?.length > 0 && (
+            <Polyline coordinates={route} strokeColor="blue" strokeWidth={5} />
+          )} */}
+        </MapView>
+
+        {/* <View style={{ padding: 10, backgroundColor: "white" }}>
+          <Text style={{ fontWeight: "bold" }}>Instrucciones:</Text>
+          {instructions.map((step, index) => (
+            <Text key={index}>• {step}</Text>
+          ))}
+        </View> */}
+      </>
       {!showRoute && (
         <Fab
           placement="top left"

@@ -6,3 +6,4 @@ export const PUBLIC_MAPBOX_API_URL = "https://api.mapbox.com/geocoding/v5/mapbox
 export const PUBLIC_MAPBOX_DIRECTIONS_API_URL = "https://api.mapbox.com/directions/v5/mapbox/driving"
 export const MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoiZGx1bmFkZXYiLCJhIjoiY2x6bG9kamtlMDR0NjJxb25tcmFxYjZ5eiJ9.m31EMqqEeF7NOMTPGCbpJQ"
 export const EXPO_PUBLIC_COUNTRY_API = "https://restcountries.com/v3.1/all"
+export const EXPO_PUBLIC_SUMUP_KEY = "sup_pk_5C229Wvj4xgmshkhtLwxZEdllq9H31g1C"

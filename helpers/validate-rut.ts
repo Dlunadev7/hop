@@ -1,36 +1,52 @@
 function cleanRut(rut: string): string {
-  /**
-   * Delete all non-numeric characters from a RUT.
-   * @param rut  RUT string
-   * @return {string} RUT without non-numeric characters.
-   */
-  return typeof rut === "string"
-    ? rut.replace(/^0+|[^0-9kK]+/g, "").toUpperCase()
-    : "";
+  // Eliminar puntos y guiones, convertir a mayúsculas
+  return rut.replace(/\./g, "").replace(/-/g, "").toUpperCase();
 }
-
 export function validateRut(rut: string): boolean {
-  /**
-   * Verify if a RUT is valid.
-   * @param rut  RUT string
-   * @return {boolean} true if RUT is valid, false otherwise.
-   */
-  if (/^0+/.test(rut)) {
-    return false;
-  }
-  if (!/^0*(\d{1,3}(\.?\d{3})*)-?([\dkK])$/.test(rut)) {
-    return false;
-  }
+  if (!rut) return false;
+
+  // Limpiar el RUT de puntos, guiones y convertir a mayúsculas
   const cleanedRut = cleanRut(rut);
 
-  let rutNumbers = parseInt(cleanedRut.slice(0, -1), 10);
-  const rutLastDigit = cleanedRut.slice(-1);
-  let M = 0,
-    S = 1;
-  for (; rutNumbers; rutNumbers = Math.floor(rutNumbers / 10))
-    S = (S + (rutNumbers % 10) * (9 - (M++ % 6))) % 11;
-  const lastDigitValid = (S ? S - 1 : "K").toString();
-  return lastDigitValid === rutLastDigit;
+  // Comprobar que el formato del RUT sea correcto (7-8 dígitos seguidos de un dígito verificador)
+  if (!/^\d{7,8}[0-9K]$/.test(cleanedRut)) {
+    console.log('Formato incorrecto');
+    return false;
+  }
+
+  // Los números del RUT y el dígito verificador
+  const rutNumbers = cleanedRut.slice(0, -1); // Todos los números del RUT
+  const givenVerifier = cleanedRut.slice(-1); // El último carácter, el dígito verificador
+
+  let sum = 0;
+  let multiplier = 2; // Empezamos con el multiplicador 2
+  let num = parseInt(rutNumbers, 10);
+
+  // Calcular la suma de los productos de cada dígito
+  while (num > 0) {
+    sum += (num % 10) * multiplier;
+    num = Math.floor(num / 10);
+    multiplier = multiplier === 7 ? 2 : multiplier + 1; // Ciclo de multiplicadores 2, 3, 4, 5, 6, 7, 2, 3, ...
+  }
+
+  const remainder = sum % 11;
+
+  // Determinamos el dígito verificador según el resto
+  let calculatedVerifier = "";
+  if (remainder === 0 || 5) {
+    calculatedVerifier = "K"; // Si el resto es 0, el dígito es "K"
+  } else if (remainder === 1) {
+    calculatedVerifier = "0"; // Si el resto es 1, el dígito es "0"
+  } else {
+    calculatedVerifier = (11 - remainder).toString(); // Para otros restos, el dígito es 11 - resto
+  }
+
+  console.log("Dígito calculado:", calculatedVerifier, "Dígito dado:", givenVerifier);
+
+  console.log(calculatedVerifier === givenVerifier.toUpperCase())
+
+  // Comparamos el dígito calculado con el proporcionado (asegurándonos de que ambos estén en mayúsculas)
+  return calculatedVerifier === givenVerifier.toUpperCase();
 }
 
 export const formatRut = (rut: string) => {

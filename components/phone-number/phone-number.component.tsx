@@ -44,8 +44,10 @@ export const PhoneNumber = (props: any) => {
   };
 
   const filteredData = useCallback(() => {
-    return parsedCountries?.filter((item) =>
-      item.label.toLowerCase().includes(searchText.toLowerCase())
+    return parsedCountries?.filter(
+      (item) =>
+        item.label.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.value.includes(searchText)
     );
   }, [parsedCountries, searchText]);
 

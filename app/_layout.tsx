@@ -22,6 +22,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DrawerProvider } from "@/context/drawer.context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import * as Notifications from "expo-notifications";
+import { SumUpProvider } from "sumup-react-native-alpha";
+import { EXPO_PUBLIC_SUMUP_KEY } from "@/config";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -173,10 +175,12 @@ export default function RootLayout() {
                 }}
               >
                 {Boolean(token?.token) ? (
-                  <Stack.Screen
-                    name="(tabs)"
-                    options={{ headerShown: false }}
-                  />
+                  <SumUpProvider publicKey={EXPO_PUBLIC_SUMUP_KEY}>
+                    <Stack.Screen
+                      name="(tabs)"
+                      options={{ headerShown: false }}
+                    />
+                  </SumUpProvider>
                 ) : (
                   <Stack.Screen
                     name="(auth)"

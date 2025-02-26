@@ -184,6 +184,8 @@ export default function Step2(props: formProps) {
             }
           }, [values.bank_account_rut, setRutError]);
 
+          console.log(errors);
+
           return (
             <VStack space="md" className="mt-[32px]">
               <Input
@@ -268,7 +270,7 @@ export default function Step2(props: formProps) {
                 })}
                 onBlur={handleBlur("bank_account_rut")}
                 onChangeText={(text) => {
-                  if (text.length <= 11) {
+                  if (text.length <= 12) {
                     handleChange("bank_account_rut")(text);
                   }
                 }}

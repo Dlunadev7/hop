@@ -174,16 +174,20 @@ export default function BookingEditForm(props: {
             icon={Send}
             stretch
             value=""
+            editable={false}
+            isDisabled={true}
           />
           <Input
             label=""
             onBlur={() => {}}
             onChangeText={() => {}}
-            placeholder="Indica destino..."
+            placeholder={String(data?.to?.address)}
             leftIcon
             icon={LocationFilled}
             stretch
             value=""
+            editable={false}
+            isDisabled={true}
           />
         </VStack>
       </Box>

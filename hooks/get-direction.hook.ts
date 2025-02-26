@@ -73,6 +73,7 @@ export const useGetCoordinatesFromAddress = () => {
   }, []);
 
   const geocodeAddress = async (address: string) => {
+
     if (!currentCoords) {
       setError("Esperando ubicación actual...");
       return;
@@ -81,11 +82,12 @@ export const useGetCoordinatesFromAddress = () => {
     try {
       let url = `${PUBLIC_MAPBOX_API_URL}/${encodeURIComponent(
         address
-      )}.json?access_token=${MAPBOX_ACCESS_TOKEN}&limit=15`;
+      )}.json?access_token=${MAPBOX_ACCESS_TOKEN}&limit=15&country=cl`;
 
       if (currentCoords) {
         url += `&proximity=${currentCoords.longitude},${currentCoords.latitude}`;
       }
+
 
       const response = await fetch(url);
       const data = await response.json();
@@ -168,4 +170,44 @@ export const useGetRouteTime = (origin: [number, number], destination: [number, 
   }, [origin, destination]);
 
   return { route, loading };
+};
+
+export const getGPSDirections = () => {
+  const [route, setRoute] = useState<any>(null);
+  const [instructions, setInstructions] = useState<string[]>([]);
+
+  const handleGetDirections = async (origin: { latitude: number, longitude: number }, destination: { latitude: number, longitude: number }) => {
+    try {
+      const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${origin.longitude},${origin.latitude};${destination.longitude},${destination.latitude}?steps=true&geometries=geojson&access_token=${MAPBOX_ACCESS_TOKEN}`;
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("Error al obtener la ruta");
+      }
+
+      const data = await response.json();
+
+      if (data.routes.length > 0) {
+        setRoute(data.routes[0].geometry.coordinates);
+
+        // Extraer instrucciones paso a paso
+        const steps = data.routes[0].legs[0].steps.map(
+          (step: any) => `${step.maneuver.instruction} en ${step.distance} metros`
+        );
+
+        setInstructions(steps);
+      }
+    } catch (error) {
+      console.error("Error obteniendo la ruta:", error);
+    }
+  }
+
+
+
+  return {
+    route,
+    instructions,
+    handleGetDirections
+  }
 };

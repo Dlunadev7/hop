@@ -18,6 +18,7 @@ import { travelStatus, travelTypeValues } from "@/utils/enum/travel.enum";
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
+import { i18NextType } from "@/utils/types/i18n.type";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 export const Step3Booking = (props: {
@@ -40,7 +41,16 @@ export const Step3Booking = (props: {
     dataPayload?.reducedMobility
   );
 
-  const options = carOptions(t);
+  const filterCarsByPassengers = (passengerCount: number, t: i18NextType) => {
+    return carOptions(t).filter((car) => {
+      if (passengerCount <= 3) return true; // Mostrar todos
+      if (passengerCount > 3 && passengerCount <= 5)
+        return car.value !== "ELECTRIC"; // Excluir eléctricos
+      return car.value === "VANS"; // Solo mostrar VAN si hay más de 5 personas
+    });
+  };
+
+  const options = filterCarsByPassengers(dataPayload.numberOfPassengers, t);
   const parsedDate = dayjs(date).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
 
   const convertToDate = (dateString: string) => {
@@ -50,6 +60,45 @@ export const Step3Booking = (props: {
 
   const handleBookHopper = async (carType: string) => {
     setIsLoading(true);
+
+    // console.log(
+    //   JSON.stringify(
+    //     {
+    //       from: {
+    //         lat: dataPayload.currentLocation.latitude!,
+    //         lng: dataPayload.currentLocation.longitude!,
+    //         address: dataPayload.currentLocation.address!,
+    //       },
+    //       to: {
+    //         lat: dataPayload.destination.latitude!,
+    //         lng: dataPayload.destination.longitude!,
+    //         address: dataPayload.destination.address!,
+    //       },
+    //       distance: dataPayload.distance,
+    //       time: dataPayload.time,
+    //       vehicleType: carType,
+    //       programedTo: dataPayload.programedTo
+    //         ? formattedDate
+    //         : convertToDate(parsedDate),
+    //       status: travelStatus.REQUEST,
+    //       passengerName: dataPayload.fullName,
+    //       passengerContact: dataPayload.contact,
+    //       passengerRoom: dataPayload.roomNumber,
+    //       passengerContactCountryCode: dataPayload.countryCode,
+    //       totalPassengers: dataPayload.numberOfPassengers.toString(),
+    //       totalSuitCases: dataPayload.numberOfLuggages.toString(),
+    //       passengerAirline: dataPayload.airline,
+    //       passengerFligth: dataPayload.flightNumber,
+    //       hoppy: {
+    //         id: data?.id!,
+    //       },
+    //       type: dataPayload.type as travelTypeValues,
+    //     },
+    //     null,
+    //     2
+    //   )
+    // );
+
     try {
       const response = await createTravel({
         from: {
@@ -82,8 +131,6 @@ export const Step3Booking = (props: {
         },
         type: dataPayload.type as travelTypeValues,
       });
-
-      console.log(JSON.stringify(response, null, 2));
 
       updateBookingData((prevState: BookingData) => ({
         ...prevState,
