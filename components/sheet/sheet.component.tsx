@@ -75,6 +75,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
       <BottomSheetView
         style={{
           backgroundColor: Colors.WHITE,
+          flex: 1,
           paddingHorizontal: 16,
           paddingBottom: insets.bottom,
         }}

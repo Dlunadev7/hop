@@ -8,5 +8,13 @@
     "button": "Contact passenger",
     "cancel": "Cancel trip",
     "commission": "Corresponding Commission"
-  }
+  },
+  "travelData": "Travel data",
+  "vehicleType": "Vehicle type",
+  "totalPassengers": "Passengers",
+  "totalSuitCases": "Suitcases",
+  "fullName": "Full name",
+  "contact": "Contact",
+  "flightNumber": "Flight number",
+  "saveChanges": "Save changes"
 }

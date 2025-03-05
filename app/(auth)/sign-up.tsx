@@ -53,6 +53,8 @@ export default function SignUp() {
       longitude: "",
     },
     birthdate: "",
+    documentation: {},
+    images: {},
   });
 
   const accumulatePayload = (newData: {}) => {
@@ -104,6 +106,8 @@ export default function SignUp() {
           longitude: state.hotel_info.longitude,
         },
       },
+      documentation: payload.documentation,
+      images: payload.images,
     };
     return (
       <StepComponent
@@ -185,7 +189,10 @@ export default function SignUp() {
           </View>
           <View style={styles.formulary_container}>
             <Text fontWeight={600} fontSize={14}>
-              {t("signup.step_label", { step })}
+              {t("signup.step_label", {
+                step,
+                stepper: role === userRoles.USER_HOPPER ? 5 : 4,
+              })}
             </Text>
             {renderStep()}
           </View>

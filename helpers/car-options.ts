@@ -1,4 +1,4 @@
-import { ElectricCar, Sedan, Van } from "@/assets/svg";
+import { ElectricCar, Sedan, Suv, Van } from "@/assets/svg";
 import { i18NextType } from "@/utils/types/i18n.type";
 
 export const carOptions = (t: i18NextType) => [
@@ -30,6 +30,19 @@ export const carOptions = (t: i18NextType) => [
     value: "ELECTRIC"
   },
   {
+    name: t("home.map_home.third_sheet.vehicle.suv.title", {
+      ns: "home",
+    }),
+    passengers: t("home.map_home.third_sheet.vehicle.suv.passengers", {
+      ns: "home",
+    }),
+    luggage: t("home.map_home.third_sheet.vehicle.suv.luggage", {
+      ns: "home",
+    }),
+    icon: Suv,
+    value: "SUV"
+  },
+  {
     name: t("home.map_home.third_sheet.vehicle.van.title", {
       ns: "home",
     }),
@@ -42,4 +55,5 @@ export const carOptions = (t: i18NextType) => [
     icon: Van,
     value: "VANS"
   },
+
 ];

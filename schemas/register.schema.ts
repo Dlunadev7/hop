@@ -60,12 +60,13 @@ export const validationSchemaS1 = (t: i18NextType) => Yup.object().shape({
 
   bank_account: Yup.string()
     .required(t("validations.step_2.bank_account_number.required", { ns: 'auth' }))
-    .min(2, t("validations.step_2.bank_account_number.min_length", { ns: 'auth' }))
+    .min(10, t("validations.step_2.bank_account_number.min_length", { ns: 'auth' }))
     .max(20, t("validations.step_2.bank_account_number.max_length", { ns: 'auth' })),
 
   bank_account_type: Yup.string()
     .required(t("validations.step_2.bank_account_type.required", { ns: 'auth' })),
   bank_account_rut: Yup.string()
+    .min(12, t("validations.step_2.bank_account_rut.length", { ns: 'auth' }))
     .required(t("validations.step_2.bank_account_rut.required", { ns: 'auth' }))
 
 })

@@ -154,6 +154,7 @@ export interface UserInfo {
   hotel_location?: HotelLocation;
   profilePic?: string;
   countryCode?: string;
+  bank_account_isOwner: boolean;
 }
 
 export interface User {

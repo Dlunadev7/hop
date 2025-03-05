@@ -6,7 +6,7 @@
   "step_message": "Para solicitar el registro debes completar los campos siguientes",
   "step_message_hopper": "Para solicitar el registro debes cargar los documentos señalados",
   "step_message_final": "Sigue el link para confirmar tu identidad y finalizar la solicitud de registro",
-  "step_label": "Paso {{step}} de 4",
+  "step_label": "Paso {{step}} de {{stepper}}",
   "step_1": {
     "title": "Información Personal",
     "name": {

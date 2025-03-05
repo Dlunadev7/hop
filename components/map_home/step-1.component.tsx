@@ -19,7 +19,10 @@ import { Divider } from "../ui/divider";
 import { Button } from "../button/button.component";
 import useSWR from "swr";
 import { getUserLogged } from "@/services/auth.service";
-import { BookingData } from "@/utils/interfaces/booking.interface";
+import {
+  BookingData,
+  FrecuentAddressInterface,
+} from "@/utils/interfaces/booking.interface";
 import { Calendar } from "../calendar/calendar.component";
 import dayjs from "dayjs";
 import { useRoute } from "@react-navigation/native";
@@ -35,6 +38,7 @@ import { SearchIcon } from "@/components/ui/icon";
 import { useGetCoordinatesFromAddress } from "@/hooks/get-direction.hook";
 import { useAuth } from "@/context/auth.context";
 import { string } from "yup";
+import { getFrecuentAddress } from "@/services/book.service";
 
 type Step1BookingProps = {
   formattedTime: string;
@@ -66,6 +70,10 @@ export const Step1Booking = (props: Step1BookingProps) => {
     revalidateOnFocus: true,
     refreshInterval: 5,
   });
+
+  const { data: frecuentTravel } = useSWR("/user/frecuent_travel", () =>
+    getFrecuentAddress(data?.id!)
+  );
 
   const { location } = useAuth();
 
@@ -298,22 +306,33 @@ export const Step1Booking = (props: Step1BookingProps) => {
               ns: "home",
             })}
           </Text>
-          {[0, 1, 2].map((_, i) => (
-            <React.Fragment key={i}>
-              <HStack space="md" className="mt-4">
-                <ClockActive width={20} height={20} />
-                <Box className="gap-2">
-                  <Text fontSize={16} fontWeight={400}>
-                    Aeropuerto internacional
-                  </Text>
-                  <Text fontSize={14} fontWeight={400} textColor={Colors.GRAY}>
+          {frecuentTravel?.mostFrequentTo
+            .filter((item) => item.address)
+            .map((item, i) => (
+              <Pressable
+                key={i}
+                onPress={() => {
+                  setDestinityLocation({
+                    latitude: item.lat,
+                    longitude: item.lng,
+                  });
+                  setDestinityAddress(item.address);
+                }}
+              >
+                <HStack space="md" className="mt-4 p-2">
+                  <ClockActive width={20} height={20} />
+                  <Box className="gap-2">
+                    <Text fontSize={16} fontWeight={400}>
+                      {item.address}
+                    </Text>
+                    {/* <Text fontSize={14} fontWeight={400} textColor={Colors.GRAY}>
                     Calle 123, 3456 - Santiago
-                  </Text>
-                </Box>
-              </HStack>
-              <Divider className="mt-2" style={styles.divider} />
-            </React.Fragment>
-          ))}
+                  </Text> */}
+                  </Box>
+                </HStack>
+                <Divider className="mt-2" style={styles.divider} />
+              </Pressable>
+            ))}
         </View>
         <Pressable
           className="flex-row gap-2 items-center mt-6 mb-6"

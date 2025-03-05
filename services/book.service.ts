@@ -1,6 +1,6 @@
 import axiosInstance from "@/axios/axios.config";
 import { userRoles } from "@/utils/enum/role.enum";
-import { BookingPagination, BookingResponse } from "@/utils/interfaces/booking.interface";
+import { BookingPagination, BookingResponse, FrecuentAddressInterface } from "@/utils/interfaces/booking.interface";
 import axios, { AxiosResponse } from "axios";
 
 export const createTravel = async (travelData: Partial<BookingResponse>): Promise<BookingResponse> => {
@@ -91,7 +91,7 @@ export const updateTravel = async (id: string, travelData: any): Promise<any> =>
 
 export const deleteTravel = async (id: string): Promise<any> => {
   try {
-    const response: AxiosResponse<any> = await axiosInstance.delete(`/ travels / ${id}`);
+    const response: AxiosResponse<any> = await axiosInstance.delete(`/travels/${id}`);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -100,3 +100,15 @@ export const deleteTravel = async (id: string): Promise<any> => {
     throw error;
   }
 };
+
+export const getFrecuentAddress = async (id: string): Promise<FrecuentAddressInterface> => {
+  try {
+    const response: AxiosResponse<FrecuentAddressInterface> = await axiosInstance.get(`/travels/frecuentAddress?hoppy=${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.response || error
+    }
+    throw error;
+  }
+}

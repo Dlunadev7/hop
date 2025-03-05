@@ -117,3 +117,16 @@ export interface BookingResponseNotification {
   paymentStatus: string;
   vehicleType: string;
 }
+
+
+export interface FrecuentAddressInterface {
+  mostFrequentFrom: MostFrequent[];
+  mostFrequentTo: MostFrequent[];
+}
+
+export interface MostFrequent {
+  address: string;
+  lat: string;
+  lng: string;
+  count: string;
+}

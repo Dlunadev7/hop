@@ -35,8 +35,6 @@ export default function Profile() {
     refreshInterval: 5,
   });
 
-  const route = useRoute();
-
   const { isDrawerOpen, setIsDrawerOpen } = useDrawer();
   const { t } = useTranslation();
   const navigation = useNavigation();

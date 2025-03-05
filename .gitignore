@@ -2,7 +2,10 @@
 
 # dependencies
 node_modules/
-
+firebaseConfig.js
+google-services.json
+GoogleService-Info.plist
+config.ts
 # Expo
 .expo/
 dist/
@@ -74,6 +77,7 @@ yarn-error.*
 
 # local env files
 .env*.local
+
 
 # typescript
 *.tsbuildinfo

@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import Swiper from "react-native-swiper";
 import { LinearGradient } from "../linear-gradient/LinearGradient";
 import {
+  ArrowLeftRounded,
   Hop,
   Onboarding1,
   Onboarding2,
@@ -24,10 +25,11 @@ import { useTranslation } from "react-i18next";
 import { i18NextType } from "@/utils/types/i18n.type";
 import { router } from "expo-router";
 import { AuthRoutesLink } from "@/utils/enum/auth.routes";
+import { Fab, FabIcon } from "../ui/fab";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const PulsingEffect = () => {
   const { scale, opacity } = usePulsingAnimation();
-
   return (
     <Animated.View
       style={{
@@ -70,9 +72,20 @@ const DottedBorderEffect = () => {
 
 const FirstItemCarousel = () => {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   return (
     <LinearGradient locations={[0, 0.3]}>
+      <Fab
+        placement="top left"
+        onPress={() => router.back()}
+        className="bg-[#E1F5F3] w-[24px] h-[24px]"
+        style={{
+          marginTop: insets.top,
+        }}
+      >
+        <FabIcon as={ArrowLeftRounded} width={30} />
+      </Fab>
       <Box className="flex-1 items-center pt-6">
         <Hop color={Colors.SECONDARY} />
         <VStack space="lg" className="items-center mt-[32px] mb-[48px]">
@@ -100,8 +113,20 @@ const FirstItemCarousel = () => {
 const SecondItemCarousel = () => {
   const { t } = useTranslation();
 
+  const insets = useSafeAreaInsets();
+
   return (
     <LinearGradient locations={[0, 0.3]}>
+      <Fab
+        placement="top left"
+        onPress={() => router.back()}
+        className="bg-[#E1F5F3] w-[24px] h-[24px]"
+        style={{
+          marginTop: insets.top,
+        }}
+      >
+        <FabIcon as={ArrowLeftRounded} width={30} />
+      </Fab>
       <Box className="flex-1 items-center pt-6">
         <Hop color={Colors.SECONDARY} />
         <VStack space="lg" className="items-center mt-[32px] mb-[48px]">
@@ -129,8 +154,20 @@ const SecondItemCarousel = () => {
 const ThirdItemCarousel = () => {
   const { t } = useTranslation();
 
+  const insets = useSafeAreaInsets();
+
   return (
     <LinearGradient locations={[0, 0.3]}>
+      <Fab
+        placement="top left"
+        onPress={() => router.back()}
+        className="bg-[#E1F5F3] w-[24px] h-[24px]"
+        style={{
+          marginTop: insets.top,
+        }}
+      >
+        <FabIcon as={ArrowLeftRounded} width={30} />
+      </Fab>
       <Box className="flex-1 items-center pt-[24px]">
         <Hop color={Colors.SECONDARY} />
         <VStack space="lg" className="items-center mt-[32px] mb-[48px]">

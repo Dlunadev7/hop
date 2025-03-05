@@ -2,7 +2,7 @@
   "header": "Hola",
   "balance": "Saldo",
   "booking": {
-    "title": "Reservación",
+    "title": "Reservas",
     "booking_hopper": "Reservar un Hopper",
     "destinity_placeholder": "Indica un destino..."
   },
@@ -55,12 +55,12 @@
       "accessibility": "Apto para movilidad reducida",
       "vehicle": {
         "sedan": {
-          "title": "Sedán/SUV",
+          "title": "Sedan",
           "passengers": "1-3 pasajeros",
           "luggage": "30 Kg."
         },
         "electric_car": {
-          "title": "Auto eléctrico",
+          "title": "Électrico",
           "passengers": "1-3 pasajeros",
           "luggage": "30 Kg."
         },
@@ -68,9 +68,16 @@
           "title": "Van",
           "passengers": "1-10 pasajeros",
           "luggage": "50 Kg."
+        },
+        "suv": {
+          "title": "SUV",
+          "passengers": "1-3 pasajeros",
+          "luggage": "30 kg."
         }
       },
-      "cancel": "Cancelar búsqueda"
+      "text": "Esto puede tardar unos minutos. Te avisaremos cuando el viaje esté confirmado.",
+      "cancel": "Cancelar búsqueda",
+      "search": "Hacer otra reserva"
     },
     "fourthy_sheet": {
       "title": "Esperando confirmación de un Hopper",
@@ -90,10 +97,15 @@
   },
   "hopper": {
     "void": "Complete los datos del vehículo para comenzar a viajar",
+    "void_bank": "Complete los datos de la cuenta de banco para comenzar a viajar",
     "vehicle": "vehículo",
     "bookings": {
       "title": "Reservas",
       "description": "Aún no tienes ningún viaje reservado"
+    },
+    "advice": {
+      "title": "Consejos para un Hopper",
+      "description": "Se amable y profesional, mantén tu auto limpio. ¡Los pequeños detalles hacen la diferencia!"
     }
   },
   "waiting_validation": {
@@ -101,5 +113,15 @@
     "review_info": "Estamos revisando tu información, esto puede tardar unos días. Podrás iniciar sesión una vez que tu cuenta sea validada por nuestro equipo.",
     "accept": "Aceptar"
   },
-  "next": "Siguiente"
+  "next": "Siguiente",
+  "modal_hopper": {
+    "title": "Nueva solicitud",
+    "departure": "Punto de partida",
+    "destination": "Destino",
+    "passengers": "{count} Pasajeros",
+    "suitcases": "{count} Maletas",
+    "trip_value": "Valor del viaje ${price}",
+    "accept_trip": "Aceptar Viaje",
+    "reject_trip": "Rechazar viaje"
+  }
 }

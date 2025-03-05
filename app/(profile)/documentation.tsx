@@ -39,6 +39,8 @@ import { getUserLogged, updateUserDocuments } from "@/services/auth.service";
 import { getUserDocumentation } from "@/services/user.service";
 import { Button } from "@/components/button/button.component";
 import WebView from "react-native-webview";
+import axiosInstance from "@/axios/axios.config";
+import axios from "axios";
 
 const { width } = Dimensions.get("window");
 
@@ -51,7 +53,7 @@ export default function Documentation() {
     refreshInterval: 5,
   });
 
-  const { data } = useSWR(
+  const { data, mutate } = useSWR(
     `/user-documents/user/${user?.id!}`,
     async () => getUserDocumentation(user?.id!),
     {
@@ -83,6 +85,8 @@ export default function Documentation() {
     null
   );
   const [imagesByItem, setImagesByItem] = useState<any>([]);
+  const [urls, setUrls] = useState<any[]>([]);
+
   const [selectedPdf, setSelectedPdf] = useState<string>("");
   const handleOpenActionSheet = (index: number) => {
     setOpenActionSheetIndex(index);
@@ -174,76 +178,109 @@ export default function Documentation() {
   //   });
   // };
 
+  console.log(imagesByItem);
+
   const handleSubmitDocuments = async () => {
     setLoading(true);
+
     try {
-      if (!imagesByItem) {
-        console.log("No se encontraron imágenes en imagesByItem[4]");
+      const requiredFields = {
+        "imagesByItem[4]": imagesByItem,
+        "Documento para seremi": documentsByItem["seremi"],
+        "Documento para curriculum vitae": documentsByItem["curriculum_vitae"],
+        "Documento para permissions": documentsByItem["permission"],
+      };
+
+      const missingFields = Object.entries(requiredFields)
+        .filter(([, value]) => !value)
+        .map(([key]) => key);
+
+      if (missingFields.length > 0) {
+        showToast({
+          message: t("empty", { ns: "utils" }),
+          action: "error",
+          duration: 3000,
+          placement: "bottom",
+        });
         return;
       }
 
-      if (!documentsByItem["seremi"]) {
-        console.log("No se encontraron documentos para seremi");
-        return;
-      }
+      const filterDocs = (docs: any) => {
+        return docs?.filter((doc: any) => doc.name && doc.uri && doc.type);
+      };
 
-      if (!documentsByItem["curriculum_vitae"]) {
-        console.log("No se encontraron documentos para curriculum_vitae");
-        return;
-      }
+      const images = filterDocs(
+        imagesByItem["4"]?.map(
+          (doc: { uri: string; name: string; type: string }) => ({
+            name: doc.name,
+            uri: doc.uri,
+            type: doc.type,
+          })
+        )
+      );
 
-      if (!documentsByItem["permission"]) {
-        console.log("No se encontraron documentos para permissions");
-        return;
-      }
+      const seremiDoc = filterDocs(
+        documentsByItem["seremi"]?.map(
+          (doc: { uri: string; name: string; type: string }) => ({
+            name: doc.name,
+            uri: doc.uri,
+            type: doc.type,
+          })
+        )
+      );
 
-      const images = imagesByItem?.map(
-        (doc: { uri: string; name: string; type: string }) => ({
-          name: doc.name,
-          uri: doc.uri,
-          type: doc.type,
-        })
+      const driverResume = filterDocs(
+        documentsByItem["curriculum_vitae"]?.map(
+          (doc: { uri: string; name: string; type: string }) => ({
+            name: doc.name,
+            uri: doc.uri,
+            type: doc.type,
+          })
+        )
       );
-      const seremiDoc = documentsByItem["seremi"]?.map(
-        (doc: { uri: string; name: string; type: string }) => ({
-          name: doc.name,
-          uri: doc.uri,
-          type: doc.type,
-        })
+
+      const circulationPermit = filterDocs(
+        documentsByItem["permission"]?.map(
+          (doc: { uri: string; name: string; type: string }) => ({
+            name: doc.name,
+            uri: doc.uri,
+            type: doc.type,
+          })
+        )
       );
-      const driverResume = documentsByItem["curriculum_vitae"]?.map(
-        (doc: { uri: string; name: string; type: string }) => ({
-          name: doc.name,
-          uri: doc.uri,
-          type: doc.type,
-        })
-      );
-      const circulationPermit = documentsByItem["permission"]?.map(
-        (doc: { uri: string; name: string; type: string }) => ({
-          name: doc.name,
-          uri: doc.uri,
-          type: doc.type,
-        })
-      );
-      const passengerInsurance = documentsByItem["secure"]?.map(
-        (doc: { uri: string; name: string; type: string }) => ({
-          name: doc.name,
-          uri: doc.uri,
-          type: doc.type,
-        })
+
+      const passengerInsurance = filterDocs(
+        documentsByItem["secure"]?.map(
+          (doc: { uri: string; name: string; type: string }) => ({
+            name: doc.name,
+            uri: doc.uri,
+            type: doc.type,
+          })
+        )
       );
 
       const payload = {
-        vehiclePictures: images,
-        seremiDecree: seremiDoc,
-        driverResume: driverResume,
-        circulationPermit: circulationPermit,
-        passengerInsurance: passengerInsurance,
+        ...(images &&
+          images.length > 0 && {
+            vehiclePictures: [...images, ...imagesByItem[0]],
+          }),
+        ...(seremiDoc && seremiDoc.length > 0 && { seremiDecree: seremiDoc }),
+        ...(driverResume &&
+          driverResume.length > 0 && { driverResume: driverResume }),
+        ...(circulationPermit &&
+          circulationPermit.length > 0 && {
+            circulationPermit: circulationPermit,
+          }),
+        ...(passengerInsurance &&
+          passengerInsurance.length > 0 && {
+            passengerInsurance: passengerInsurance,
+          }),
       };
 
       await updateUserDocuments(user?.id!, payload);
       router.back();
     } catch (error) {
+      console.log("error", error);
       showToast({
         message: t("server_error", { ns: "utils" }),
         action: "error",
@@ -253,6 +290,50 @@ export default function Documentation() {
       return;
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteFile = async (
+    doc: {
+      name: string;
+      uri: string;
+      type: string;
+    },
+    type: string
+  ) => {
+    try {
+      const formData = new FormData();
+
+      const documentMap: Record<string, string> = {
+        vehicle_picture: "vehiclePictures",
+        permission: "circulationPermit",
+        seremi: "seremiDecree",
+        curriculum_vitae: "driverResume",
+        secure: "passengerInsurance",
+      };
+
+      if (!type) {
+        throw new Error("El tipo de documento es requerido.");
+      }
+
+      formData.append("file", null as any);
+      formData.append("document", documentMap[type]);
+
+      await axiosInstance.patch(`/user-documents/${user?.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      mutate();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Error al actualizar el documento:", error.message);
+        console.error("Código de estado:", error.response?.status);
+        console.error("Detalles del error:", error.response?.data);
+      } else {
+        console.error("Error inesperado:", error);
+      }
     }
   };
 
@@ -279,19 +360,20 @@ export default function Documentation() {
         return updatedDocuments;
       });
     }
-    if (selectedImages.length > 0) {
+
+    if (selectedImages && selectedImages.length > 0) {
       setImagesByItem((prev: any) => {
         const itemId = selectedImages[0]?.itemId;
+        if (!itemId) return prev;
+
         const currentImages = prev[itemId] || [];
-        const newImages = selectedImages.filter(
-          (img) =>
-            !currentImages.some(
-              (existingImg: { uri: string }) => existingImg.uri === img.uri
-            )
+        const newImageUris = selectedImages.filter(
+          (uri) => !currentImages.includes(uri)
         );
+
         return {
           ...prev,
-          [itemId]: [...currentImages, ...newImages],
+          [itemId]: [...currentImages, ...newImageUris],
         };
       });
     }
@@ -313,11 +395,11 @@ export default function Documentation() {
 
     if (data?.vehiclePictures) {
       setImagesByItem([
-        ...data?.vehiclePictures!,
+        data.vehiclePictures,
         ...selectedImages.map((item) => item.uri),
       ] as any);
     }
-  }, [selectedImages, data, selectedImages]);
+  }, [data]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -333,7 +415,10 @@ export default function Documentation() {
 
   const imageWidth = (width - 2 * 28) / 3;
 
-  console.log(imagesByItem);
+  useEffect(() => {
+    const newUrls: any = Object.values(imagesByItem).flat();
+    setUrls(newUrls.map((item: any) => (item.uri ? item.uri : item)));
+  }, [imagesByItem]);
 
   return (
     <>
@@ -395,32 +480,26 @@ export default function Documentation() {
                   </Text>
                   <DocumentUpload color={Colors.DARK_GREEN} />
                 </Pressable>
-                {index === 4 &&
-                  data?.vehiclePictures &&
-                  data?.vehiclePictures.length > 0 && (
-                    <ScrollView contentContainerStyle={styles.gridContainer}>
-                      <HStack style={styles.row}>
-                        {imagesByItem?.map((image: string) => {
-                          console.log(image);
-                          return (
-                            <View
-                              style={[
-                                styles.imageWrapper,
-                                { width: imageWidth },
-                              ]}
-                              key={image}
-                            >
-                              <Image
-                                className="rounded-lg"
-                                source={{ uri: image }}
-                                style={[styles.image, { width: imageWidth }]}
-                              />
-                            </View>
-                          );
-                        })}
-                      </HStack>
-                    </ScrollView>
-                  )}
+                {index === 4 && Boolean(imagesByItem) && (
+                  <ScrollView contentContainerStyle={styles.gridContainer}>
+                    <HStack style={styles.row}>
+                      {urls?.map((image: string, i: number) => {
+                        return (
+                          <View
+                            style={[styles.imageWrapper, { width: imageWidth }]}
+                            key={i}
+                          >
+                            <Image
+                              className="rounded-lg"
+                              source={{ uri: image }}
+                              style={[styles.image, { width: imageWidth }]}
+                            />
+                          </View>
+                        );
+                      })}
+                    </HStack>
+                  </ScrollView>
+                )}
                 {documentsByItem[documentation.name] &&
                   documentsByItem[documentation.name]?.length > 0 && (
                     <View className="gap-4">
@@ -437,13 +516,14 @@ export default function Documentation() {
                             </Text>
                           </Box>
                           <Pressable
-                            onPress={() =>
+                            onPress={() => {
                               handleRemoveDocument(
                                 documentation.name,
                                 index,
                                 doc?.uri ?? ""
-                              )
-                            }
+                              );
+                              handleDeleteFile(doc, documentation.name);
+                            }}
                           >
                             <Icon
                               as={CloseCircleIcon}

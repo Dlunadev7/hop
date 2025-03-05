@@ -48,7 +48,7 @@ export default function MapHome() {
   const { t } = useTranslation();
   const { data } = useSWR("/user/logged", getUserLogged);
 
-  const [stepper, setStepper] = useState(1);
+  const [stepper, setStepper] = useState(4);
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
 
   const formattedDate = dayjs(route.date).format("DD MMM. YYYY");
@@ -235,7 +235,7 @@ export default function MapHome() {
   };
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 ">
       <StatusBar hidden />
       {!(stepper > 3) && (
         <Fab

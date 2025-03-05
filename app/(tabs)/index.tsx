@@ -23,14 +23,14 @@ import { userRoles } from "@/utils/enum/role.enum";
 import { router, useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, Animated, Pressable, StyleSheet, View } from "react-native";
+import { Animated, Pressable, StyleSheet, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import useSWR from "swr";
 import { TravelNotification } from "@/utils/interfaces/booking.notification.interface";
 import { AuthRoutesLink } from "@/utils/enum/auth.routes";
-import { SumUpProvider, useSumUp } from "sumup-react-native-alpha";
-import { Button } from "@/components/button/button.component";
+import { SumUpProvider } from "sumup-react-native-alpha";
 import { EXPO_PUBLIC_SUMUP_KEY } from "@/config";
+import { ModalBook } from "@/components/modal/modal_booking/modal-book-acepted.component";
 
 export default function HomeScreen() {
   const navigator = useNavigation();
@@ -65,12 +65,16 @@ export default function HomeScreen() {
         : true
     )
   );
-  const height = useState(new Animated.Value(400))[0];
+
+  const height = useState(
+    new Animated.Value(emptyFields.length > 0 ? 250 : 400)
+  )[0];
+
   const toggleContainer = () => {
     setIsOpen(!isOpen);
 
     Animated.timing(height, {
-      toValue: isOpen ? 60 : 400,
+      toValue: isOpen ? 60 : emptyFields.length > 0 ? 250 : 400,
       duration: 300,
       useNativeDriver: false,
     }).start();
@@ -115,7 +119,15 @@ export default function HomeScreen() {
           <VStack className="mt-4">
             <Balance />
             <View style={{}}>
-              {emptyFields.length > 0 && <Void />}
+              {emptyFields.length > 0 && (
+                <Void
+                  type={
+                    emptyFields.some((item) => item.startsWith("bank_"))
+                      ? "bank"
+                      : "vehicle"
+                  }
+                />
+              )}
               {emptyFields.length === 0 && <BookingsHopper />}
             </View>
           </VStack>
@@ -194,10 +206,18 @@ export default function HomeScreen() {
         )}
         {isModalOpen && data!.role === userRoles.USER_HOPPER && (
           <ModalBooking
-            isOpen={isModalOpen}
+            isOpen={true}
             handleClose={handleClose}
             travel={travelData!}
             user={data!}
+          />
+        )}
+        {true && data!.role === userRoles.USER_HOPPY && (
+          <ModalBook
+            isOpen={true}
+            handleClose={handleClose}
+            // travel={travelData!}
+            // user={data!}
           />
         )}
       </View>

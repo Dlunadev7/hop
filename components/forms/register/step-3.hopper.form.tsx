@@ -48,7 +48,7 @@ type formProps = {
 const { width } = Dimensions.get("window");
 
 export default function Step3Hopper(props: formProps) {
-  const { setStep, extraData, payloadValues } = props;
+  const { setStep, extraData, payloadValues, payload: setPayload } = props;
   const { t } = useTranslation();
 
   const {
@@ -152,6 +152,14 @@ export default function Step3Hopper(props: formProps) {
       };
 
       await updateUserDocuments(extraData, payload);
+      const newPayload = {
+        ...payloadValues,
+        documentation: documentsByItem,
+        images: imagesByItem,
+      } as any;
+
+      setPayload(newPayload);
+
       setStep(4);
     } catch (error) {
       showToast({
@@ -165,6 +173,8 @@ export default function Step3Hopper(props: formProps) {
       setLoading(false);
     }
   };
+
+  console.log(JSON.stringify(payloadValues, null, 2));
 
   const handlePickDocument = (
     itemId: number,
@@ -279,6 +289,11 @@ export default function Step3Hopper(props: formProps) {
   }, [selectedImages, selectedDocuments]);
 
   const imageWidth = (width - 2 * 28) / 3;
+
+  useEffect(() => {
+    setDocumentsByItem(payloadValues.documentation);
+    setImagesByItem(payloadValues.images);
+  }, []);
 
   return (
     <Pressable

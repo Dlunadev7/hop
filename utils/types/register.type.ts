@@ -25,4 +25,6 @@ export type RegisterType = {
       longitude: string,
     }
   };
+  documentation: {},
+  images: {},
 }

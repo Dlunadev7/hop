@@ -92,6 +92,8 @@ export const useGetCoordinatesFromAddress = () => {
       const response = await fetch(url);
       const data = await response.json();
 
+      console.log(data)
+
 
       if (data.features && data.features.length > 0) {
         const options = data.features

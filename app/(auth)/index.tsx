@@ -42,7 +42,7 @@ export default function Entry() {
           </Button>
           <Button
             type="ghost"
-            onPress={() => router.replace(AuthRoutesLink.ONBOARDING)}
+            onPress={() => router.push(AuthRoutesLink.ONBOARDING)}
           >
             {t("entry.signUpButton", { ns: "auth" })}
           </Button>

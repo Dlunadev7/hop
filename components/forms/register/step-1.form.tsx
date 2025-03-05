@@ -78,6 +78,7 @@ export default function Step1(props: formProps) {
   }) => {
     setLoading(true);
     Keyboard.dismiss();
+    console.log(state);
     try {
       const data = await createUser({
         email: values.email,
@@ -91,6 +92,7 @@ export default function Step1(props: formProps) {
           },
           bank_account_holder: "",
           bank_account_rut: "",
+          bank_account_isOwner: false,
         },
       });
 

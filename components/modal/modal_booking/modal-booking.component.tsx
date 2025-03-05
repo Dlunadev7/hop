@@ -49,15 +49,15 @@ export const ModalBooking = ({
   user: User;
 }) => {
   const translatedStatus =
-    status[travel.metadata.travel?.type as travelTypeValues] ||
-    travel.metadata.travel?.type;
+    status[travel?.metadata.travel?.type as travelTypeValues] ||
+    travel?.metadata.travel?.type;
 
-  const { date, time } = formattedDate(travel.metadata.travel.programedTo);
+  const { date, time } = formattedDate(travel?.metadata?.travel?.programedTo);
 
   return (
     <Center className="h-auto w-[100%] bg-slate-800">
       <Modal
-        isOpen={isOpen}
+        isOpen={false}
         onClose={() => handleClose()}
         style={{ paddingHorizontal: 16 }}
       >
@@ -117,7 +117,7 @@ export const ModalBooking = ({
                 <Box className="flex-row gap-2 items-center">
                   <Send />
                   <Text fontSize={16} fontWeight={400}>
-                    {travel.metadata.travel.from.address}
+                    {travel?.metadata.travel.from.address}
                   </Text>
                 </Box>
               </VStack>
@@ -129,7 +129,7 @@ export const ModalBooking = ({
                 <Box className="flex-row gap-2 items-center">
                   <LocationFilled />
                   <Text fontSize={16} fontWeight={400}>
-                    {travel.metadata.travel.to.address}
+                    {travel?.metadata.travel.to.address}
                   </Text>
                 </Box>
               </VStack>
@@ -142,7 +142,7 @@ export const ModalBooking = ({
                   fontSize={18}
                   fontWeight={400}
                 >
-                  {travel.metadata.travel.totalPassengers} Pasajeros
+                  {travel?.metadata.travel.totalPassengers} Pasajeros
                 </Text>
               </Box>
               <Box className="flex-row gap-2 items-center">
@@ -152,7 +152,7 @@ export const ModalBooking = ({
                   fontSize={18}
                   fontWeight={400}
                 >
-                  {travel.metadata.travel.totalSuitCases} Maletas
+                  {travel?.metadata.travel.totalSuitCases} Maletas
                 </Text>
               </Box>
               <Box className="flex-row gap-2 items-center">
@@ -162,7 +162,7 @@ export const ModalBooking = ({
                   fontSize={18}
                   fontWeight={400}
                 >
-                  Valor del viaje ${travel.metadata.travel.price?.toFixed(2)}
+                  Valor del viaje ${travel?.metadata.travel.price?.toFixed(2)}
                 </Text>
               </Box>
             </VStack>
@@ -171,7 +171,7 @@ export const ModalBooking = ({
             <Button
               onPress={() => {
                 handleClose();
-                updateTravel(travel.metadata.travel.id, {
+                updateTravel(travel?.metadata.travel.id, {
                   status: travelStatus.ACCEPT,
                   hopper: {
                     id: user.id,
@@ -192,12 +192,12 @@ export const ModalBooking = ({
               }}
               onPress={() => {
                 handleClose();
-                updateTravel(travel.metadata.travel.id, {
-                  status: travelStatus.CANCELLED,
-                  hopper: {
-                    id: user.id,
-                  },
-                });
+                // updateTravel(travel?.metadata.travel.id, {
+                //   status: travelStatus.CANCELLED,
+                //   hopper: {
+                //     id: user.id,
+                //   },
+                // });
               }}
               stretch
               textClassName={{

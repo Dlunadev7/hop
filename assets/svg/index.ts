@@ -71,6 +71,9 @@ import PeopleColored from '@/assets/svg/people-colored.svg';
 import ShippingBagColored from '@/assets/svg/shopping-bag-colored.svg';
 import Reserve from '@/assets/svg/reserve.svg';
 import ReserveFilled from '@/assets/svg/reserve-filled.svg';
+import PeopleFilled from '@/assets/svg/people-filled.svg';
+import ShoppingBagFilled from '@/assets/svg/shopping-bag-filled.svg';
+import Suv from '@/assets/svg/suv.svg';
 
 export {
   CircleArrowRight,
@@ -145,5 +148,8 @@ export {
   PeopleColored,
   ShippingBagColored,
   Reserve,
-  ReserveFilled
+  ReserveFilled,
+  PeopleFilled,
+  ShoppingBagFilled,
+  Suv
 }

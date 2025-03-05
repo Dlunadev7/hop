@@ -49,6 +49,8 @@ export default function Step4Hopper(props: formProps) {
     }
   };
 
+  console.log("asd", props.payloadValues);
+
   const handleRegisterStep4 = async (values: VehicleUser) => {
     setLoading(true);
     try {

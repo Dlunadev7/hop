@@ -43,10 +43,10 @@ export const Step3Booking = (props: {
 
   const filterCarsByPassengers = (passengerCount: number, t: i18NextType) => {
     return carOptions(t).filter((car) => {
-      if (passengerCount <= 3) return true; // Mostrar todos
+      if (passengerCount <= 3) return true;
       if (passengerCount > 3 && passengerCount <= 5)
-        return car.value !== "ELECTRIC"; // Excluir eléctricos
-      return car.value === "VANS"; // Solo mostrar VAN si hay más de 5 personas
+        return car.value !== "ELECTRIC";
+      return car.value === "VANS";
     });
   };
 
@@ -61,54 +61,16 @@ export const Step3Booking = (props: {
   const handleBookHopper = async (carType: string) => {
     setIsLoading(true);
 
-    // console.log(
-    //   JSON.stringify(
-    //     {
-    //       from: {
-    //         lat: dataPayload.currentLocation.latitude!,
-    //         lng: dataPayload.currentLocation.longitude!,
-    //         address: dataPayload.currentLocation.address!,
-    //       },
-    //       to: {
-    //         lat: dataPayload.destination.latitude!,
-    //         lng: dataPayload.destination.longitude!,
-    //         address: dataPayload.destination.address!,
-    //       },
-    //       distance: dataPayload.distance,
-    //       time: dataPayload.time,
-    //       vehicleType: carType,
-    //       programedTo: dataPayload.programedTo
-    //         ? formattedDate
-    //         : convertToDate(parsedDate),
-    //       status: travelStatus.REQUEST,
-    //       passengerName: dataPayload.fullName,
-    //       passengerContact: dataPayload.contact,
-    //       passengerRoom: dataPayload.roomNumber,
-    //       passengerContactCountryCode: dataPayload.countryCode,
-    //       totalPassengers: dataPayload.numberOfPassengers.toString(),
-    //       totalSuitCases: dataPayload.numberOfLuggages.toString(),
-    //       passengerAirline: dataPayload.airline,
-    //       passengerFligth: dataPayload.flightNumber,
-    //       hoppy: {
-    //         id: data?.id!,
-    //       },
-    //       type: dataPayload.type as travelTypeValues,
-    //     },
-    //     null,
-    //     2
-    //   )
-    // );
-
     try {
       const response = await createTravel({
         from: {
-          lat: dataPayload.currentLocation.latitude!,
-          lng: dataPayload.currentLocation.longitude!,
+          lat: Number(dataPayload.currentLocation.latitude)!,
+          lng: Number(dataPayload.currentLocation.longitude)!,
           address: dataPayload.currentLocation.address!,
         },
         to: {
-          lat: dataPayload.destination.latitude!,
-          lng: dataPayload.destination.longitude!,
+          lat: Number(dataPayload.destination.latitude)!,
+          lng: Number(dataPayload.destination.longitude)!,
           address: dataPayload.destination.address!,
         },
         distance: dataPayload.distance,
@@ -194,7 +156,7 @@ export const Step3Booking = (props: {
             key={name}
           >
             <HStack space="md" className="items-center">
-              <Icon height={85} />
+              <Icon height={85} width={85} />
               <VStack space="md">
                 <Text
                   fontSize={20}

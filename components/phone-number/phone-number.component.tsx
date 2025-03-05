@@ -58,6 +58,8 @@ export const PhoneNumber = (props: any) => {
     setSearchText("");
   };
 
+  console.log(countries);
+
   const Item: React.FC<{ title: string; image: string; id: string }> =
     useCallback((value) => {
       return (

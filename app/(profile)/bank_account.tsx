@@ -44,7 +44,6 @@ import {
 } from "@/helpers/check-empty-fields";
 import { Badge } from "@/components/ui/badge";
 import { Danger } from "@/assets/svg";
-import { userRoles } from "@/utils/enum/role.enum";
 import { useRoute } from "@react-navigation/native";
 
 export default function BankAccount() {
@@ -59,7 +58,9 @@ export default function BankAccount() {
   const route = useRoute();
 
   const [loading, setLoading] = useState(false);
-  const [ToggleSwitch, setToggleSwitch] = useState(false);
+  const [ToggleSwitch, setToggleSwitch] = useState(
+    user?.userInfo.bank_account_isOwner || false
+  );
   const [showActionsheet, setShowActionsheet] = React.useState(false);
   const [searchText, setSearchText] = useState<string>("");
   const [bankSelected, setBankSelected] = useState<{
@@ -134,6 +135,7 @@ export default function BankAccount() {
           id: values.bank_name?.id! || user?.userInfo.bank_name?.id!,
           name: values.bank_name?.name! || user?.userInfo.bank_name?.name!,
         },
+        bank_account_isOwner: ToggleSwitch,
       });
       router.back();
     } catch (error) {
@@ -179,6 +181,13 @@ export default function BankAccount() {
                 id: bankSelected.id,
                 name: bankSelected.name,
               },
+              bank_account_holder: ToggleSwitch
+                ? `${user?.userInfo.firstName} ${user?.userInfo.lastName}`
+                : values.bank_account_holder,
+              bank_account_rut: ToggleSwitch
+                ? user?.userInfo.rut
+                : values.bank_account_rut,
+              bank_account_isOwner: ToggleSwitch,
             });
           }}
         >
@@ -222,15 +231,43 @@ export default function BankAccount() {
                       removeEmptyField("bank_account_holder", setEmptyFields);
                     }}
                     placeholder=""
-                    value={values.bank_account_holder}
+                    value={
+                      ToggleSwitch
+                        ? `${user?.userInfo.firstName} ${user?.userInfo.lastName}`
+                        : values.bank_account_holder
+                    }
                     error={
                       (touched.bank_account_holder &&
                         errors.bank_account_holder) ||
                       emptyFields.find((item) => item === "bank_account_holder")
                     }
                     touched={touched.bank_account_holder}
-                    isDisabled={!ToggleSwitch}
-                    editable={ToggleSwitch}
+                    isDisabled={!isEditable || ToggleSwitch}
+                    editable={!ToggleSwitch}
+                  />
+                  <Input
+                    label={t("signup.step_2.fields.rut.label", {
+                      ns: "auth",
+                    })}
+                    onBlur={handleBlur("bank_account_rut")}
+                    onChangeText={(text) => {
+                      handleChange("bank_account_rut")(text);
+                      removeEmptyField("bank_account_rut", setEmptyFields);
+                    }}
+                    placeholder=""
+                    value={
+                      ToggleSwitch
+                        ? `${user?.userInfo.rut}`
+                        : values.bank_account_rut
+                    }
+                    error={
+                      (touched.bank_account_rut && errors.bank_account_rut) ||
+                      emptyFields.find((item) => item === "bank_account_rut")
+                    }
+                    touched={touched.bank_account_rut}
+                    keyboardType="number-pad"
+                    isDisabled={!isEditable || ToggleSwitch}
+                    editable={!ToggleSwitch}
                   />
                   <Input
                     label={t("signup.step_2.fields.bankName.label", {
@@ -249,11 +286,11 @@ export default function BankAccount() {
                     }
                     touched={touched.bank_name}
                     editable={false}
-                    pressable={ToggleSwitch}
+                    isDisabled={!isEditable}
                     onPress={() => setShowActionsheet(true)}
                     icon={ChevronDownIcon}
                     rightIcon
-                    isDisabled={!ToggleSwitch}
+                    pressable={isEditable}
                   />
                   <Input
                     label={t("signup.step_2.fields.accountNumber.label", {
@@ -275,6 +312,7 @@ export default function BankAccount() {
                     isDisabled={!isEditable}
                     editable={isEditable}
                   />
+
                   <Select
                     label={t("signup.step_2.fields.accountType.label", {
                       ns: "auth",
@@ -308,26 +346,6 @@ export default function BankAccount() {
                       emptyFields.find((item) => item === "bank_account_type")
                     }
                     disabled={!isEditable}
-                  />
-                  <Input
-                    label={t("signup.step_2.fields.rut.label", {
-                      ns: "auth",
-                    })}
-                    onBlur={handleBlur("bank_account_rut")}
-                    onChangeText={(text) => {
-                      handleChange("bank_account_rut")(text);
-                      removeEmptyField("bank_account_rut", setEmptyFields);
-                    }}
-                    placeholder=""
-                    value={values.bank_account_rut}
-                    error={
-                      (touched.bank_account_rut && errors.bank_account_rut) ||
-                      emptyFields.find((item) => item === "bank_account_rut")
-                    }
-                    touched={touched.bank_account_rut}
-                    keyboardType="number-pad"
-                    isDisabled={!isEditable}
-                    editable={isEditable}
                   />
                 </Box>
                 {isEditable && (

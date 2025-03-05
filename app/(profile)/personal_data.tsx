@@ -124,6 +124,8 @@ export default function PersonalData() {
     }
   };
 
+  console.log(data);
+
   return (
     <Container>
       <KeyboardContainer>

@@ -151,39 +151,41 @@ export const updateUserDocuments = async (
           "Content-Type": "multipart/form-data",
         },
       });
-
-      console.log('se ejecuto');
     } catch (error: unknown) {
-
-      console.log(error)
       if (axios.isAxiosError(error)) {
         throw error.response || error;
       }
       throw error;
     }
   };
-
   const uploadPromises: Promise<void>[] = [];
 
-  if (data.vehiclePictures) {
+  console.log(data.vehiclePictures)
+
+  if (data.vehiclePictures && data.vehiclePictures.length > 0) {
+    console.log('se ejecuto el de las fotos')
     uploadPromises.push(uploadDocument("vehiclePictures", data.vehiclePictures));
   }
 
-  if (data.circulationPermit) {
+  if (data.circulationPermit && data.circulationPermit.length > 0) {
     uploadPromises.push(uploadDocument("circulationPermit", data.circulationPermit));
   }
 
-  if (data.seremiDecree) {
+  if (data.seremiDecree && data.seremiDecree.length > 0) {
     uploadPromises.push(uploadDocument("seremiDecree", data.seremiDecree));
   }
 
-  if (data.driverResume) {
+  if (data.driverResume && data.driverResume.length > 0) {
     uploadPromises.push(uploadDocument("driverResume", data.driverResume));
   }
 
-  if (data.passengerInsurance) {
+  if (data.passengerInsurance && data.passengerInsurance.length > 0) {
     uploadPromises.push(uploadDocument("passengerInsurance", data.passengerInsurance));
   }
 
-  await Promise.all(uploadPromises);
+  console.log(JSON.stringify(data, null, 2))
+
+  if (uploadPromises.length > 0) {
+    await Promise.all(uploadPromises);
+  }
 };

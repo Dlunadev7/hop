@@ -55,7 +55,7 @@
       "accessibility": "Reduced mobility apt.",
       "vehicle": {
         "sedan": {
-          "title": "Sedan/SUV",
+          "title": "Sedan",
           "passengers": "1-3 passengers",
           "luggage": "30 Kg."
         },
@@ -68,9 +68,16 @@
           "title": "Van",
           "passengers": "1-10 passengers",
           "luggage": "50 Kg."
+        },
+        "suv": {
+          "title": "SUV",
+          "passengers": "1-3 passengers",
+          "luggage": "30 Kg."
         }
       },
-      "cancel": "Cancel search"
+      "text": "This may take a few minutes. We will notify you when the trip is confirmed.",
+      "cancel": "Cancel search",
+      "search": "Make another reservation"
     },
     "fourthy_sheet": {
       "title": "Waiting for confirmation from a Hopper",
@@ -90,6 +97,7 @@
   },
   "hopper": {
     "void": "Fill in the vehicle details to start traveling",
+    "void_bank": "Fill in the bank account details to start traveling",
     "vehicle": "vehicle",
     "bookings": {
       "title": "Bookings",
@@ -105,5 +113,15 @@
     "review_info": "We are reviewing your information. This process may take a few days. You will be able to log in once your account has been validated by our team.",
     "accept": "Accept"
   },
-  "next": "Next"
+  "next": "Next",
+  "modal_hopper": {
+    "title": "New Request",
+    "departure": "Departure Point",
+    "destination": "Destination",
+    "passengers": "{count} Passengers",
+    "suitcases": "{count} Suitcases",
+    "trip_value": "Trip Value ${price}",
+    "accept_trip": "Accept Trip",
+    "reject_trip": "Reject Trip"
+  }
 }

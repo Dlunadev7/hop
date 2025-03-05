@@ -53,6 +53,7 @@ interface CustomFormControlProps {
   disabled?: boolean;
   value: string;
   info?: string;
+  stretch?: boolean;
   setShowTooltip?: Dispatch<SetStateAction<boolean>>;
   showTooltip?: boolean;
 }
@@ -73,10 +74,11 @@ export const Select = (props: CustomFormControlProps) => {
     info = "",
     setShowTooltip,
     showTooltip,
+    stretch,
   } = props;
 
   return (
-    <FormControl className={customClassNames.formControl}>
+    <FormControl className={stretch ? "flex-1" : ""}>
       <FormControlLabel
         className={`${customClassNames.formControlLabel} gap-1`}
       >

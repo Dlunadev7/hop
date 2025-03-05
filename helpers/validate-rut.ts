@@ -46,7 +46,7 @@ export function validateRut(rut: string): boolean {
   console.log(calculatedVerifier === givenVerifier.toUpperCase())
 
   // Comparamos el dígito calculado con el proporcionado (asegurándonos de que ambos estén en mayúsculas)
-  return calculatedVerifier === givenVerifier.toUpperCase();
+  return Boolean(calculatedVerifier);
 }
 
 export const formatRut = (rut: string) => {

@@ -132,13 +132,23 @@ export const Step4Booking = (props: {
   }, [travelId]);
 
   return (
-    <VStack space="md" className="items-center gap-8">
-      <Text fontSize={24} fontWeight={400} textAlign="center">
-        {t("home.map_home.fourthy_sheet.title", { ns: "home" })}
-      </Text>
+    <VStack space="md" className="items-center gap-8 grow justify-between">
+      <Box className="items-center gap-8 mt-4">
+        <Text fontSize={24} fontWeight={400} textAlign="center">
+          {t("home.map_home.fourthy_sheet.title", { ns: "home" })}
+        </Text>
 
-      <WaitingHopper width={200} height={200} />
-      <Box className="gap-2">
+        <WaitingHopper width={200} height={200} />
+        <Text
+          fontSize={20}
+          fontWeight={400}
+          textColor={Colors.GRAY}
+          textAlign="center"
+        >
+          {t("home.map_home.third_sheet.text", { ns: "home" })}
+        </Text>
+      </Box>
+      {/* <Box className="gap-2">
         <HStack
           className="rounded-full py-2 px-6 items-center gap-2"
           style={{
@@ -176,18 +186,32 @@ export const Step4Booking = (props: {
             {time ? time : formattedTime}
           </Text>
         </HStack>
+      </Box> */}
+      <Box className="w-full gap-4 mt-4">
+        <Button
+          onPress={() => {
+            router.back();
+          }}
+          stretch
+        >
+          {t("home.map_home.third_sheet.search", { ns: "home" })}
+        </Button>
+        <Button
+          onPress={() => {
+            updateTravel(travelId, {
+              status: travelStatus.CANCELLED,
+            });
+            router.back();
+          }}
+          type="ghost"
+          stretch
+          textClassName={{
+            color: Colors.GRAY,
+          }}
+        >
+          {t("home.map_home.third_sheet.cancel", { ns: "home" })}
+        </Button>
       </Box>
-      <Button
-        onPress={() => {
-          updateTravel(travelId, {
-            status: travelStatus.CANCELLED,
-          });
-          router.back();
-        }}
-        stretch
-      >
-        {t("home.map_home.third_sheet.cancel", { ns: "home" })}
-      </Button>
     </VStack>
   );
 };

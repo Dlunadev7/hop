@@ -166,6 +166,7 @@ export default function Step2(props: formProps) {
           errors,
           touched,
         }) => {
+          console.log(values.bank_name);
           useEffect(() => {
             const formattedRUT = formatRut(values.bank_account_rut);
 
@@ -183,8 +184,6 @@ export default function Step2(props: formProps) {
               setRutError("");
             }
           }, [values.bank_account_rut, setRutError]);
-
-          console.log(errors);
 
           return (
             <VStack space="md" className="mt-[32px]">

@@ -8,5 +8,13 @@
     "button": "Contactar al pasajero",
     "cancel": "Cancelar viaje",
     "commission": "Comisión correspondiente"
-  }
+  },
+  "travelData": "Datos del viaje",
+  "vehicleType": "Tipo de vehículo",
+  "totalPassengers": "pasajeros",
+  "totalSuitCases": "maletas",
+  "fullName": "Nombre completo",
+  "contact": "Contacto",
+  "flightNumber": "Número de vuelo",
+  "saveChanges": "Guardar cambios"
 }

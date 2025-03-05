@@ -29,6 +29,7 @@ import { router } from "expo-router";
 import { travelTypeValues } from "@/utils/enum/travel.enum";
 import { PhoneNumber } from "@/components";
 import { User } from "@/utils/interfaces/auth.interface";
+import { useTranslation } from "react-i18next";
 
 export default function BookingEditForm(props: {
   formattedDate: string;
@@ -38,7 +39,7 @@ export default function BookingEditForm(props: {
   user: User;
 }) {
   const { formattedDate, formattedTime, data, id, user } = props;
-
+  const { t } = useTranslation();
   const [date, setDate] = useState<Date | null>(null);
   const [time, setTime] = useState<Date | null>(null);
   const [type, setType] = useState<"date" | "time">("date");
@@ -162,7 +163,7 @@ export default function BookingEditForm(props: {
       )}
       <Box className="mt-6 gap-3">
         <Text fontSize={18} fontWeight={400} textColor={Colors.GRAY}>
-          Datos del viaje
+          {t("booking.travelData", { ns: "booking" })}
         </Text>
         <VStack className="px-4 gap-3">
           <Input
@@ -193,7 +194,7 @@ export default function BookingEditForm(props: {
       </Box>
       <Box className="mt-6">
         <Text fontSize={18} fontWeight={400} textColor={Colors.GRAY}>
-          Tipo de vehículo
+          {t("booking.vehicleType", { ns: "booking" })}
         </Text>
         <HStack space="md" className="px-4 gap-3 mt-6 items-start">
           {vehicle[data?.vehicleType!]}
@@ -205,13 +206,15 @@ export default function BookingEditForm(props: {
               <Box className="flex-row">
                 <ProfileActive width={16} height={16} />
                 <Text fontSize={14} fontWeight={400} textColor={Colors.GRAY}>
-                  {data?.totalPassengers} pasajeros
+                  {data?.totalPassengers}{" "}
+                  {t("booking.totalPassengers", { ns: "booking" })}
                 </Text>
               </Box>
               <Box className="flex-row">
                 <Luggage />
                 <Text fontSize={14} fontWeight={400} textColor={Colors.GRAY}>
-                  {data?.totalSuitCases} maletas
+                  {data?.totalSuitCases}{" "}
+                  {t("booking.totalSuitCases", { ns: "booking" })}
                 </Text>
               </Box>
             </VStack>
@@ -239,12 +242,12 @@ export default function BookingEditForm(props: {
           <>
             <Box className="mt-6 mb-8">
               <Text fontSize={18} fontWeight={400} textColor={Colors.GRAY}>
-                Datos del viaje
+                {t("booking.travelData", { ns: "booking" })}
               </Text>
 
               <VStack className="mt-6 gap-3 px-4">
                 <Input
-                  label="Nombre completo"
+                  label={t("booking.fullName", { ns: "booking" })}
                   onBlur={handleBlur("passengerName")}
                   onChangeText={handleChange("passengerName")}
                   placeholder={data.passengerName}
@@ -253,7 +256,7 @@ export default function BookingEditForm(props: {
                   error={touched.passengerName && errors.passengerName}
                 />
                 <PhoneNumber
-                  label="Contacto"
+                  label={t("booking.contact", { ns: "booking" })}
                   onBlur={handleBlur("passengerContact")}
                   onChangeText={handleChange("passengerContact")}
                   placeholder={data.passengerContact}
@@ -267,7 +270,7 @@ export default function BookingEditForm(props: {
                 {data.type === travelTypeValues.PICKUP && (
                   <>
                     <Input
-                      label="Número de vuelo"
+                      label={t("booking.flightNumber", { ns: "booking" })}
                       onBlur={handleBlur("passengerFligth")}
                       onChangeText={handleChange("passengerFligth")}
                       placeholder={data.passengerFligth}
@@ -283,7 +286,7 @@ export default function BookingEditForm(props: {
               {loading ? (
                 <ActivityIndicator color={Colors.WHITE} />
               ) : (
-                "Guardar cambios"
+                t("booking.saveChanges", { ns: "booking" })
               )}
             </Button>
           </>

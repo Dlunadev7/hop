@@ -7,8 +7,11 @@ import { Text } from "../text/text.component";
 import { Colors } from "@/constants/Colors";
 import { useTranslation } from "react-i18next";
 
-export const Void = () => {
+export const Void = ({ type }: { type?: string }) => {
   const { t } = useTranslation();
+
+  console.log(type);
+
   return (
     <LinearGradient
       colors={["#134641", "#07A999"]}
@@ -26,11 +29,27 @@ export const Void = () => {
           <Warning />
         </View>
         <Text fontSize={20} textColor={Colors.WHITE} className="flex-1">
-          {t("home.hopper.void", { ns: "home" }).split("vehicle")[0]}
-          <Text fontWeight={600} fontSize={20} textColor={Colors.WHITE}>
-            {t("home.hopper.vehicle", { ns: "home" })}
-          </Text>
-          {t("home.hopper.void", { ns: "home" }).split("vehicle")[1]}
+          {type === "vehicle" ? (
+            <>
+              {
+                t("home.hopper.void", { ns: "home" }).split(
+                  t("home.hopper.vehicle", { ns: "home" })
+                )[0]
+              }
+
+              <Text fontWeight={600} fontSize={20} textColor={Colors.WHITE}>
+                {t("home.hopper.vehicle", { ns: "home" })}
+              </Text>
+
+              {
+                t("home.hopper.void", { ns: "home" }).split(
+                  t("home.hopper.vehicle", { ns: "home" })
+                )[1]
+              }
+            </>
+          ) : (
+            t("home.hopper.void_bank", { ns: "home" })
+          )}
         </Text>
       </HStack>
     </LinearGradient>
